@@ -1,0 +1,111 @@
+<nav th:fragment="navbar" class="navbar navbar-expand-lg fixed-top navbar-transparent shadow-sm p-3"
+     xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold text-primary" th:href="@{/}">TrungTravel</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNav">
+            <!-- Menu giữa -->
+            <ul class="navbar-nav mx-auto">
+                <!-- Trang chủ -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Trang chủ</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{/}">Giới thiệu</a></li>
+                        <li><a class="dropdown-item" href="#">Ưu đãi</a></li>
+                    </ul>
+                </li>
+
+                <!-- Điểm đến -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Điểm đến</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#mien-bac">Miền Bắc</a></li>
+                        <li><a class="dropdown-item" href="#mien-trung">Miền Trung</a></li>
+                        <li><a class="dropdown-item" href="#mien-nam">Miền Nam</a></li>
+                    </ul>
+                </li>
+
+                <!-- Tours -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Tours</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#noidia">Tour nội địa</a></li>
+                        <li><a class="dropdown-item" href="#quocte">Tour quốc tế</a></li>
+                    </ul>
+                </li>
+
+                <!-- Hoạt động -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Hoạt động</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#camtrai">Cắm trại</a></li>
+                        <li><a class="dropdown-item" href="#trekking">Trekking</a></li>
+                    </ul>
+                </li>
+
+                <!-- Khách sạn -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Khách sạn</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#3sao">3 sao</a></li>
+                        <li><a class="dropdown-item" href="#5sao">5 sao</a></li>
+                    </ul>
+                </li>
+
+                <!-- Vé -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Vé</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#maybay">Vé máy bay</a></li>
+                        <li><a class="dropdown-item" href="#thamquan">Vé tham quan</a></li>
+                    </ul>
+                </li>
+
+                <!-- Blog -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Blog</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#kinhnghiem">Kinh nghiệm</a></li>
+                        <li><a class="dropdown-item" href="#amthuc">Ẩm thực</a></li>
+                    </ul>
+                </li>
+
+                <!-- Pages -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Pages</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#about">Về chúng tôi</a></li>
+                        <li><a class="dropdown-item" href="#terms">Điều khoản</a></li>
+                    </ul>
+                </li>
+
+                <!-- Liên hệ -->
+                <li class="nav-item">
+                    <a class="nav-link" href="#contact">Liên hệ</a>
+                </li>
+            </ul>
+
+            <!-- Góc phải: ngôn ngữ + đăng nhập -->
+            <div class="d-flex align-items-center gap-3">
+                <!-- Ngôn ngữ -->
+                <div class="dropdown">
+                    <a class="dropdown-toggle text-black text-decoration-none d-flex align-items-center gap-1"
+                       href="#" data-bs-toggle="dropdown">
+                        <i class="fas fa-globe"></i> <span>Ngôn ngữ</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="?lang=vi">🇻🇳 Tiếng Việt</a></li>
+                        <li><a class="dropdown-item" href="?lang=en">🇬🇧 English</a></li>
+                    </ul>
+                </div>
+
+                <!-- Nút đăng nhập -->
+                <a class="btn btn-warning fw-bold" th:href="@{/login}">Đăng nhập</a>
+            </div>
+
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,33 @@
+.scroll-drag-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 10px 0 10px 20px;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 0 20px;
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
+  user-select: none;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox */
+}
+
+.scroll-drag-container::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.scroll-item {
+  flex: 0 0 auto;
+  min-width: 250px;
+  height: 180px;
+  scroll-snap-align: start;
+  background: #eee;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.scroll-item:hover {
+  transform: scale(1.02);
+}

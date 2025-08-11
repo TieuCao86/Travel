@@ -1,0 +1,47 @@
+/* XÓA trong suốt — chuyển sang nền trắng */
+.navbar-transparent {
+  background-color: white !important;
+  backdrop-filter: none !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important; /* bóng nhẹ dưới navbar */
+}
+
+/* Chữ menu chính màu đen */
+.nav-link {
+  color: #000 !important;
+  font-weight: 500;
+}
+
+/* Hover: chuyển sang màu xanh dương */
+.nav-link:hover {
+  color: #007bff !important;
+}
+
+/* Menu dropdown trắng */
+.dropdown-menu {
+  background-color: white;
+  border: 1px solid #dee2e6;
+}
+
+/* Hover từng item trong dropdown */
+.dropdown-item {
+  color: #000;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+  color: #007bff;
+}
+
+/* Hover nút vàng (nếu có) */
+.btn-warning:hover {
+  background-color: #e0a800;
+}
+
+/* Ngôn ngữ — màu đen và hover màu xanh */
+.language-toggle {
+  color: #000 !important;
+}
+
+.language-toggle:hover {
+  color: #007bff;
+}

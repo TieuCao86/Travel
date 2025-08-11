@@ -1,0 +1,308 @@
+.carousel-caption {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 30px;
+    border-radius: 8px;
+    max-width: 500px;
+}
+
+.search-section {
+  background: rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid #eee;
+}
+
+.search-box {
+  border-radius: 0.375rem;
+}
+
+.filter-btn {
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 14px;
+  background-color: #fff;
+  color: #333;
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+  background-color: #ffc107;
+  color: #000;
+  border-color: #ffc107;
+}
+
+.resort-card {
+    max-width: 380px;
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    background: white;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    animation: slideUp 0.6s ease-out;
+    border: 4px solid transparent; /* Đặt sẵn border để tránh nhảy */
+}
+
+.resort-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+    border-color: #4A90E2; /* Chỉ đổi màu */
+}
+
+.card-image-container {
+    position: relative;
+    height: 280px;
+    overflow: hidden;
+}
+
+.card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.resort-card:hover .card-image {
+    transform: scale(1.05);
+}
+
+.heart-icon {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 35px;
+    height: 35px;
+    background: rgba(255,255,255,0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.heart-icon:hover {
+    background: rgba(255,255,255,1);
+    transform: scale(1.1);
+}
+
+.heart-icon i {
+    color: #666;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.heart-icon:hover i {
+    color: green;
+}
+
+.transport-icons {
+    position: absolute;
+    top: 60px;
+    right: 15px;
+    display: flex;
+    gap: 10px;
+    z-index: 2;
+}
+
+.transport-icon-circle {
+    width: 35px;
+    height: 35px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8px);
+}
+
+.transport-icon-circle:hover {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 1);
+}
+
+.transport-icon-circle i {
+    color: #666;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.rating-badge {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    background: rgba(255,255,255,0.95);
+    padding: 8px 12px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.rating-badge .star {
+    color: #ffc107;
+    margin-right: 4px;
+}
+
+.rating-text {
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+}
+
+.promotion-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 12px;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+    animation: pulse 2s infinite;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.promotion-badge i {
+    font-size: 12px;
+    animation: bounce 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-3px); }
+    60% { transform: translateY(-2px); }
+}
+
+.card-content {
+    padding: 25px;
+}
+
+.card-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 10px;
+    line-height: 1.3;
+    min-height: calc(1.3em * 2);
+}
+
+.card-subtitle {
+    color: #7f8c8d;
+    font-size: 15px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.duration, .category, .transport {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.price-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.price-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.original-price {
+    font-size: 14px;
+    color: #95a5a6;
+    text-decoration: line-through;
+    font-weight: 500;
+}
+
+.savings-text {
+    font-size: 12px;
+    color: #27ae60;
+    font-weight: 600;
+}
+
+.price {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.price-unit {
+    font-size: 16px;
+    color: #7f8c8d;
+    font-weight: 400;
+}
+
+.book-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.book-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+}
+
+.divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #e0e0e0, transparent);
+    margin: 20px 0;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .resort-card {
+        max-width: 350px;
+        margin: 0 15px;
+    }
+}
+
+.resort-card {
+    flex: 0 0 calc(100vw / 4.5); /* 3 full cards + 1 card ló ra */
+    max-width: calc(100vw / 4.5);
+    scroll-snap-align: start;
+    border-radius: 25px;
+    background: white;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
+}
+
+
+

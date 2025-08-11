@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<head>
+    <div layout:fragment="styles">
+        <link rel="stylesheet" th:href="@{/css/home.css}">
+    </div>
+</head>
+
+<body>
+<div layout:fragment="content">
+
+    <div class="search-section py-4 bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <!-- Input + Filter Buttons cùng 1 hàng -->
+                    <div class="d-flex flex-wrap gap-2 mb-3 align-items-center">
+                        <div class="flex-grow-1">
+                            <div class="input-group">
+                                <input type="text" class="form-control search-box" placeholder="Bạn đang tìm về?">
+                                <button class="btn btn-warning" type="button">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Các nút filter chính -->
+                        <div class="d-flex flex-wrap gap-2">
+                            <button class="btn filter-btn active">Tours</button>
+                            <button class="btn filter-btn">Khách sạn</button>
+                            <button class="btn filter-btn">Vé</button>
+                            <button class="btn filter-btn">Hoạt động</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Carousel -->
+    <div id="heroCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active" style="background: url('https://images.unsplash.com/photo-1559827260-dc66d52bef19') center / cover; height: 80vh;">
+                <div class="carousel-caption d-none d-md-block text-start">
+                    <h1 class="display-4 fw-bold">Khám Phá Vịnh Hạ Long</h1>
+                    <p>Trải nghiệm vẻ đẹp huyền bí của di sản thế giới</p>
+                    <a href="#destinations" class="btn btn-primary btn-lg">Khám Phá Ngay</a>
+                </div>
+            </div>
+            <div class="carousel-item" style="background: url('https://images.unsplash.com/photo-1528127269322-539801943592') center / cover; height: 80vh;">
+                <div class="carousel-caption d-none d-md-block text-start">
+                    <h1 class="display-4 fw-bold">Phố Cổ Hội An</h1>
+                    <p>Không gian cổ kính và văn hóa đặc sắc</p>
+                    <a href="#destinations" class="btn btn-warning btn-lg">Đặt Tour Ngay</a>
+                </div>
+            </div>
+            <div class="carousel-item" style="background: url('https://images.unsplash.com/photo-1583417319070-4a69db38a482') center / cover; height: 80vh;">
+                <div class="carousel-caption d-none d-md-block text-start">
+                    <h1 class="display-4 fw-bold">Sapa Hùng Vĩ</h1>
+                    <p>Ruộng bậc thang tuyệt đẹp trong sương mù</p>
+                    <a href="#destinations" class="btn btn-light btn-lg text-dark">Trải Nghiệm</a>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
+
+    <!-- Điểm Đến Nổi Bật -->
+    <section id="destinations" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-4">Điểm Đến Nổi Bật</h2>
+
+            <!-- Carousel wrapper -->
+            <div class="position-relative">
+                <!-- Scrollable container -->
+                <div id="top-tour-container" class="scroll-drag-container">
+                    <!-- JS sẽ load tour vào đây -->
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Tại sao chọn chúng tôi -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">Tại Sao Chọn Chúng Tôi?</h2>
+            <div class="row text-center">
+                <div class="col-md-3">
+                    <div class="p-3">
+                        <div class="fs-1 mb-2">🎯</div>
+                        <h5>Tour Chất Lượng</h5>
+                        <p>10+ năm kinh nghiệm thiết kế tour chuyên nghiệp.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-3">
+                        <div class="fs-1 mb-2">💰</div>
+                        <h5>Giá Cả Hợp Lý</h5>
+                        <p>Ưu đãi tốt, minh bạch chi phí, không phát sinh.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-3">
+                        <div class="fs-1 mb-2">🏆</div>
+                        <h5>Dịch Vụ 5 Sao</h5>
+                        <p>Hướng dẫn viên tận tâm, thân thiện và chuyên nghiệp.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-3">
+                        <div class="fs-1 mb-2">🛡️</div>
+                        <h5>An Toàn Tuyệt Đối</h5>
+                        <p>Bảo hiểm toàn diện cho mọi hành trình.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="bg-primary text-white py-5">
+        <div class="container text-center">
+            <h2>Đăng Ký Nhận Tin</h2>
+            <p>Nhận thông tin ưu đãi và tour mới nhất</p>
+            <form class="row justify-content-center">
+                <div class="col-md-6 col-sm-8">
+                    <input type="email" class="form-control form-control-lg mb-3" placeholder="Nhập email của bạn..." required>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-warning btn-lg">Đăng Ký</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+</div>
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/home.js}"></script>
+    <script th:src="@{/js/tour.js}"></script>
+</th:block>
+</body>
+</html>

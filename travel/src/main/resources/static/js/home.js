@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const filterButtons = document.querySelectorAll(".filter-btn");
     const searchBox = document.querySelector(".search-box");
-    const searchBtn = document.querySelector(".btn-warning");
+    const searchBtn = document.querySelector(".search-section .btn-warning");
 
     // Lấy loại search từ nút active ban đầu
     let selectedType = getTypeFromText(document.querySelector(".filter-btn.active").textContent.trim());
@@ -25,6 +25,10 @@ document.addEventListener("DOMContentLoaded", function () {
             alert("Vui lòng nhập từ khóa tìm kiếm");
             return;
         }
+
+        const activeBtn = document.querySelector(".filter-btn.active");
+        const selectedType = getTypeFromText(activeBtn.textContent.trim());
+
         window.location.href = `/search/${selectedType}?q=${encodeURIComponent(keyword)}`;
     });
 

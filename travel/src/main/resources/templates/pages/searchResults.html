@@ -1,599 +1,121 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Journey with Travila - Begin Your Story!</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .header-section {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            margin: 20px auto;
-            max-width: 1200px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-        .search-form {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        .filter-sidebar {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            height: fit-content;
-        }
-        .tour-card {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            margin-bottom: 25px;
-            position: relative;
-        }
-        .tour-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-        }
-        .tour-image {
-            height: 250px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-        .best-seller-badge {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: #ff6b6b;
-            color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        .favorite-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(255, 255, 255, 0.9);
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #666;
-            transition: all 0.3s ease;
-        }
-        .favorite-btn:hover {
-            background: white;
-            color: #ff6b6b;
-        }
-        .price-tag {
-            font-size: 24px;
-            font-weight: 700;
-            color: #2c5aa0;
-        }
-        .rating {
-            color: #ffc107;
-        }
-        .btn-book {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 10px;
-            padding: 10px 25px;
-            color: white;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        .btn-book:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            color: white;
-        }
-        .filter-section h6 {
-            color: #2c5aa0;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-        .form-check-input:checked {
-            background-color: #667eea;
-            border-color: #667eea;
-        }
-        .price-range {
-            accent-color: #667eea;
-        }
-        .tour-info {
-            padding: 20px;
-        }
-        .tour-details {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 15px;
-        }
-        .tour-meta {
-            display: flex;
-            gap: 15px;
-            color: #666;
-            font-size: 14px;
-            margin: 10px 0;
-        }
-        .tour-meta span {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-    </style>
+    <div layout:fragment="styles">
+        <link rel="stylesheet" th:href="@{/css/searchResults.css}">
+        <link rel="stylesheet" th:href="@{/css/home.css}">
+    </div>
 </head>
+
 <body>
-<div class="container-fluid">
-    <!-- Header Section -->
-    <div class="header-section">
-        <div class="text-center mb-4">
-            <h1 class="display-5 fw-bold text-primary mb-2">Journey with Travila - Begin Your Story!</h1>
-            <p class="lead text-muted">Easily search for top tours offered by our professional network</p>
+<div layout:fragment="content">
+
+    <div class="container-fluid">
+        <!-- Header Section -->
+        <div class="header-section">
+            <div class="text-center mb-4">
+                <h1 class="display-5 fw-bold text-primary mb-2">Journey with Travila - Begin Your Story!</h1>
+                <p class="lead text-muted">Easily search for top tours offered by our professional network</p>
+            </div>
+
+            <!-- Search Form -->
+            <div class="search-form">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Location</label>
+                        <select class="form-select">
+                            <option>New York, USA</option>
+                            <option>Paris, France</option>
+                            <option>Tokyo, Japan</option>
+                            <option>London, UK</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold">Check In</label>
+                        <input type="date" class="form-control" value="2024-01-22">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold">Check Out</label>
+                        <input type="date" class="form-control" value="2024-01-25">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Guest</label>
+                        <select class="form-select">
+                            <option>2 Adults, 2 Children</option>
+                            <option>1 Adult</option>
+                            <option>2 Adults</option>
+                            <option>Family (4+)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">&nbsp;</label>
+                        <button class="btn btn-book w-100">
+                            <i class="fas fa-search me-2"></i>Search
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- Search Form -->
-        <div class="search-form">
-            <div class="row g-3">
+        <div class="container-fluid mt-4">
+            <div class="row">
+                <!-- Filter Sidebar -->
                 <div class="col-md-3">
-                    <label class="form-label fw-semibold">Location</label>
-                    <select class="form-select">
-                        <option>New York, USA</option>
-                        <option>Paris, France</option>
-                        <option>Tokyo, Japan</option>
-                        <option>London, UK</option>
-                    </select>
+                    <div class="filter-sidebar">
+                        <!-- (phần filter giữ nguyên như cũ) -->
+                    </div>
                 </div>
-                <div class="col-md-2">
-                    <label class="form-label fw-semibold">Check In</label>
-                    <input type="date" class="form-control" value="2024-01-22">
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label fw-semibold">Check Out</label>
-                    <input type="date" class="form-control" value="2024-01-25">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label fw-semibold">Guest</label>
-                    <select class="form-select">
-                        <option>2 Adults, 2 Children</option>
-                        <option>1 Adult</option>
-                        <option>2 Adults</option>
-                        <option>Family (4+)</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label">&nbsp;</label>
-                    <button class="btn btn-book w-100">
-                        <i class="fas fa-search me-2"></i>Search
-                    </button>
+
+                <!-- Tour Results -->
+                <div class="col-md-9">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h5 class="fw-bold">94 tours found</h5>
+                        </div>
+                        <div class="d-flex align-items-center gap-3">
+                            <span>View: 24</span>
+                            <span>Sort by: Most Popular</span>
+                        </div>
+                    </div>
+
+                    <!-- Container for search results -->
+                    <div class="row" id="search-result-container">
+                        <!-- Tours will be injected here dynamically -->
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="d-flex justify-content-center mt-4">
+                        <nav>
+                            <ul class="pagination">
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="container-fluid mt-4">
-        <div class="row">
-            <!-- Filter Sidebar -->
-            <div class="col-md-3">
-                <div class="filter-sidebar">
-                    <!-- Price Filter -->
-                    <div class="filter-section mb-4">
-                        <h6>Filter Price</h6>
-                        <div class="mb-3">
-                            <input type="range" class="form-range price-range" min="0" max="500" value="250" id="priceRange">
-                            <div class="d-flex justify-content-between">
-                                <span>$0</span>
-                                <span class="fw-bold">$500</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Activities Filter -->
-                    <div class="filter-section mb-4">
-                        <h6>By Activities</h6>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="city" checked>
-                            <label class="form-check-label" for="city">City <span class="text-muted">(115)</span></label>
-                        </div>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="nature">
-                            <label class="form-check-label" for="nature">City_tours <span class="text-muted">(89)</span></label>
-                        </div>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="adventure">
-                            <label class="form-check-label" for="adventure">Explore tours <span class="text-muted">(15)</span></label>
-                        </div>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="beach">
-                            <label class="form-check-label" for="beach">Beach Survival <span class="text-muted">(23)</span></label>
-                        </div>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="cultural">
-                            <label class="form-check-label" for="cultural">Cultural Tour <span class="text-muted">(45)</span></label>
-                        </div>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="food">
-                            <label class="form-check-label" for="food">Food Tour <span class="text-muted">(34)</span></label>
-                        </div>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="museum">
-                            <label class="form-check-label" for="museum">Museum <span class="text-muted">(67)</span></label>
-                        </div>
-                    </div>
-
-                    <!-- Attractions Filter -->
-                    <div class="filter-section mb-4">
-                        <h6>By Attractions</h6>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="museum2">
-                            <label class="form-check-label" for="museum2">Museum/Exhibits <span class="text-muted">(33)</span></label>
-                        </div>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="observation">
-                            <label class="form-check-label" for="observation">Observation Decks <span class="text-muted">(12)</span></label>
-                        </div>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="liberty">
-                            <label class="form-check-label" for="liberty">Ellis Island <span class="text-muted">(23)</span></label>
-                        </div>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="statue">
-                            <label class="form-check-label" for="statue">Statue of Liberty <span class="text-muted">(23)</span></label>
-                        </div>
-                    </div>
-
-                    <!-- Duration Filter -->
-                    <div class="filter-section mb-4">
-                        <h6>By Durations</h6>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="0-3hours">
-                            <label class="form-check-label" for="0-3hours">0 - 3 hours <span class="text-muted">(14)</span></label>
-                        </div>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="3-6hours">
-                            <label class="form-check-label" for="3-6hours">3 - 6 hours <span class="text-muted">(23)</span></label>
-                        </div>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="6-12hours">
-                            <label class="form-check-label" for="6-12hours">6 - 12 hours <span class="text-muted">(16)</span></label>
-                        </div>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="fullday">
-                            <label class="form-check-label" for="fullday">Full day <span class="text-muted">(16)</span></label>
-                        </div>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="multiday">
-                            <label class="form-check-label" for="multiday">Multi-day <span class="text-muted">(25)</span></label>
-                        </div>
-                    </div>
-
-                    <!-- Review Score -->
-                    <div class="filter-section">
-                        <h6>Review Score</h6>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="rating" id="5star">
-                            <label class="form-check-label" for="5star">
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                            </label>
-                        </div>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="rating" id="4star">
-                            <label class="form-check-label" for="4star">
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="far fa-star text-warning"></i>
-                            </label>
-                        </div>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="rating" id="3star">
-                            <label class="form-check-label" for="3star">
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="far fa-star text-warning"></i>
-                                <i class="far fa-star text-warning"></i>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tour Results -->
-            <div class="col-md-9">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <div>
-                        <h5 class="fw-bold">94 tours found</h5>
-                    </div>
-                    <div class="d-flex align-items-center gap-3">
-                        <span>View: 24</span>
-                        <span>Sort by: Most Popular</span>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <!-- Tour Card 1 -->
-                    <div class="col-md-6 col-lg-4">
-                        <div class="tour-card">
-                            <div class="tour-image" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop');">
-                                <div class="best-seller-badge">Best Seller</div>
-                                <button class="favorite-btn">
-                                    <i class="far fa-heart"></i>
-                                </button>
-                            </div>
-                            <div class="tour-info">
-                                <h6 class="fw-bold mb-2">1-Hour Bay Cruise by Boat in San Francisco</h6>
-                                <div class="tour-meta">
-                                    <span><i class="fas fa-clock"></i> 2 Days 3 Nights</span>
-                                    <span><i class="fas fa-users"></i> 8-9 guests</span>
-                                </div>
-                                <div class="d-flex align-items-center mb-2">
-                                    <div class="rating me-2">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                    </div>
-                                    <small class="text-muted">4.96 (672 reviews)</small>
-                                </div>
-                                <div class="tour-details">
-                                    <div class="price-tag">$48.25</div>
-                                    <button class="btn btn-book">Book Now</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Tour Card 2 -->
-                    <div class="col-md-6 col-lg-4">
-                        <div class="tour-card">
-                            <div class="tour-image" style="background-image: url('https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=400&h=300&fit=crop');">
-                                <div class="best-seller-badge">Best Seller</div>
-                                <button class="favorite-btn">
-                                    <i class="far fa-heart"></i>
-                                </button>
-                            </div>
-                            <div class="tour-info">
-                                <h6 class="fw-bold mb-2">1-Hour Bay Cruise by Boat in San Francisco</h6>
-                                <div class="tour-meta">
-                                    <span><i class="fas fa-clock"></i> 2 Days 3 Nights</span>
-                                    <span><i class="fas fa-users"></i> 8-9 guests</span>
-                                </div>
-                                <div class="d-flex align-items-center mb-2">
-                                    <div class="rating me-2">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                    </div>
-                                    <small class="text-muted">4.96 (572 reviews)</small>
-                                </div>
-                                <div class="tour-details">
-                                    <div class="price-tag">$49.25</div>
-                                    <button class="btn btn-book">Book Now</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Tour Card 3 -->
-                    <div class="col-md-6 col-lg-4">
-                        <div class="tour-card">
-                            <div class="tour-image" style="background-image: url('https://images.unsplash.com/photo-1551632811-561732d1e306?w=400&h=300&fit=crop');">
-                                <div class="best-seller-badge">Best Seller</div>
-                                <button class="favorite-btn">
-                                    <i class="far fa-heart"></i>
-                                </button>
-                            </div>
-                            <div class="tour-info">
-                                <h6 class="fw-bold mb-2">1-Hour Bay Cruise by Boat in San Francisco</h6>
-                                <div class="tour-meta">
-                                    <span><i class="fas fa-clock"></i> 2 Days 3 Nights</span>
-                                    <span><i class="fas fa-users"></i> 8-9 guests</span>
-                                </div>
-                                <div class="d-flex align-items-center mb-2">
-                                    <div class="rating me-2">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                    </div>
-                                    <small class="text-muted">4.96 (672 reviews)</small>
-                                </div>
-                                <div class="tour-details">
-                                    <div class="price-tag">$48.25</div>
-                                    <button class="btn btn-book">Book Now</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Tour Card 4 -->
-                    <div class="col-md-6 col-lg-4">
-                        <div class="tour-card">
-                            <div class="tour-image" style="background-image: url('https://images.unsplash.com/photo-1502780402662-acc01917949e?w=400&h=300&fit=crop');">
-                                <div class="best-seller-badge">Best Seller</div>
-                                <button class="favorite-btn">
-                                    <i class="far fa-heart"></i>
-                                </button>
-                            </div>
-                            <div class="tour-info">
-                                <h6 class="fw-bold mb-2">Top of the Rock Observation Deck Ticket</h6>
-                                <div class="tour-meta">
-                                    <span><i class="fas fa-clock"></i> 3 Days 4 Nights</span>
-                                    <span><i class="fas fa-users"></i> 6-8 guests</span>
-                                </div>
-                                <div class="d-flex align-items-center mb-2">
-                                    <div class="rating me-2">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                    </div>
-                                    <small class="text-muted">4.85 (892 reviews)</small>
-                                </div>
-                                <div class="tour-details">
-                                    <div class="price-tag">$48.25</div>
-                                    <button class="btn btn-book">Book Now</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Tour Card 5 -->
-                    <div class="col-md-6 col-lg-4">
-                        <div class="tour-card">
-                            <div class="tour-image" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop');">
-                                <div class="best-seller-badge">Best Seller</div>
-                                <button class="favorite-btn">
-                                    <i class="far fa-heart"></i>
-                                </button>
-                            </div>
-                            <div class="tour-info">
-                                <h6 class="fw-bold mb-2">1-Hour Bay Cruise by Boat in San Francisco</h6>
-                                <div class="tour-meta">
-                                    <span><i class="fas fa-clock"></i> 2 Days 3 Nights</span>
-                                    <span><i class="fas fa-users"></i> 8-9 guests</span>
-                                </div>
-                                <div class="d-flex align-items-center mb-2">
-                                    <div class="rating me-2">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                    </div>
-                                    <small class="text-muted">4.96 (672 reviews)</small>
-                                </div>
-                                <div class="tour-details">
-                                    <div class="price-tag">$48.25</div>
-                                    <button class="btn btn-book">Book Now</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Tour Card 6 -->
-                    <div class="col-md-6 col-lg-4">
-                        <div class="tour-card">
-                            <div class="tour-image" style="background-image: url('https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=400&h=300&fit=crop');">
-                                <div class="best-seller-badge">Best Seller</div>
-                                <button class="favorite-btn">
-                                    <i class="far fa-heart"></i>
-                                </button>
-                            </div>
-                            <div class="tour-info">
-                                <h6 class="fw-bold mb-2">1-Hour Bay Cruise by Boat in San Francisco</h6>
-                                <div class="tour-meta">
-                                    <span><i class="fas fa-clock"></i> 2 Days 3 Nights</span>
-                                    <span><i class="fas fa-users"></i> 8-9 guests</span>
-                                </div>
-                                <div class="d-flex align-items-center mb-2">
-                                    <div class="rating me-2">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                    </div>
-                                    <small class="text-muted">4.96 (672 reviews)</small>
-                                </div>
-                                <div class="tour-details">
-                                    <div class="price-tag">$48.25</div>
-                                    <button class="btn btn-book">Book Now</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Pagination -->
-                <div class="d-flex justify-content-center mt-4">
-                    <nav>
-                        <ul class="pagination">
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-<script>
-    // Price range functionality
-    const priceRange = document.getElementById('priceRange');
-    const priceDisplay = document.querySelector('.filter-section .fw-bold');
-
-    priceRange.addEventListener('input', function() {
-        priceDisplay.textContent = '$' + this.value;
-    });
-
-    // Favorite button functionality
-    document.querySelectorAll('.favorite-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const icon = this.querySelector('i');
-            if (icon.classList.contains('far')) {
-                icon.classList.remove('far');
-                icon.classList.add('fas');
-                this.style.color = '#ff6b6b';
-            } else {
-                icon.classList.remove('fas');
-                icon.classList.add('far');
-                this.style.color = '#666';
-            }
-        });
-    });
-
-    // Search button functionality
-    document.querySelector('.btn-book').addEventListener('click', function() {
-        alert('Search functionality would be implemented here!');
-    });
-
-    // Book Now button functionality
-    document.querySelectorAll('.tour-card .btn-book').forEach(btn => {
-        btn.addEventListener('click', function() {
-            alert('Booking functionality would be implemented here!');
-        });
-    });
-</script>
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/searchResults.js}"></script>
+    <script th:src="@{/js/tour.js}"></script>
+</th:block>
 </body>
 </html>

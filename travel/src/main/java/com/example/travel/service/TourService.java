@@ -4,23 +4,33 @@ import com.example.travel.dto.TourDTO;
 import com.example.travel.mapper.TourMapper;
 import com.example.travel.model.Tour;
 import com.example.travel.repository.TourRepository;
-import org.springframework.data.domain.PageRequest;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.ParameterMode;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.StoredProcedureQuery;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class TourService {
+
     private final TourRepository tourRepository;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Autowired
     public TourService(TourRepository tourRepository) {
         this.tourRepository = tourRepository;
     }
+
+    // ========================= CRUD =========================
 
     public List<Tour> getAllTours() {
         return tourRepository.findAll();
@@ -34,6 +44,7 @@ public class TourService {
         return tourRepository.save(tour);
     }
 
+    @Transactional
     public Tour updateTour(Integer id, Tour updatedTour) {
         return tourRepository.findById(id)
                 .map(tour -> {
@@ -53,46 +64,50 @@ public class TourService {
         return false;
     }
 
-    public List<TourDTO> getTopTourWithHighestRating() {
-        return tourRepository.findTopTourWithHighestRating().stream()
-                .map(obj -> {
-                    TourDTO dto = new TourDTO();
-                    dto.setMaTour((Integer) obj[0]);
-                    dto.setTenTour((String) obj[1]);
-                    dto.setLoaiTour((String) obj[2]);
-                    dto.setMoTa((String) obj[3]);
-                    dto.setThoiGian((String) obj[4]);
-                    dto.setGia((BigDecimal) obj[5]);
+    // ========================= Stored Procedure =========================
 
-                    dto.setSoSaoTrungBinh(obj[6] != null ? ((Double) obj[6]) : 0.0);
-                    dto.setSoDanhGia(obj[7] != null ? ((Integer) obj[7]) : 0);
-                    dto.setDuongDanAnhDaiDien((String) obj[8]);
+    public List<TourDTO> getTours(
+            String tenTour,
+            String loaiTour,
+            BigDecimal minGia,
+            BigDecimal maxGia,
+            String sortBy,
+            int offset,
+            int limit
+    ) {
+        StoredProcedureQuery query = entityManager
+                .createStoredProcedureQuery("sp_GetTours")
+                .registerStoredProcedureParameter("TenTour", String.class, ParameterMode.IN)
+                .registerStoredProcedureParameter("LoaiTour", String.class, ParameterMode.IN)
+                .registerStoredProcedureParameter("MinGia", BigDecimal.class, ParameterMode.IN)
+                .registerStoredProcedureParameter("MaxGia", BigDecimal.class, ParameterMode.IN)
+                .registerStoredProcedureParameter("SortBy", String.class, ParameterMode.IN)
+                .registerStoredProcedureParameter("Offset", Integer.class, ParameterMode.IN)
+                .registerStoredProcedureParameter("Limit", Integer.class, ParameterMode.IN)
+                .setParameter("TenTour", tenTour)
+                .setParameter("LoaiTour", loaiTour)
+                .setParameter("MinGia", minGia)
+                .setParameter("MaxGia", maxGia)
+                .setParameter("SortBy", sortBy)
+                .setParameter("Offset", offset)
+                .setParameter("Limit", limit);
 
-                    String phuongTienStr = (String) obj[9];
-                    dto.setPhuongTiens(phuongTienStr != null ? List.of(phuongTienStr.split(",\\s*")) : List.of());
-
-                    Boolean laPhanTram = obj[10] != null && (Boolean) obj[10];
-                    BigDecimal giaTri = (BigDecimal) obj[11];
-                    if (giaTri != null) {
-                        if (laPhanTram) {
-                            dto.setGiamGia(giaTri.intValue() + "%");
-                        } else {
-                            dto.setGiamGia(giaTri.toString());
-                        }
-                    }
-
-                    return dto;
-                })
+        List<Object[]> result = query.getResultList();
+        return result.stream()
+                .map(TourMapper::fromRaw)
                 .collect(Collectors.toList());
     }
 
-    public List<Tour> searchTours(String keyword) {
-        if (keyword == null || keyword.isBlank()) {
-            return tourRepository.findAll();
-        }
-        return tourRepository.findByTenTourContainingIgnoreCase(keyword);
+    // Hàm tiện lợi
+    public List<TourDTO> searchTours(String keyword, int offset, int limit) {
+        return getTours(keyword, null, null, null, null, offset, limit);
     }
 
+    public List<TourDTO> filterTours(String loaiTour, BigDecimal minGia, BigDecimal maxGia, String sortBy, int offset, int limit) {
+        return getTours(null, loaiTour, minGia, maxGia, sortBy, offset, limit);
+    }
 
+    public List<TourDTO> getTopTourWithHighestRating(int limit) {
+        return getTours(null, null, null, null, "rating", 0, limit);
+    }
 }
-

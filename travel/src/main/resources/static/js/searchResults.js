@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchKeyword = params.get("q");
 
     if (searchKeyword) {
-        loadTours(`/api/tours/search?q=${encodeURIComponent(searchKeyword)}`, "#search-result-container");
+        loadTours(`/api/tours/search?q=${encodeURIComponent(searchKeyword)}`, "#search-result-container", function(tours) {
+            document.querySelector("#total-tours").textContent = tours.length;
+        });
     }
 });

@@ -1,4 +1,4 @@
-function loadTours(apiUrl, targetSelector) {
+function loadTours(apiUrl, targetSelector, onLoaded) {
     fetch(apiUrl)
         .then(response => {
             if (!response.ok) throw new Error("API lỗi");
@@ -10,13 +10,17 @@ function loadTours(apiUrl, targetSelector) {
 
             if (!tours.length) {
                 container.innerHTML = "<p class='text-danger'>Không có tour nào.</p>";
-                return;
+            } else {
+                tours.forEach(tour => {
+                    const card = createTourCard(tour);
+                    container.appendChild(card);
+                });
             }
 
-            tours.forEach(tour => {
-                const card = createTourCard(tour);
-                container.appendChild(card);
-            });
+            // Nếu có callback thì gọi
+            if (typeof onLoaded === "function") {
+                onLoaded(tours);
+            }
         })
         .catch(error => {
             console.error("Lỗi tải tour:", error);

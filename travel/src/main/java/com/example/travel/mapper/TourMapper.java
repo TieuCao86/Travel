@@ -72,8 +72,8 @@ public class TourMapper {
         dto.setMoTa((String) row[3]);
         dto.setThoiGian((String) row[4]);
         dto.setGia(row[5] != null ? (BigDecimal) row[5] : null);
-        dto.setSoSaoTrungBinh(row[6] instanceof Double ? (Double) row[6] : 0.0);
-        dto.setSoDanhGia(row[7] instanceof Integer ? (Integer) row[7] : 0);
+        dto.setSoSaoTrungBinh(row[6] != null ? ((Number) row[6]).doubleValue() : 0.0);
+        dto.setSoDanhGia(row[7] != null ? ((Number) row[7]).intValue() : 0);
         dto.setDuongDanAnhDaiDien((String) row[8]);
 
         String phuongTienStr = (String) row[9];

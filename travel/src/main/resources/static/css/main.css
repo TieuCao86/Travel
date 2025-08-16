@@ -3,7 +3,6 @@
   overflow-x: auto;
   gap: 16px;
   padding: 10px 0 10px 20px;
-  scroll-snap-type: x mandatory;
   scroll-padding: 0 20px;
   -webkit-overflow-scrolling: touch;
   cursor: grab;
@@ -20,7 +19,6 @@
   flex: 0 0 auto;
   min-width: 250px;
   height: 180px;
-  scroll-snap-align: start;
   background: #eee;
   border-radius: 8px;
   padding: 10px;

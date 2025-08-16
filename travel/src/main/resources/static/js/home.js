@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    loadTours("/api/tours/top-rated", "#top-tour-container");
+    loadTours("/api/tours/top-rated", "#top-tour-container", false);
 
     const filterButtons = document.querySelectorAll(".filter-btn");
     const searchBox = document.querySelector(".search-box");

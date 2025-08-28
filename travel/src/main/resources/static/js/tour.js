@@ -141,37 +141,39 @@ function createTourCard(tour) {
 
     // Build HTML đầy đủ
     div.innerHTML = `
-        <div class="card-image-container">
-            <img src="${tour.duongDanAnhDaiDien}" alt="${tour.tenTour}" class="card-image">
+        <a href="/tour/${tour.maTour}" class="card-link">
+            <div class="card-image-container">
+                <img src="${tour.duongDanAnhDaiDien}" alt="Hình ảnh tour ${tour.tenTour}" class="card-image">
 
-            <div class="heart-icon" onclick="toggleHeart(this)">
-                <i class="far fa-heart"></i>
+                <div class="heart-icon" onclick="event.stopPropagation(); toggleHeart(this)">
+                    <i class="far fa-heart"></i>
+                </div>
+
+                <div class="transport-icons mt-1 ms-2 text-white" style="font-size: 1.1rem;">
+                    ${transportIcons}
+                </div>
+
+                <div class="rating-badge" aria-label="Đánh giá ${soSaoHienThi} trên 5 từ ${soDanhGia} người dùng">
+                    <span class="star">★</span>
+                    <span class="rating-text">${soSaoHienThi}</span>
+                    <span class="reviews-text">(${soDanhGia} đánh giá)</span>
+                </div>
+
+                ${textGiamGia ? `<div class="promotion-badge"><i class="fas fa-fire"></i><span>Giảm ${textGiamGia}!</span></div>` : ''}
             </div>
 
-            <div class="transport-icons mt-1 ms-2 text-white" style="font-size: 1.1rem;">
-                ${transportIcons}
+            <div class="card-content">
+                <h3 class="card-title">
+                    <i class="fas fa-map-marked-alt" style="color: #667eea; margin-right: 8px;"></i>
+                    ${tour.tenTour}
+                </h3>
+                <div class="price-section">
+                    ${tietKiem > 0 ? `<p class="original-price"><s>${giaGoc.toLocaleString('vi-VN')}₫</s></p>` : ''}
+                    <p class="price-after-discount">${giaSauGiam.toLocaleString('vi-VN')}₫</p>
+                    ${tietKiem > 0 ? `<p class="text-danger">Tiết kiệm ${tietKiem.toLocaleString('vi-VN')}₫</p>` : ''}
+                </div>
             </div>
-
-            <div class="rating-badge">
-                <span class="star">★</span>
-                <span class="rating-text">${soSaoHienThi}</span>
-                <span class="reviews-text">(${soDanhGia} đánh giá)</span>
-            </div>
-
-            ${textGiamGia ? `<div class="promotion-badge"><i class="fas fa-fire"></i><span>Giảm ${textGiamGia}!</span></div>` : ''}
-        </div>
-
-        <div class="card-content">
-            <h3 class="card-title">
-                <i class="fas fa-map-marked-alt" style="color: #667eea; margin-right: 8px;"></i>
-                ${tour.tenTour}
-            </h3>
-            <div class="price-section">
-                ${tietKiem > 0 ? `<p class="original-price"><s>${giaGoc.toLocaleString('vi-VN')}₫</s></p>` : ''}
-                <p class="price-after-discount">${giaSauGiam.toLocaleString('vi-VN')}₫</p>
-                ${tietKiem > 0 ? `<p class="text-danger">Tiết kiệm ${tietKiem.toLocaleString('vi-VN')}₫</p>` : ''}
-            </div>
-        </div>
+        </a>
     `;
 
     return div;

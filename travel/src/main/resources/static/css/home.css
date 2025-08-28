@@ -304,5 +304,17 @@
     transition: transform 0.3s ease;
 }
 
+.heart-icon,
+.transport-icons,
+.rating-badge,
+.promotion-badge {
+  pointer-events: none !important;
+}
+
+.heart-icon i {
+  pointer-events: auto !important;
+  cursor: pointer;
+}
+
 
 

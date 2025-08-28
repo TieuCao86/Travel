@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${tour.tenTour}">Chi tiết tour</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <h1 th:text="${tour.tenTour}"></h1>
+    <img th:src="${tour.duongDanAnhDaiDien}" alt="Ảnh tour" style="max-width:400px;">
+
+    <p><strong>Loại tour:</strong> <span th:text="${tour.loaiTour}"></span></p>
+    <p><strong>Mô tả:</strong> <span th:text="${tour.moTa}"></span></p>
+    <p><strong>Thời gian:</strong> <span th:text="${tour.thoiGian}"></span></p>
+    <p><strong>Giá:</strong>
+        <span th:text="${#numbers.formatDecimal(tour.gia, 0, 'COMMA', 0, 'POINT')}"></span> ₫
+    </p>
+</div>
+</body>
+</html>

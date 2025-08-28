@@ -29,3 +29,15 @@
 .scroll-item:hover {
   transform: scale(1.02);
 }
+
+.card-link {
+  display: block;              /* để bọc cả card */
+  text-decoration: none;       /* bỏ gạch chân */
+  color: inherit;              /* giữ màu chữ bên trong */
+}
+
+.card-link:hover {
+  text-decoration: none;       /* khi hover cũng không gạch */
+  color: inherit;              /* giữ màu chữ */
+}
+

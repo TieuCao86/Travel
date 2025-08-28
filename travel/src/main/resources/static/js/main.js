@@ -2,16 +2,15 @@ function enableDragScroll(container) {
   let isDragging = false;
   let startX = 0;
   let scrollLeft = 0;
+  let moved = false;
 
   container.addEventListener("mousedown", (e) => {
     if (e.button !== 0) return;
     isDragging = true;
+    moved = false;
     container.classList.add("dragging");
     container.style.cursor = "grabbing";
     container.style.scrollBehavior = "auto";
-
-    // Tạm thời bỏ pointer-events của tất cả con
-    container.querySelectorAll("*").forEach(el => el.style.pointerEvents = "none");
 
     startX = e.pageX;
     scrollLeft = container.scrollLeft;
@@ -20,18 +19,21 @@ function enableDragScroll(container) {
   container.addEventListener("mousemove", (e) => {
     if (!isDragging) return;
     const move = e.pageX - startX;
+    if (Math.abs(move) > 5) moved = true; // chỉ tính là drag khi di chuyển đủ xa
     container.scrollLeft = scrollLeft - move;
   });
 
-  const stopDrag = () => {
+  const stopDrag = (e) => {
     if (!isDragging) return;
     isDragging = false;
     container.classList.remove("dragging");
     container.style.cursor = "grab";
     container.style.scrollBehavior = "smooth";
 
-    // Bật lại pointer-events cho tất cả con
-    container.querySelectorAll("*").forEach(el => el.style.pointerEvents = "auto");
+    if (moved) {
+      // Nếu vừa kéo, chặn click trên link để không vô tình mở
+      e.preventDefault();
+    }
   };
 
   container.addEventListener("mouseup", stopDrag);
@@ -45,20 +47,17 @@ function enableDragScroll(container) {
     touchStartX = e.touches[0].pageX;
     touchScrollLeft = container.scrollLeft;
     container.style.scrollBehavior = "auto";
+    moved = false;
   });
 
   container.addEventListener("touchmove", (e) => {
     const move = e.touches[0].pageX - touchStartX;
+    if (Math.abs(move) > 5) moved = true;
     container.scrollLeft = touchScrollLeft - move;
   });
 
-  container.addEventListener("touchend", () => {
+  container.addEventListener("touchend", (e) => {
     container.style.scrollBehavior = "smooth";
+    if (moved) e.preventDefault();
   });
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll(".scroll-drag-container").forEach(container => {
-    enableDragScroll(container);
-  });
-});

@@ -1,21 +1,191 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${tour.tenTour}">Chi tiết tour</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tour Trung Quốc 5N4Đ: HCM - Thượng Hải - Hàng Châu - Tô Châu</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .tour-badge { background: #ff4757; color: white; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; position: absolute; top: 15px; left: 15px; z-index: 10; }
+        .tour-images { position: relative; }
+        .main-image { width: 100%; height: 300px; object-fit: cover; border-radius: 8px; }
+        .thumbnail-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; margin-top: 10px; }
+        .thumbnail { width: 100%; height: 60px; object-fit: cover; border-radius: 4px; cursor: pointer; opacity: 0.8; transition: opacity 0.3s; }
+        .thumbnail:hover { opacity: 1; }
+        .tour-info { background: #f8f9fa; border-radius: 8px; padding: 20px; }
+        .price-section { background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .price-highlight { color: #ff4757; font-size: 24px; font-weight: bold; }
+        .btn-book { background: #ff6b35; color: white; border: none; width: 100%; padding: 12px; border-radius: 6px; font-weight: bold; }
+        .btn-book:hover { background: #e55a2e; color: white; }
+        .tour-details { background: white; border-radius: 8px; padding: 20px; margin-top: 20px; }
+        .day-item { border-bottom: 1px solid #eee; padding: 15px 0; }
+        .day-item:last-child { border-bottom: none; }
+        .day-number { background: #007bff; color: white; width: 80px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 6px; font-weight: bold; }
+        .schedule-table { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .form-select, .form-control { border: 1px solid #ddd; border-radius: 6px; }
+        .info-item { display: flex; justify-content: space-between; margin-bottom: 10px; }
+        .info-label { color: #666; }
+        .rating { color: #ffc107; }
+    </style>
 </head>
-<body>
-<div class="container">
-    <h1 th:text="${tour.tenTour}"></h1>
-    <img th:src="${tour.duongDanAnhDaiDien}" alt="Ảnh tour" style="max-width:400px;">
+<body class="bg-light">
+<div class="container-fluid py-4">
+    <div class="row">
+        <!-- Left Column -->
+        <div class="col-lg-8">
+            <!-- Tour Title -->
+            <div class="d-flex align-items-center mb-3">
+                <h1 th:text="${tour.tenTour}"></h1>
+                <div class="rating ms-3">
+                    <!-- Sao đầy -->
+                    <span th:each="i : ${#numbers.sequence(1, tour.soSaoTrungBinh != null ? T(java.lang.Math).floor(tour.soSaoTrungBinh).intValue() : 0)}">
+        <i class="fas fa-star text-warning"></i>
+    </span>
 
-    <p><strong>Loại tour:</strong> <span th:text="${tour.loaiTour}"></span></p>
-    <p><strong>Mô tả:</strong> <span th:text="${tour.moTa}"></span></p>
-    <p><strong>Thời gian:</strong> <span th:text="${tour.thoiGian}"></span></p>
-    <p><strong>Giá:</strong>
-        <span th:text="${#numbers.formatDecimal(tour.gia, 0, 'COMMA', 0, 'POINT')}"></span> ₫
-    </p>
+                    <!-- Sao nửa -->
+                    <span th:if="${tour.soSaoTrungBinh != null and (tour.soSaoTrungBinh - T(java.lang.Math).floor(tour.soSaoTrungBinh)) >= 0.5}">
+        <i class="fas fa-star-half-alt text-warning"></i>
+    </span>
+
+                    <!-- Sao rỗng -->
+                    <span th:each="i : ${#numbers.sequence(
+        1,
+        5 - (tour.soSaoTrungBinh != null ? (T(java.lang.Math).floor(tour.soSaoTrungBinh).intValue() + ((tour.soSaoTrungBinh - T(java.lang.Math).floor(tour.soSaoTrungBinh)) >= 0.5 ? 1 : 0)) : 0)
+    )}">
+        <i class="far fa-star text-warning"></i>
+    </span>
+
+                    <!-- Text mô tả -->
+                    <span class="text-muted">
+        (<span th:text="${tour.soSaoTrungBinh != null ? tour.soSaoTrungBinh : 0}"></span>/5 -
+        <span th:text="${tour.soDanhGia != null ? tour.soDanhGia : 0}"></span> đánh giá)
+    </span>
+                </div>
+
+            </div>
+
+            <p class="text-muted mb-4"><i class="fas fa-map-marker-alt me-1"></i> Khởi hành từ: Hồ Chí Minh</p>
+
+            <!-- Tour Images -->
+            <div class="tour-images mb-4">
+                <div class="tour-badge">- <span th:text="${tour.giamGia}"></span></div>
+                <img th:src="${tour.duongDanAnhDaiDien}" alt="Shanghai skyline" class="main-image">
+                <div class="thumbnail-grid">
+                    <img src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?auto=format&fit=crop&w=200&q=80" alt="Thumbnail 1" class="thumbnail">
+                    <img src="https://images.unsplash.com/photo-1559623638-7e4b1b4d7b7e?auto=format&fit=crop&w=200&q=80" alt="Thumbnail 2" class="thumbnail">
+                    <img src="https://images.unsplash.com/photo-1582655832003-2b8e4894b1a0?auto=format&fit=crop&w=200&q=80" alt="Thumbnail 3" class="thumbnail">
+                    <img src="https://images.unsplash.com/photo-1529600031095-3c0178526d0d?auto=format&fit=crop&w=200&q=80" alt="Thumbnail 4" class="thumbnail">
+                </div>
+            </div>
+
+            <!-- Tour Package Info -->
+            <div class="tour-info mb-4">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="mb-2"><strong>Mã Tour: </strong><span th:text="${tour.maTour}"></span></p>
+                        <p class="mb-2"><strong>Loại tour: </strong><span th:text="${tour.loaiTour}"></span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="mb-2"><strong>Dịch vụ bao gồm:</strong></p>
+                        <div class="row">
+                            <div class="col-4"><i class="fas fa-plane text-primary me-1"></i> Vé máy bay</div>
+                            <div class="col-4"><i class="fas fa-utensils text-primary me-1"></i> Ăn uống</div>
+                            <div class="col-4"><i class="fas fa-hotel text-primary me-1"></i> Khách sạn 4*</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tour Experience -->
+            <div class="tour-details">
+                <h5 class="mb-3">Trải nghiệm thú vị</h5>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-check-circle text-success me-2"></i> Dạo phố Nanjing, ngắm Thượng Hải rực rỡ</li>
+                    <li><i class="fas fa-check-circle text-success me-2"></i> Du ngoạn Tây Hồ, Hàng Châu</li>
+                    <li><i class="fas fa-check-circle text-success me-2"></i> Ghé Tô Châu - Venice phương Đông</li>
+                    <li><i class="fas fa-check-circle text-success me-2"></i> Tản bộ Ô Trấn - làng cổ Trung Hoa</li>
+                    <li><i class="fas fa-check-circle text-success me-2"></i> Option: Disneyland Thượng Hải</li>
+                </ul>
+            </div>
+
+            <!-- Tour Schedule -->
+            <div class="tour-details mt-4">
+                <h5 class="mb-3">Chương trình tour</h5>
+                <div class="day-item"><strong>Ngày 1:</strong> HCM - Thượng Hải (Ăn trưa, tối)</div>
+                <div class="day-item"><strong>Ngày 2:</strong> Thượng Hải - Hàng Châu (Ăn sáng, trưa, tối)</div>
+                <div class="day-item"><strong>Ngày 3:</strong> Hàng Châu - Ô Trấn - Tô Châu (Ăn sáng, trưa, tối)</div>
+                <div class="day-item"><strong>Ngày 4:</strong> Tô Châu - Thượng Hải (Ăn sáng, trưa)</div>
+                <div class="day-item"><strong>Ngày 5:</strong> Thượng Hải - HCM (Ăn sáng)</div>
+            </div>
+
+            <!-- Booking Schedule -->
+            <div class="schedule-table mt-4">
+                <h5 class="p-3 mb-0 bg-light">Lịch khởi hành & giá tour</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                        <tr>
+                            <th>Ngày khởi hành</th>
+                            <th>Ngày về</th>
+                            <th>Hạn chót</th>
+                            <th>Giá</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>06/07/2025</td>
+                            <td>10/07/2025</td>
+                            <td>01/07/2025</td>
+                            <td class="price-highlight">13.990.000 ₫</td>
+                        </tr>
+                        <tr>
+                            <td>20/07/2025</td>
+                            <td>24/07/2025</td>
+                            <td>15/07/2025</td>
+                            <td class="price-highlight">14.500.000 ₫</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-lg-4">
+            <div class="price-section sticky-top" style="top: 20px;">
+                <h6 class="mb-3">Đặt tour</h6>
+
+                <div class="info-item">
+                    <span>Thời gian</span>
+                    <span th:text="${tour.thoiGian}"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Người lớn</label>
+                    <input type="number" class="form-control" value="2" min="1">
+                    <small>Giá: 13.990.000 ₫/người</small>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Trẻ em</label>
+                    <input type="number" class="form-control" value="1" min="0">
+                    <small>Giá: 10.000.000 ₫/người</small>
+                </div>
+
+                <hr>
+
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Tổng giá</span>
+                    <span class="price-highlight">37.980.000 ₫</span>
+                </div>
+
+                <button class="btn-book">ĐẶT NGAY</button>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

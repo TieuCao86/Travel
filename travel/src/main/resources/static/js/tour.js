@@ -4,9 +4,12 @@ const toursPerPage = 9;
 
 function loadTours(apiUrl, targetSelector, usePagination = false) {
     fetch(apiUrl)
-        .then(response => {
-            if (!response.ok) throw new Error("API lỗi");
-            return response.json();
+        .then(async response => {
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`API lỗi: ${response.status} - ${errorText}`);
+                }
+                return response.json();
         })
         .then(tours => {
             allTours = tours;

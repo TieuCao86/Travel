@@ -4,11 +4,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import jakarta.persistence.Id;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
 import java.util.List;
 
 @Entity
@@ -27,7 +25,7 @@ public class DatTour {
     private String trangThai;
 
     @ManyToOne
-    @JoinColumn(name = "maTour")
+    @JoinColumn(name = "maTour", nullable = false)
     private Tour tour;
 
     @ManyToOne
@@ -41,4 +39,3 @@ public class DatTour {
     @OneToMany(mappedBy = "datTour")
     private List<ThanhToan> thanhToanList;
 }
-

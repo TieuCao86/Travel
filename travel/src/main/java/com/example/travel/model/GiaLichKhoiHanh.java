@@ -6,22 +6,32 @@ import lombok.*;
 import java.math.BigDecimal;
 
 @Entity
+@Table(name = "GiaLichKhoiHanh")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GiaTour {
+@Builder
+public class GiaLichKhoiHanh {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "MaGia")
     private Integer maGia;
 
-    @ManyToOne
-    @JoinColumn(name = "maTour")
-    private Tour tour;
+    @Column(name = "LoaiHanhKhach", nullable = false)
+    private String loaiHanhKhach; // 'NguoiLon', 'TreEm', 'TreNho'
 
-    private String loaiHanhKhach; // "NguoiLon", "TreEm", "TreNho"
-    private Integer doTuoiTu;      // tuổi từ
-    private Integer doTuoiDen;     // đến tuổi
-    private BigDecimal gia;
-    private String moTa;
+    @Column(name = "Gia", nullable = false)
+    private Double gia;
+
+    @Column(name = "DoTuoiTu")
+    private Integer doTuoiTu;
+
+    @Column(name = "DoTuoiDen")
+    private Integer doTuoiDen;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MaLichKhoiHanh")
+    private LichKhoiHanh lichKhoiHanh;
 }
+

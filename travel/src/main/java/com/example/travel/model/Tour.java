@@ -45,11 +45,14 @@ public class Tour {
     @OneToMany(mappedBy = "tour")
     private List<HinhAnhTour> hinhAnhTours;
 
+    @OneToMany(mappedBy = "tour")
+    private List<LichKhoiHanh> lichKhoiHanhs;
+
     @ManyToMany
     @JoinTable(
             name = "TourVoucher",
-            joinColumns = @JoinColumn(name = "ma_tour"),
-            inverseJoinColumns = @JoinColumn(name = "ma_voucher")
+            joinColumns = @JoinColumn(name = "MaTour"),
+            inverseJoinColumns = @JoinColumn(name = "MaVoucher")
     )
     private Set<Voucher> vouchers;
 }

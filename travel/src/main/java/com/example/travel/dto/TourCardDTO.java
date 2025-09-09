@@ -6,12 +6,12 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Data
-public class TourDTO {
+@Data
+public class TourCardDTO {
     private int maTour;
     private String tenTour;
     private String loaiTour;
-    private String moTa;
-    private String thoiGian;
+    private String moTa; // mô tả ngắn gọn
     private BigDecimal gia;
     private List<String> phuongTiens;
     private String duongDanAnhDaiDien;
@@ -19,4 +19,5 @@ public class TourDTO {
     private Integer soDanhGia;
     private String giamGia;
 }
+
 

@@ -44,15 +44,15 @@
     </span>
 
                     <!-- Sao nửa -->
-                    <span th:if="${tour.soSaoTrungBinh != null and (tour.soSaoTrungBinh - T(java.lang.Math).floor(tour.soSaoTrungBinh)) >= 0.5}">
+                    <span th:if="${tour.soSaoTrungBinh != null and (tour.soSaoTrungBinh % 1) >= 0.5}">
         <i class="fas fa-star-half-alt text-warning"></i>
     </span>
 
                     <!-- Sao rỗng -->
                     <span th:each="i : ${#numbers.sequence(
-        1,
-        5 - (tour.soSaoTrungBinh != null ? (T(java.lang.Math).floor(tour.soSaoTrungBinh).intValue() + ((tour.soSaoTrungBinh - T(java.lang.Math).floor(tour.soSaoTrungBinh)) >= 0.5 ? 1 : 0)) : 0)
-    )}">
+            1,
+            5 - (tour.soSaoTrungBinh != null ? (T(java.lang.Math).round(tour.soSaoTrungBinh)) : 0)
+        )}">
         <i class="far fa-star text-warning"></i>
     </span>
 
@@ -62,6 +62,7 @@
         <span th:text="${tour.soDanhGia != null ? tour.soDanhGia : 0}"></span> đánh giá)
     </span>
                 </div>
+
 
             </div>
 
@@ -123,32 +124,29 @@
             <div class="schedule-table mt-4">
                 <h5 class="p-3 mb-0 bg-light">Lịch khởi hành & giá tour</h5>
                 <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead class="table-light">
+                    <table class="table table-bordered">
+                        <thead>
                         <tr>
                             <th>Ngày khởi hành</th>
-                            <th>Ngày về</th>
-                            <th>Hạn chót</th>
+                            <th>Ngày kết thúc</th>
                             <th>Giá</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>06/07/2025</td>
-                            <td>10/07/2025</td>
-                            <td>01/07/2025</td>
-                            <td class="price-highlight">13.990.000 ₫</td>
-                        </tr>
-                        <tr>
-                            <td>20/07/2025</td>
-                            <td>24/07/2025</td>
-                            <td>15/07/2025</td>
-                            <td class="price-highlight">14.500.000 ₫</td>
+                        <tr th:each="lich : ${tour.lichKhoiHanhs}">
+                            <td th:text="${lich.ngayKhoiHanh}"></td>
+                            <td th:text="${lich.ngayKetThuc}"></td>
+                            <td th:text="${#lists.isEmpty(lich.giaList.?[loaiHanhKhach == 'NguoiLon'])
+                              ? '---'
+                              : #numbers.formatDecimal(lich.giaList.?[loaiHanhKhach == 'NguoiLon'][0].gia * 2, 0, 'COMMA', 0, 'POINT') + 'đ'}">
+                            </td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
+
+
         </div>
 
         <!-- Right Column -->

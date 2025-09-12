@@ -10,7 +10,10 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {LichKhoiHanhMapper.class, DanhGiaMapper.class})
+@Mapper(
+        componentModel = "spring",
+        uses = {LichKhoiHanhMapper.class, DanhGiaMapper.class, LichTrinhChiTietMapper.class}
+)
 public interface TourMapper {
 
     // Entity -> DetailDTO
@@ -19,7 +22,7 @@ public interface TourMapper {
     @Mapping(target = "phuongTiens", expression = "java(mapPhuongTiens(tour.getPhuongTiens()))")
     @Mapping(target = "lichKhoiHanhs", source = "lichKhoiHanhs")
     @Mapping(target = "danhGiaList", source = "danhGiaList")
-    @Mapping(target = "giaList", expression = "java(getGiaHienTai(tour))")
+    @Mapping(target = "lichTrinhChiTietList", source = "lichTrinhList")
     @Mapping(target = "soSaoTrungBinh", expression = "java(tinhSoSaoTrungBinh(tour.getDanhGiaList()))")
     @Mapping(target = "soDanhGia", expression = "java(tour.getDanhGiaList() != null ? tour.getDanhGiaList().size() : 0)")
     TourDetailDTO toDetailDTO(Tour tour);
@@ -78,7 +81,6 @@ public interface TourMapper {
                                 GiaLoaiKhachDTO dto = new GiaLoaiKhachDTO();
                                 dto.setLoaiHanhKhach(g.getLoaiHanhKhach());
                                 dto.setGia(g.getGia().doubleValue());
-                                dto.setMaLichKhoiHanh(lkh.getMaLichKhoiHanh()); // nếu muốn biết đợt nào
                                 return dto;
                             });
                 })

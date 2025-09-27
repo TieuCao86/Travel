@@ -9,21 +9,26 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "HinhAnhChiTietTour")
 public class HinhAnhChiTietTour {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "MaAnhChiTiet")
     private Integer maAnhChiTiet;
 
-    @ManyToOne
-    @JoinColumn(name = "maChiTiet")
+    // FK tới LichTrinhChiTiet mới
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MaChiTiet", nullable = false)
     private LichTrinhChiTiet lichTrinhChiTiet;
 
-    @Column(nullable = false)
+    @Column(name = "DuongDan", nullable = false)
     private String duongDan;
 
+    @Column(name = "MoTa")
     private String moTa;
 
-    @Column(columnDefinition = "BIT")
+    @Column(name = "LaAnhNoiBat", columnDefinition = "BIT DEFAULT 0")
     private Boolean laAnhNoiBat = false;
 }
+

@@ -25,8 +25,9 @@ public class Tour {
 
     private String thoiGian;
 
-    @OneToMany(mappedBy = "tour")
-    private List<LichTrinhChiTiet> lichTrinhList;
+    // Đúng theo thiết kế mới: Tour -> LichTrinhNgay -> LichTrinhChiTiet
+    @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LichTrinhNgay> lichTrinhNgayList;
 
     @OneToMany(mappedBy = "tour")
     private List<DatTour> datTours;

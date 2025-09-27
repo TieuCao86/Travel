@@ -1,8 +1,6 @@
 package com.example.travel.mapper;
 
-import com.example.travel.dto.GiaLoaiKhachDTO;
-import com.example.travel.dto.TourCardDTO;
-import com.example.travel.dto.TourDetailDTO;
+import com.example.travel.dto.*;
 import com.example.travel.model.*;
 import com.example.travel.projection.TourCardProjection;
 import org.mapstruct.Mapper;
@@ -22,7 +20,7 @@ public interface TourMapper {
     @Mapping(target = "phuongTiens", expression = "java(mapPhuongTiens(tour.getPhuongTiens()))")
     @Mapping(target = "lichKhoiHanhs", source = "lichKhoiHanhs")
     @Mapping(target = "danhGiaList", source = "danhGiaList")
-    @Mapping(target = "lichTrinhChiTietList", source = "lichTrinhList")
+    @Mapping(target = "lichTrinhNgayList", expression = "java(mapLichTrinhNgayList(tour))")
     @Mapping(target = "soSaoTrungBinh", expression = "java(tinhSoSaoTrungBinh(tour.getDanhGiaList()))")
     @Mapping(target = "soDanhGia", expression = "java(tour.getDanhGiaList() != null ? tour.getDanhGiaList().size() : 0)")
     TourDetailDTO toDetailDTO(Tour tour);
@@ -87,6 +85,38 @@ public interface TourMapper {
                 .toList();
     }
 
+    default List<LichTrinhChiTietDTO> mapLichTrinhChiTietList(Tour tour) {
+        if (tour == null || tour.getLichTrinhNgayList() == null) return List.of();
+
+        // Dùng LichTrinhChiTietMapper (đã khai báo trong `uses`)
+        return tour.getLichTrinhNgayList().stream()
+                .flatMap(ngay -> ngay.getChiTietList().stream())
+                .map(this::mapChiTiet) // gọi method khác để dùng mapper
+                .toList();
+    }
+
+    default LichTrinhChiTietDTO mapChiTiet(LichTrinhChiTiet entity) {
+        // MapStruct sẽ tự generate method gọi sang LichTrinhChiTietMapper.toDTO
+        return null;
+    }
+
+    default List<LichTrinhNgayDTO> mapLichTrinhNgayList(Tour tour) {
+        if (tour == null || tour.getLichTrinhNgayList() == null) return List.of();
+
+        return tour.getLichTrinhNgayList().stream()
+                .map(ngay -> {
+                    LichTrinhNgayDTO dto = new LichTrinhNgayDTO();
+                    dto.setSoNgay(ngay.getNgayThu());       // ví dụ ngày 1, 2, 3
+                    dto.setMoTaNgay(ngay.getMoTaTongQuan());   // mô tả ngày
+                    dto.setChiTietList(
+                            ngay.getChiTietList().stream()
+                                    .map(this::mapChiTiet)
+                                    .toList()
+                    );
+                    return dto;
+                })
+                .toList();
+    }
 
 
 }

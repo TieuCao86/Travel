@@ -7,62 +7,196 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        .tour-badge { background: #ff4757; color: white; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; position: absolute; top: 15px; left: 15px; z-index: 10; }
-        .tour-images { position: relative; }
-        .main-image { width: 100%; height: 300px; object-fit: cover; border-radius: 8px; }
-        .thumbnail-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; margin-top: 10px; }
-        .thumbnail { width: 100%; height: 60px; object-fit: cover; border-radius: 4px; cursor: pointer; opacity: 0.8; transition: opacity 0.3s; }
-        .thumbnail:hover { opacity: 1; }
-        .tour-info { background: #f8f9fa; border-radius: 8px; padding: 20px; }
-        .price-section { background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .price-highlight { color: #ff4757; font-size: 24px; font-weight: bold; }
-        .btn-book { background: #ff6b35; color: white; border: none; width: 100%; padding: 12px; border-radius: 6px; font-weight: bold; }
-        .btn-book:hover { background: #e55a2e; color: white; }
-        .tour-details { background: white; border-radius: 8px; padding: 20px; margin-top: 20px; }
-        .day-item { border-bottom: 1px solid #eee; padding: 15px 0; }
-        .day-item:last-child { border-bottom: none; }
-        .day-number { background: #007bff; color: white; width: 80px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 6px; font-weight: bold; }
-        .schedule-table { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .form-select, .form-control { border: 1px solid #ddd; border-radius: 6px; }
-        .info-item { display: flex; justify-content: space-between; margin-bottom: 10px; }
-        .info-label { color: #666; }
-        .rating { color: #ffc107; }
+        /* Tour Detail Styles */
+        .tour-badge {
+            background: #ff4757;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            z-index: 10;
+        }
+        .tour-images {
+            position: relative;
+        }
+        .main-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .thumbnail-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 5px;
+            margin-top: 10px;
+        }
+        .thumbnail {
+            width: 100%;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        .thumbnail:hover {
+            opacity: 1;
+        }
+        .tour-info {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .tour-details {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .day-item {
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+        }
+        .day-item:last-child {
+            border-bottom: none;
+        }
+        .day-number {
+            background: #007bff;
+            color: white;
+            width: 80px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .price-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .price-highlight {
+            color: #ff4757;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .btn-book {
+            background: #ff6b35;
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        .btn-book:hover {
+            background: #e55a2e;
+            color: white;
+        }
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .rating {
+            color: #ffc107;
+        }
+
+        /* Booking System Styles */
+        .schedule-table {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .rating-stars {
+            color: #ffc107;
+        }
+        .tour-card {
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        .tour-card:hover {
+            transform: translateY(-5px);
+        }
+        .price-tag {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-weight: bold;
+        }
+        .info-section {
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .booking-summary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .nav-tabs .nav-link {
+            border: none;
+            background: transparent;
+            color: #6c757d;
+        }
+        .nav-tabs .nav-link.active {
+            background: #007bff;
+            color: white;
+            border-radius: 20px;
+        }
+        .form-select, .form-control {
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
     </style>
 </head>
 <body class="bg-light">
+<!-- Navigation Header -->
+
+<!-- Breadcrumb -->
+<div class="container mt-3">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#" class="text-decoration-none">Trang chủ</a></li>
+            <li class="breadcrumb-item"><a href="#" class="text-decoration-none">Tours</a></li>
+            <li class="breadcrumb-item"><a href="#" class="text-decoration-none">Tour Trung Quốc</a></li>
+            <li class="breadcrumb-item active" aria-current="page">5N4Đ: HCM - Thượng Hải - Hàng Châu - Tô Châu</li>
+        </ol>
+    </nav>
+</div>
+
 <div class="container-fluid py-4">
-    <div class="row">
-        <!-- Left Column -->
+    <!-- Tour Detail Section -->
+    <div class="row mb-5">
+        <!-- Left Column - Tour Details -->
         <div class="col-lg-8">
             <!-- Tour Title -->
             <div class="d-flex align-items-center mb-3">
                 <h1 th:text="${tour.tenTour}"></h1>
                 <div class="rating ms-3">
-                    <!-- Sao đầy -->
-                    <span th:each="i : ${#numbers.sequence(1, tour.soSaoTrungBinh != null ? T(java.lang.Math).floor(tour.soSaoTrungBinh).intValue() : 0)}">
-        <i class="fas fa-star text-warning"></i>
-    </span>
-
-                    <!-- Sao nửa -->
-                    <span th:if="${tour.soSaoTrungBinh != null and (tour.soSaoTrungBinh % 1) >= 0.5}">
-        <i class="fas fa-star-half-alt text-warning"></i>
-    </span>
-
-                    <!-- Sao rỗng -->
-                    <span th:each="i : ${#numbers.sequence(
-            1,
-            5 - (tour.soSaoTrungBinh != null ? (T(java.lang.Math).round(tour.soSaoTrungBinh)) : 0)
-        )}">
-        <i class="far fa-star text-warning"></i>
-    </span>
-
-                    <!-- Text mô tả -->
-                    <span class="text-muted">
-        (<span th:text="${tour.soSaoTrungBinh != null ? tour.soSaoTrungBinh : 0}"></span>/5 -
-        <span th:text="${tour.soDanhGia != null ? tour.soDanhGia : 0}"></span> đánh giá)
-    </span>
+                    <i th:each="i : ${#numbers.sequence(1,5)}"
+                       th:classappend="${i <= tour.soSaoTrungBinh} ? 'fas fa-star text-warning' :
+                        (${i - 0.5 <= tour.soSaoTrungBinh} ? 'fas fa-star-half-alt text-warning' :
+                                                             'far fa-star text-warning')">
+                    </i>
+                    <span class="text-muted ms-2">
+                        (<span th:text="${tour.soSaoTrungBinh}">0</span>/5 -
+                         <span th:text="${tour.soDanhGia}">0</span> đánh giá)
+                    </span>
                 </div>
-
 
             </div>
 
@@ -70,13 +204,15 @@
 
             <!-- Tour Images -->
             <div class="tour-images mb-4">
-                <div class="tour-badge">- <span th:text="${tour.giamGia}"></span></div>
-                <img th:src="${tour.duongDanAnhDaiDien}" alt="Shanghai skyline" class="main-image">
+                <div class="tour-badge">Giảm 15%</div>
+                <img src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800&h=400&fit=crop" alt="Shanghai skyline" class="main-image">
                 <div class="thumbnail-grid">
-                    <img src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?auto=format&fit=crop&w=200&q=80" alt="Thumbnail 1" class="thumbnail">
-                    <img src="https://images.unsplash.com/photo-1559623638-7e4b1b4d7b7e?auto=format&fit=crop&w=200&q=80" alt="Thumbnail 2" class="thumbnail">
-                    <img src="https://images.unsplash.com/photo-1582655832003-2b8e4894b1a0?auto=format&fit=crop&w=200&q=80" alt="Thumbnail 3" class="thumbnail">
-                    <img src="https://images.unsplash.com/photo-1529600031095-3c0178526d0d?auto=format&fit=crop&w=200&q=80" alt="Thumbnail 4" class="thumbnail">
+                    <img src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=200&h=120&fit=crop" alt="Thumbnail 1" class="thumbnail">
+                    <img src="https://images.unsplash.com/photo-1559623638-7e4b1b4d7b7e?w=200&h=120&fit=crop" alt="Thumbnail 2" class="thumbnail">
+                    <img src="https://images.unsplash.com/photo-1582655832003-2b8e4894b1a0?w=200&h=120&fit=crop" alt="Thumbnail 3" class="thumbnail">
+                    <img src="https://images.unsplash.com/photo-1529600031095-3c0178526d0d?w=200&h=120&fit=crop" alt="Thumbnail 4" class="thumbnail">
+                    <img src="https://images.unsplash.com/photo-1548919973-5cef591cdbc9?w=200&h=120&fit=crop" alt="Thumbnail 5" class="thumbnail">
+                    <img src="https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=200&h=120&fit=crop" alt="Thumbnail 6" class="thumbnail">
                 </div>
             </div>
 
@@ -84,8 +220,14 @@
             <div class="tour-info mb-4">
                 <div class="row">
                     <div class="col-md-6">
-                        <p class="mb-2"><strong>Mã Tour: </strong><span th:text="${tour.maTour}"></span></p>
-                        <p class="mb-2"><strong>Loại tour: </strong><span th:text="${tour.loaiTour}"></span></p>
+                        <p class="mb-2">
+                            <strong>Mã Tour: </strong>
+                            <span th:text="${tour.maTour}"></span>
+                        </p>
+                        <p class="mb-2">
+                            <strong>Loại Tour: </strong>
+                            <span th:text="${tour.loaiTour}"></span>
+                        </p>
                     </div>
                     <div class="col-md-6">
                         <p class="mb-2"><strong>Dịch vụ bao gồm:</strong></p>
@@ -101,73 +243,107 @@
             <!-- Tour Experience -->
             <div class="tour-details">
                 <h5 class="mb-3">Trải nghiệm thú vị</h5>
-                <ul class="list-unstyled">
-                    <li><i class="fas fa-check-circle text-success me-2"></i> Dạo phố Nanjing, ngắm Thượng Hải rực rỡ</li>
-                    <li><i class="fas fa-check-circle text-success me-2"></i> Du ngoạn Tây Hồ, Hàng Châu</li>
-                    <li><i class="fas fa-check-circle text-success me-2"></i> Ghé Tô Châu - Venice phương Đông</li>
-                    <li><i class="fas fa-check-circle text-success me-2"></i> Tản bộ Ô Trấn - làng cổ Trung Hoa</li>
-                    <li><i class="fas fa-check-circle text-success me-2"></i> Option: Disneyland Thượng Hải</li>
+                <ul class="list-unstyled" th:if="${moTaList}">
+                    <li th:each="item : ${moTaList}">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        <span th:text="${item}"></span>
+                    </li>
                 </ul>
+
+
             </div>
 
             <!-- Tour Schedule -->
             <div class="tour-details mt-4">
                 <h5 class="mb-3">Chương trình tour</h5>
-                <div class="day-item"><strong>Ngày 1:</strong> HCM - Thượng Hải (Ăn trưa, tối)</div>
-                <div class="day-item"><strong>Ngày 2:</strong> Thượng Hải - Hàng Châu (Ăn sáng, trưa, tối)</div>
-                <div class="day-item"><strong>Ngày 3:</strong> Hàng Châu - Ô Trấn - Tô Châu (Ăn sáng, trưa, tối)</div>
-                <div class="day-item"><strong>Ngày 4:</strong> Tô Châu - Thượng Hải (Ăn sáng, trưa)</div>
-                <div class="day-item"><strong>Ngày 5:</strong> Thượng Hải - HCM (Ăn sáng)</div>
-            </div>
-
-            <!-- Booking Schedule -->
-            <div class="schedule-table mt-4">
-                <h5 class="p-3 mb-0 bg-light">Lịch khởi hành & giá tour</h5>
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <thead>
-                        <tr>
-                            <th>Ngày khởi hành</th>
-                            <th>Ngày kết thúc</th>
-                            <th>Giá</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="lich : ${tour.lichKhoiHanhs}">
-                            <td th:text="${lich.ngayKhoiHanh}"></td>
-                            <td th:text="${lich.ngayKetThuc}"></td>
-                            <td th:text="${#lists.isEmpty(lich.giaList.?[loaiHanhKhach == 'NguoiLon'])
-                              ? '---'
-                              : #numbers.formatDecimal(lich.giaList.?[loaiHanhKhach == 'NguoiLon'][0].gia * 2, 0, 'COMMA', 0, 'POINT') + 'đ'}">
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                <div class="day-item">
+                    <div class="d-flex align-items-start">
+                        <div class="day-number me-3">Ngày 1</div>
+                        <div>
+                            <p><strong>TP.HCM - THƯỢNG HẢI (Ăn trưa, tối)</strong></p>
+                            <ul class="list-unstyled mb-0">
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Bay từ TP.HCM đến Thượng Hải</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Tham quan Bến Thượng Hải (The Bund)</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Dạo phố Nanjing về đêm</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="day-item">
+                    <div class="d-flex align-items-start">
+                        <div class="day-number me-3">Ngày 2</div>
+                        <div>
+                            <p><strong>THƯỢNG HẢI - HÀNG CHÂU (Ăn sáng, trưa, tối)</strong></p>
+                            <ul class="list-unstyled mb-0">
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Tham quan Vườn Dự Viên</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Du ngoạn Tây Hồ bằng thuyền</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Thưởng thức trà Longjing</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="day-item">
+                    <div class="d-flex align-items-start">
+                        <div class="day-number me-3">Ngày 3</div>
+                        <div>
+                            <p><strong>HÀNG CHÂU - TÔ CHÂU (Ăn sáng, trưa, tối)</strong></p>
+                            <ul class="list-unstyled mb-0">
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Tham quan Vườn Khiêm Tôn</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Dạo phố cổ Pingjiang</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Thưởng thức ẩm thực địa phương</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="day-item">
+                    <div class="d-flex align-items-start">
+                        <div class="day-number me-3">Ngày 4</div>
+                        <div>
+                            <p><strong>TÔ CHÂU - Ô TRẤN - THƯỢNG HẢI (Ăn sáng, trưa, tối)</strong></p>
+                            <ul class="list-unstyled mb-0">
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Tham quan làng cổ Ô Trấn</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Trải nghiệm thuyền gondola</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Về Thượng Hải nghỉ ngơi</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="day-item">
+                    <div class="d-flex align-items-start">
+                        <div class="day-number me-3">Ngày 5</div>
+                        <div>
+                            <p><strong>THƯỢNG HẢI - TP.HCM (Ăn sáng)</strong></p>
+                            <ul class="list-unstyled mb-0">
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Tự do mua sắm buổi sáng</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Ra sân bay về TP.HCM</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Kết thúc tour</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-
         </div>
 
-        <!-- Right Column -->
+        <!-- Right Column - Booking Form -->
         <div class="col-lg-4">
             <div class="price-section sticky-top" style="top: 20px;">
                 <h6 class="mb-3">Đặt tour</h6>
 
                 <div class="info-item">
                     <span>Thời gian</span>
-                    <span th:text="${tour.thoiGian}"></span>
+                    <span>5 ngày 4 đêm</span>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Người lớn</label>
-                    <input type="number" class="form-control" value="2" min="1">
+                    <input type="number" class="form-control adult-count" value="2" min="1">
                     <small>Giá: 13.990.000 ₫/người</small>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Trẻ em</label>
-                    <input type="number" class="form-control" value="1" min="0">
+                    <input type="number" class="form-control child-count" value="1" min="0">
                     <small>Giá: 10.000.000 ₫/người</small>
                 </div>
 
@@ -175,15 +351,313 @@
 
                 <div class="d-flex justify-content-between mb-3">
                     <span>Tổng giá</span>
-                    <span class="price-highlight">37.980.000 ₫</span>
+                    <span class="price-highlight total-price">37.980.000 ₫</span>
                 </div>
 
                 <button class="btn-book">ĐẶT NGAY</button>
             </div>
         </div>
     </div>
-</div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    <!-- Booking System Section -->
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <!-- Schedule Section -->
+            <div class="card schedule-table mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-calendar-alt me-2"></i>Lịch Trình và Giá Tour</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                            <tr>
+                                <th>Ngày khởi hành</th>
+                                <th>Ngày kết thúc</th>
+                                <th>Loại hình</th>
+                                <th>Giá tour</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>CN, 23/11/2025</td>
+                                <td>T4, 26/11/2025</td>
+                                <td><span class="badge bg-success">Liên hệ</span></td>
+                                <td class="price-highlight">8,500,000 ₫</td>
+                                <td><button class="btn btn-outline-primary btn-sm">Chọn</button></td>
+                            </tr>
+                            <tr>
+                                <td>T7, 06/12/2025</td>
+                                <td>T3, 09/12/2025</td>
+                                <td><span class="badge bg-success">Liên hệ</span></td>
+                                <td class="price-highlight">8,500,000 ₫</td>
+                                <td><button class="btn btn-outline-primary btn-sm">Chọn</button></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tour Information -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs" id="tourTabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#overview" data-bs-toggle="tab">Giới thiệu chung</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#itinerary" data-bs-toggle="tab">Chương trình tour</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#policy" data-bs-toggle="tab">Phụ thu</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#terms" data-bs-toggle="tab">Thông tin khác</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="overview">
+                            <div class="info-section">
+                                <h6><i class="fas fa-map-marker-alt text-primary me-2"></i>Vận Chuyển:</h6>
+                                <p>Xe máy lạnh chạy quốc lộ tại TP Hồ Chí Minh, tại Asia, Seoul, Malaysia Airlines... Bao gồm 7kg hành lý xách tay, 1 kg gói.</p>
+
+                                <h6><i class="fas fa-bed text-primary me-2"></i>Khách sạn:</h6>
+                                <p>Xe đưa đón từ sân quần theo chương trình.</p>
+
+                                <h6><i class="fas fa-utensils text-primary me-2"></i>Thực đẩy:</h6>
+                                <p>Phí xây dựng đầu án sân nhà, phí sân bay phí trường 2 nước.</p>
+
+                                <h6><i class="fas fa-ticket-alt text-primary me-2"></i>Bao Gồm:</h6>
+                                <ul>
+                                    <li>Khách sạn 3 - 4 sao đặc phòng hạng nhạnh / 3 khách/phòng</li>
+                                    <li>Bảo hiểm du lịch trọn.</li>
+                                    <li>Hướng dẫn viên du lịch Nằm theo đoàn suốt tuyến.</li>
+                                    <li>Quà tặng kỷ niệm chuyến tour. Bao gồm.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="itinerary">
+                            <p>Chi tiết chương trình tour sẽ được cập nhật tại đây...</p>
+                        </div>
+                        <div class="tab-pane fade" id="policy">
+                            <p>Thông tin về phụ thu và chính sách...</p>
+                        </div>
+                        <div class="tab-pane fade" id="terms">
+                            <p>Các thông tin bổ sung và điều khoản...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reviews Section -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="mb-0">Đánh giá khách hàng về Tour Singapore - Malaysia 4N3Đ: Sentosa - Genting - Dong Baik - Thái Đài Penusoa</h6>
+                    <div class="d-flex align-items-center mt-2">
+                        <div class="rating-stars me-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span class="badge bg-success">4.4/5</span>
+                        <span class="text-muted ms-2">Dựt vềt </span>
+                        <span class="badge bg-secondary ms-1">14 đánh giá</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-user-circle text-primary me-2"></i>
+                                <div>
+                                    <strong>Lê Hồng</strong>
+                                    <div class="rating-stars small">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-user-circle text-primary me-2"></i>
+                                <div>
+                                    <strong>Nguyen Thi Hang</strong>
+                                    <div class="rating-stars small">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-user-circle text-primary me-2"></i>
+                                <div>
+                                    <strong>Nguyen Hai</strong>
+                                    <div class="rating-stars small">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-user-circle text-primary me-2"></i>
+                                <div>
+                                    <strong>Ân Thi Hang</strong>
+                                    <div class="rating-stars small">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-outline-primary">Xem thêm phó</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Related Tours -->
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">Tours du lịch Malaysia liên quan</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="card tour-card h-100">
+                                <div class="position-relative">
+                                    <img src="https://images.unsplash.com/photo-1548274304-6c7c88d81cdf?w=300&h=200&fit=crop" class="card-img-top" alt="Cruise Ship">
+                                    <div class="position-absolute top-0 start-0 m-2">
+                                        <span class="badge bg-danger">Giảm 8% linh hoạt 9</span>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-title">Combo Siêu Du Thuyền Genting Dream 4N3Đ: Singapore - Malaka (Kuala Lumpur)</h6>
+                                    <p class="text-muted small">Có thương làm báo • từ Hồ Chí Minh</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="rating-stars small">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                        </div>
+                                        <small class="text-muted">4 ngày 3 đêm</small>
+                                    </div>
+                                    <div class="mt-3">
+                                        <span class="price-tag">11,290,000 ₫</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="card tour-card h-100">
+                                <div class="position-relative">
+                                    <img src="https://images.unsplash.com/photo-1605650692106-7b4c2e7b3b8a?w=300&h=200&fit=crop" class="card-img-top" alt="Malaysia Tour">
+                                    <div class="position-absolute top-0 start-0 m-2">
+                                        <span class="badge bg-info">Tour Giá Siêu Sốc</span>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-title">Combo Siêu Du Thuyền Ovation Of The Seas 5N4Đ: Singapore - Penang</h6>
+                                    <p class="text-muted small">Có hướng dẫn tour • từ Hồ Chí Minh</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="rating-stars small">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </div>
+                                        <small class="text-muted">5 ngày 4 đêm</small>
+                                    </div>
+                                    <div class="mt-3">
+                                        <span class="price-tag">16,399,000 ₫</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="card tour-card h-100">
+                                <div class="position-relative">
+                                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=200&fit=crop" class="card-img-top" alt="Genting Highlands">
+                                    <div class="position-absolute top-0 start-0 m-2">
+                                        <span class="badge bg-warning">4 Sao Ngôi 3 Đánh Giá</span>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-title">Tour du lịch Quần Đảo 5N4Đ: Hà Nội - Singapore - Indonesia (Đảo Ba Tam) - Malaysia</h6>
+                                    <p class="text-muted small">Khởi hành Từ Hà Nội • Nhóm khách vip bay thẳng hạng thường • Có hdv Hội thao • Gưa tíc</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="rating-stars small">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                        </div>
+                                        <small class="text-muted">5 ngày 4 đêm</small>
+                                    </div>
+                                    <div class="mt-3">
+                                        <span class="price-tag">13,290,000 ₫</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+
+            <!-- Contact Info -->
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h6 class="mb-0"><i class="fas fa-phone me-2"></i>Hỗ trợ tư vấn</h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-headset text-success me-3 fs-4"></i>
+                        <div>
+                            <div class="fw-bold">Hotline 24/7</div>
+                            <div class="text-primary">1900 1234</div>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-envelope text-success me-3 fs-4"></i>
+                        <div>
+                            <div class="fw-bold">Email hỗ trợ</div>
+                            <div class="text-primary">info@travel.com</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

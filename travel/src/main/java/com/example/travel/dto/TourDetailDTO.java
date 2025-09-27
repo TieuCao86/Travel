@@ -21,7 +21,8 @@ public class TourDetailDTO {
     private List<String> phuongTiens;
     private List<LichKhoiHanhDTO> lichKhoiHanhs;
     private List<DanhGiaDTO> danhGiaList;
-    private List<LichTrinhChiTietDTO> lichTrinhChiTietList;
+    private List<LichTrinhNgayDTO> lichTrinhNgayList;
+
 }
 
 

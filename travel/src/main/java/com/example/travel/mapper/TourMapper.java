@@ -7,7 +7,11 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Mapper(
         componentModel = "spring",
@@ -25,10 +29,10 @@ public interface TourMapper {
     @Mapping(target = "lichTrinhNgayList", source = ".", qualifiedByName = "mapLichTrinhNgayList")
     @Mapping(target = "soSaoTrungBinh", source = "danhGiaList", qualifiedByName = "tinhSoSaoTrungBinh")
     @Mapping(target = "soDanhGia", expression = "java(tour.getDanhGiaList() != null ? tour.getDanhGiaList().size() : 0)")
+    @Mapping(target = "giamGia", source = "vouchers", qualifiedByName = "mapGiamGia")
     TourDetailDTO toDetailDTO(Tour tour);
 
     // Entity -> CardDTO
-    @Mapping(target = "giamGia", ignore = true)
     @Mapping(target = "phuongTiens", source = "phuongTiens", qualifiedByName = "mapPhuongTiens")
     TourCardDTO toCardDTO(Tour tour);
 
@@ -124,4 +128,23 @@ public interface TourMapper {
                 })
                 .toList();
     }
+
+    @Named("mapGiamGia")
+    default Double mapGiamGia(Set<Voucher> vouchers) {
+        if (vouchers == null || vouchers.isEmpty()) return null;
+
+        LocalDate now = LocalDate.now();
+
+        var optionalMax = vouchers.stream()
+                .filter(Objects::nonNull)
+                .filter(v -> v.getTrangThai() == null || v.getTrangThai().equalsIgnoreCase("Hoạt động"))
+                .filter(v -> v.getNgayHetHan() == null || !v.getNgayHetHan().isBefore(now))
+                .map(Voucher::getGiaTri)
+                .filter(Objects::nonNull)
+                .mapToDouble(BigDecimal::doubleValue)
+                .max();
+
+        return optionalMax.isPresent() ? optionalMax.getAsDouble() : null;
+    }
+
 }

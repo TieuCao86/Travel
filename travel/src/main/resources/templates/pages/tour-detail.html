@@ -6,6 +6,7 @@
     <title>Tour Trung Quốc 5N4Đ: HCM - Thượng Hải - Hàng Châu - Tô Châu</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         /* Tour Detail Styles */
         body {
@@ -101,7 +102,7 @@
         <div class="col-lg-8">
             <!-- Tour Images -->
             <div class="tour-images">
-                <div class="tour-badge">Giảm 15%</div>
+                <div class="tour-badge">Giảm <span th:text="${tour.giamGia}"></span></div>
                 <img src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800&h=400&fit=crop"
                      alt="Shanghai skyline" class="main-image">
                 <div class="thumbnail-grid">
@@ -155,28 +156,55 @@
 
             <!-- Tour Schedule -->
             <div class="accordion tour-section" id="tourSchedule">
-                <h3 class="section-title">Chương trình tour</h3>
-                <h5 class="text-end">Xem tất cả</h5>
-                <div class="accordion-item" th:each="ngay,iter : ${tour.lichTrinhNgayList}">
-                    <h2 class="accordion-header" th:attr="id='heading' + ${iter.index}">
-                        <button class="accordion-button collapsed" type="button"
-                                th:attr="data-bs-target='#day' + ${iter.index}">
-                            <img th:if="${ngay.anhNoiBat != null}" th:src="${ngay.anhNoiBat}"
-                                 class="me-3 rounded" width="60">
-                            <strong th:text="'Ngày ' + ${ngay.ngayThu} + ':'"></strong>
-                            <span th:text="${ngay.tieuDe}"></span>
-                        </button>
-                    </h2>
-                    <div class="accordion-collapse collapse" th:attr="id='day' + ${iter.index}"
-                         data-bs-parent="#tourSchedule">
-                        <div class="accordion-body">
-                            <p th:text="${ngay.moTaTongQuan}"></p>
-                            <ul>
-                                <li th:each="hd : ${ngay.hoatDongList}" th:text="${hd}"></li>
-                            </ul>
-                            <div class="day-images mt-3">
-                                <img th:each="anh : ${ngay.dsAnhChiTiet}" th:src="${anh.duongDan}"
-                                     th:alt="${anh.moTa}" class="img-thumbnail me-2 mb-2" width="120">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h3 class="section-title mb-0">Chương trình tour</h3>
+                    <span id="xemTatCa" class="text-primary" style="cursor: pointer;">Xem tất cả</span>
+                </div>
+
+                <div class="d-flex flex-column gap-4">
+                    <!-- Lặp từng ngày trong lịch trình -->
+                    <div class="accordion-item" th:each="ngay, iter : ${tour.lichTrinhNgayList}">
+                        <h2 class="accordion-header" th:attr="id='heading' + ${iter.index}">
+                            <button class="accordion-button collapsed"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    th:attr="data-bs-target='#day' + ${iter.index}"
+                                    aria-expanded="false"
+                                    th:attrappend="aria-controls='day' + ${iter.index}">
+                                <div class="d-flex align-items-center w-100">
+                                    <img th:src="${ngay.anhNoiBat != null ? ngay.anhNoiBat : '/images/no-image.jpg'}"
+                                         th:alt="${ngay.anhNoiBat != null ? 'Ảnh ngày ' + ngay.ngayThu : 'Chưa có ảnh'}"
+                                         class="me-3 rounded" width="80" height="60" style="object-fit: cover;">
+                                    <div class="d-flex flex-column">
+                                        <strong th:text="'Ngày ' + ${ngay.ngayThu}"></strong>
+                                        <span th:text="${ngay.tieuDe}" class="text-muted small"></span>
+                                    </div>
+                                </div>
+                            </button>
+                        </h2>
+
+                        <div class="accordion-collapse collapse"
+                             th:attr="id='day' + ${iter.index}"
+                             th:attrappend="aria-labelledby='heading' + ${iter.index}"
+                             data-bs-parent="#tourSchedule">
+                            <div class="accordion-body">
+                                <!-- Mô tả tổng quan -->
+                                <p th:text="${ngay.moTaTongQuan}"></p>
+
+                                <!-- Hoạt động -->
+                                <ul>
+                                    <li th:each="hd : ${ngay.hoatDongList}" th:text="${hd}"></li>
+                                </ul>
+
+                                <!-- Ảnh chi tiết -->
+                                <div class="day-images mt-3 d-flex flex-wrap">
+                                    <img th:each="anh : ${ngay.dsAnhChiTiet}"
+                                         th:src="@{${anh.duongDan}}"
+                                         th:alt="${anh.moTa != null ? anh.moTa : 'Không có mô tả'}"
+                                         class="img-thumbnail me-2 mb-2"
+                                         width="120" height="90"
+                                         style="object-fit: cover;">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -352,3 +380,23 @@
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const toggleBtn = document.getElementById("xemTatCa"); // ✅ sửa lại id cho đúng
+        const allCollapses = document.querySelectorAll("#tourSchedule .accordion-collapse");
+        let expanded = false;
+
+        toggleBtn.addEventListener("click", function() {
+            allCollapses.forEach(collapse => {
+                const bsCollapse = new bootstrap.Collapse(collapse, { toggle: false });
+                expanded ? bsCollapse.hide() : bsCollapse.show();
+            });
+
+            expanded = !expanded;
+            toggleBtn.textContent = expanded ? "Rút gọn" : "Xem tất cả";
+        });
+    });
+</script>
+</body>
+</html>

@@ -12,7 +12,7 @@ public class TourDetailDTO {
     private String loaiTour;
     private String moTa;
     private String thoiGian;
-
+    private String noiXuatPhat;
     private Double giamGia;
     private Double soSaoTrungBinh;
     private Integer soDanhGia;

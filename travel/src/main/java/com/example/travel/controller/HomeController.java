@@ -38,32 +38,29 @@ public class HomeController {
                     List<String> moTaList = List.of();
 
                     if (moTa != null && !moTa.isBlank()) {
-                        // 1. Chuẩn hóa unicode
+                        // Chuẩn hóa unicode
                         moTa = Normalizer.normalize(moTa, Normalizer.Form.NFKC);
 
-                        // 2. Xử lý chuỗi literal "\\n" hoặc "\\r\\n" thành newline
-                        moTa = moTa.replace("\\r\\n", "\n").replace("\\n", "\n");
-
-                        // 3. Chuẩn hóa tất cả newline về '\n'
+                        // Chuẩn hóa newline
                         moTa = moTa.replace("\r\n", "\n").replace("\r", "\n");
 
-                        // 4. Xóa ký tự ẩn (zero-width, BOM…)
+                        // Xóa ký tự ẩn
                         moTa = moTa.replaceAll("[\\u200B\\u200C\\u200D\\uFEFF\\u00AD]", "");
 
-                        // 5. Tách thành danh sách dòng
-                        moTaList = Arrays.stream(moTa.split("\\n"))
+                        // Tách thành list
+                        moTaList = Arrays.stream(moTa.split("\n"))
                                 .map(String::trim)
                                 .filter(s -> !s.isEmpty())
                                 .collect(Collectors.toList());
                     }
 
-                    // Gắn vào model
                     model.addAttribute("tour", tourDetailDTO);
-                    model.addAttribute("moTaList", moTaList); // dùng cho <ul><li>
-                    model.addAttribute("moTaHtml", moTa == null ? "" : moTa.replace("\n", "<br/>")); // dùng cho <p>
+                    model.addAttribute("moTaList", moTaList);
+                    model.addAttribute("moTaHtml", moTa == null ? "" : moTa.replace("\n", "<br/>"));
 
                     return "pages/tour-detail";
                 })
-                .orElse("error/404");
+                .orElse("error/404"); // nhớ có file 404.html
     }
+
 }

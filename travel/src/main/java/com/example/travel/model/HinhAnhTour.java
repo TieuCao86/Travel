@@ -1,5 +1,6 @@
 package com.example.travel.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,5 +20,7 @@ public class HinhAnhTour {
 
     @ManyToOne
     @JoinColumn(name = "maTour")
+    @JsonIgnore
     private Tour tour;
+
 }

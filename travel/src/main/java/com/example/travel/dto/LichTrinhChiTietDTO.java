@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -15,5 +17,9 @@ public class LichTrinhChiTietDTO {
     private String loaiNoiDung;
     private String noiDung;
     private String tenThanhPho;
+
+    // Thêm dòng này:
+    private List<AnhChiTietDTO> dsAnhChiTiet;
 }
+
 

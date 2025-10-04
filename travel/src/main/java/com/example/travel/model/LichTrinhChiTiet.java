@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -28,6 +30,9 @@ public class LichTrinhChiTiet {
     @Column(name = "LoaiNoiDung", length = 20)
     private String loaiNoiDung; // TEXT / IMAGE / OPTION
 
+    @OneToMany(mappedBy = "lichTrinhChiTiet", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HinhAnhChiTietTour> hinhAnhChiTietList;
+
     @Column(name = "NoiDung", columnDefinition = "NVARCHAR(MAX)")
     private String noiDung; // mô tả, link ảnh hoặc option
 
@@ -35,4 +40,8 @@ public class LichTrinhChiTiet {
     @ManyToOne
     @JoinColumn(name = "MaThanhPho")
     private ThanhPho thanhPho;
+
+    @OneToMany(mappedBy = "lichTrinhChiTiet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<HinhAnhChiTietTour> hinhAnhChiTietTours;
+
 }

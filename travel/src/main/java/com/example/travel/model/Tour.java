@@ -43,8 +43,8 @@ public class Tour {
     )
     private List<PhuongTien> phuongTiens;
 
-    @OneToMany(mappedBy = "tour")
-    private List<HinhAnhTour> hinhAnhTours;
+    @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HinhAnhTour> hinhAnhTourList;
 
     @OneToMany(mappedBy = "tour")
     private List<LichKhoiHanh> lichKhoiHanhs;

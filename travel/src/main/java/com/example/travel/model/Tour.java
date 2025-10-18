@@ -25,7 +25,6 @@ public class Tour {
 
     private String thoiGian;
 
-    // Đúng theo thiết kế mới: Tour -> LichTrinhNgay -> LichTrinhChiTiet
     @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LichTrinhNgay> lichTrinhNgayList;
 
@@ -56,4 +55,12 @@ public class Tour {
             inverseJoinColumns = @JoinColumn(name = "MaVoucher")
     )
     private Set<Voucher> vouchers;
+
+    @ManyToMany
+    @JoinTable(
+            name = "ThanhPho_Tour",
+            joinColumns = @JoinColumn(name = "MaTour"),
+            inverseJoinColumns = @JoinColumn(name = "MaThanhPho")
+    )
+    private Set<ThanhPho> thanhPhos;
 }

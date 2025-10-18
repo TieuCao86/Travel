@@ -2,7 +2,6 @@ package com.example.travel.dto;
 
 import lombok.Data;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -22,7 +21,8 @@ public class TourDetailDTO {
     private List<LichKhoiHanhDTO> lichKhoiHanhs;
     private List<DanhGiaDTO> danhGiaList;
     private List<LichTrinhNgayDTO> lichTrinhNgayList;
+    private String quocGia;
 
+    // 👇 Thêm thuộc tính này
+    private List<ThanhPhoDTO> thanhPhos;
 }
-
-

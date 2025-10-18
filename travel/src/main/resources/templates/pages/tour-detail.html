@@ -79,10 +79,21 @@
 <div class="container mt-3">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#" class="text-decoration-none">Trang chủ</a></li>
-            <li class="breadcrumb-item"><a href="#" class="text-decoration-none">Tours</a></li>
-            <li class="breadcrumb-item"><a href="#" class="text-decoration-none">Tour Trung Quốc</a></li>
-            <li class="breadcrumb-item active" aria-current="page">5N4Đ: HCM - Thượng Hải - Hàng Châu - Tô Châu</li>
+            <li class="breadcrumb-item">
+                <a th:href="@{/}" class="text-decoration-none">Trang chủ</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="#" class="text-decoration-none">Tours</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="#" class="text-decoration-none"
+                   th:text="${#lists.isEmpty(tour.thanhPhos) ? 'Tour' :
+        (#lists.first(tour.thanhPhos).quocGia.tenQuocGia == 'Việt Nam' ?
+         'Tour ' + #lists.first(tour.thanhPhos).tenThanhPho :
+         'Tour ' + #lists.first(tour.thanhPhos).quocGia.tenQuocGia)}">
+                </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page" th:text="${tour.tenTour}"></li>
         </ol>
     </nav>
 </div>

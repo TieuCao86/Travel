@@ -30,6 +30,7 @@ public interface TourMapper {
     @Mapping(target = "soSaoTrungBinh", source = "danhGiaList", qualifiedByName = "tinhSoSaoTrungBinh")
     @Mapping(target = "soDanhGia", expression = "java(tour.getDanhGiaList() != null ? tour.getDanhGiaList().size() : 0)")
     @Mapping(target = "giamGia", source = "vouchers", qualifiedByName = "mapGiamGia")
+    @Mapping(target = "thanhPhos", source = "thanhPhos", qualifiedByName = "mapThanhPhos")
     TourDetailDTO toDetailDTO(Tour tour);
 
     // Entity -> CardDTO
@@ -146,5 +147,23 @@ public interface TourMapper {
 
         return optionalMax.isPresent() ? optionalMax.getAsDouble() : null;
     }
+
+    @Named("mapThanhPhos")
+    default List<ThanhPhoDTO> mapThanhPhos(Set<ThanhPho> thanhPhos) {
+        if (thanhPhos == null || thanhPhos.isEmpty()) return List.of();
+
+        return thanhPhos.stream().map(tp -> {
+            ThanhPhoDTO dto = new ThanhPhoDTO();
+            dto.setMaThanhPho(tp.getMaThanhPho());
+            dto.setTenThanhPho(tp.getTenThanhPho());
+            dto.setMoTa(tp.getMoTa());
+            dto.setDuongDanAnh(tp.getDuongDanAnh());
+            if (tp.getQuocGia() != null) {
+                dto.setTenQuocGia(tp.getQuocGia().getTenQuocGia());
+            }
+            return dto;
+        }).toList();
+    }
+
 
 }

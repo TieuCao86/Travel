@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Data
-@Builder   // ✅ thêm annotation này để dùng builder()
+@Builder
 public class TourCardDTO {
     private int maTour;
     private String tenTour;

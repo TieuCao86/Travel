@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Data
@@ -26,5 +27,7 @@ public class ThanhToan {
     @ManyToOne
     @JoinColumn(name = "maDatTour")
     private DatTour datTour;
+
+
 }
 

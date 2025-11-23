@@ -1,67 +1,54 @@
 package com.example.travel.specification;
 
 import com.example.travel.model.Tour;
+import org.springframework.data.jpa.domain.Specification;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
-import org.springframework.data.jpa.domain.Specification;
 
-public class TourSpecification {
+public class GenericSpecification<T> {
 
-    public static Specification<Tour> tenTourContains(String tenTour) {
+    // Lọc chuỗi chứa (LIKE %value%)
+    public Specification<T> stringContains(String field, String value) {
         return (root, query, cb) -> {
-            if (tenTour == null || tenTour.isEmpty()) return null;
-            return cb.like(cb.lower(root.get("tenTour")), "%" + tenTour.toLowerCase() + "%");
+            if (value == null || value.isEmpty()) return cb.conjunction();
+            return cb.like(cb.lower(root.get(field)), "%" + value.toLowerCase() + "%");
         };
     }
 
-    public static Specification<Tour> loaiTourEqual(String loaiTour) {
+    // Lọc chuỗi bằng nhau
+    public Specification<T> stringEqual(String field, String value) {
         return (root, query, cb) -> {
-            if (loaiTour == null || loaiTour.isEmpty()) return null;
-            return cb.equal(cb.lower(root.get("loaiTour")), loaiTour.toLowerCase());
+            if (value == null || value.isEmpty()) return cb.conjunction();
+            return cb.equal(cb.lower(root.get(field)), value.toLowerCase());
         };
     }
 
-    public static Specification<Tour> thanhPhoEqual(String thanhPho) {
+    // Lọc số trong khoảng
+    public Specification<T> numberBetween(String field, Number min, Number max) {
         return (root, query, cb) -> {
-            if (thanhPho == null || thanhPho.isEmpty()) return null;
-
-            Join<Object, Object> tp = root.join("thanhPhos", JoinType.LEFT);
-            return cb.equal(cb.lower(tp.get("tenThanhPho")), thanhPho.toLowerCase());
-        };
-    }
-
-    public static Specification<Tour> giaTrongKhoang(Double minGia, Double maxGia) {
-        return (root, query, cb) -> {
-            Join<Object, Object> lk = root.join("lichKhoiHanhs", JoinType.LEFT);
-            Join<Object, Object> g = lk.join("giaLichKhoiHanhs", JoinType.LEFT);
-
             var predicate = cb.conjunction();
-
-            if (minGia != null) {
-                predicate = cb.and(predicate, cb.greaterThanOrEqualTo(g.get("gia"), minGia));
-            }
-
-            if (maxGia != null) {
-                predicate = cb.and(predicate, cb.lessThanOrEqualTo(g.get("gia"), maxGia));
-            }
-
+            if (min != null) predicate = cb.and(predicate, cb.ge(root.get(field), min));
+            if (max != null) predicate = cb.and(predicate, cb.le(root.get(field), max));
             return predicate;
         };
     }
 
-    public static Specification<Tour> diaDiemEqual(String loaiTour, String thanhPho) {
+    // Lọc quan hệ: entity liên kết và field trong entity đó
+    public Specification<T> relatedEntityEqual(String relation, String field, String value) {
         return (root, query, cb) -> {
-            if (thanhPho == null || thanhPho.isEmpty()) return null;
+            if (value == null || value.isEmpty()) return cb.conjunction();
+            Join<Object, Object> join = root.join(relation, JoinType.LEFT);
+            return cb.equal(cb.lower(join.get(field)), value.toLowerCase());
+        };
+    }
 
-            Join<Object, Object> tp = root.join("thanhPhos", JoinType.LEFT);
-
-            if ("noidia".equalsIgnoreCase(loaiTour)) {
-                return cb.equal(cb.lower(tp.get("tenThanhPho")), thanhPho.toLowerCase());
-            } else if ("nuocngoai".equalsIgnoreCase(loaiTour)) {
-                return cb.equal(cb.lower(tp.join("quocGia", JoinType.LEFT).get("tenQuocGia")), thanhPho.toLowerCase());
-            }
-
-            return null; // không lọc nếu loaiTour khác
+    public Specification<Tour> fetchRelations() {
+        return (root, query, cb) -> {
+            root.fetch("danhGiaList", JoinType.LEFT);
+            root.fetch("phuongTiens", JoinType.LEFT);
+            root.fetch("hinhAnhTourList", JoinType.LEFT);
+            query.distinct(true); // tránh duplicate khi join nhiều-to-many
+            return cb.conjunction();
         };
     }
 

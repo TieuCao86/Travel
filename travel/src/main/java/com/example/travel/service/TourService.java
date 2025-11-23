@@ -1,9 +1,9 @@
 package com.example.travel.service;
 
+import com.example.travel.dto.LichKhoiHanhDTO;
 import com.example.travel.dto.TourCardDTO;
 import com.example.travel.dto.TourDetailDTO;
 import com.example.travel.mapper.TourMapper;
-import com.example.travel.model.Tour;
 import com.example.travel.projection.TourCardProjection;
 import com.example.travel.repository.TourRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,21 +21,34 @@ public class TourService {
     private final TourRepository tourRepository;
     private final TourMapper tourMapper;
 
-    // Lấy tour (dùng cho danh sách & top-rated)
-    public List<TourCardDTO> getTours(String tenTour,
-                                      String loaiTour,
-                                      BigDecimal minGia,
-                                      BigDecimal maxGia,
-                                      String sortBy,
-                                      int offset,
-                                      int limit) {
+    public List<TourCardDTO> getTopRatedTours(int top) {
+        List<TourCardProjection> projections = tourRepository.getFullTourCards(
+                null,
+                null,
+                null,
+                null,
+                null,
+                0,
+                5
+        );
+        return tourMapper.toCardDTOList(projections);
+    }
 
-        List<TourCardProjection> projections = tourRepository.getTours(
+    public List<TourCardDTO> searchTours(
+            String tenTour,
+            String loaiTour,
+            String thanhPho,
+            BigDecimal minGia,
+            BigDecimal maxGia,
+            int offset,
+            int limit
+    ) {
+        List<TourCardProjection> projections = tourRepository.getFullTourCards(
                 tenTour,
                 loaiTour,
-                minGia != null ? minGia.doubleValue() : null,
-                maxGia != null ? maxGia.doubleValue() : null,
-                sortBy,
+                thanhPho,
+                minGia,
+                maxGia,
                 offset,
                 limit
         );
@@ -42,37 +56,23 @@ public class TourService {
         return tourMapper.toCardDTOList(projections);
     }
 
-    // ✅ Lấy tour detail theo ID
     public Optional<TourDetailDTO> getTourById(Integer id) {
-        return tourRepository.findById(id)
-                .map(tourMapper::toDetailDTO);
+        return tourRepository.findFullDetailById(id)
+                .map(tourMapper::toDetailDTO) // map sang DTO trước
+                .map(dto -> {
+                    // Lọc duplicate theo ngày khởi hành
+                    List<LichKhoiHanhDTO> distinctLich = dto.getLichKhoiHanhs().stream()
+                            .collect(Collectors.toMap(
+                                    LichKhoiHanhDTO::getNgayKhoiHanh,
+                                    lich -> lich,
+                                    (existing, replacement) -> existing // nếu trùng giữ bản đầu
+                            ))
+                            .values()
+                            .stream()
+                            .toList();
+                    dto.setLichKhoiHanhs(distinctLich);
+                    return dto;
+                });
     }
 
-    // ✅ Thêm tour mới
-    public Tour createTour(Tour tour) {
-        return tourRepository.save(tour);
-    }
-
-    // ✅ Cập nhật tour
-    public Tour updateTour(Integer id, Tour tour) {
-        return tourRepository.findById(id)
-                .map(existing -> {
-                    existing.setTenTour(tour.getTenTour());
-                    existing.setLoaiTour(tour.getLoaiTour());
-                    existing.setMoTa(tour.getMoTa());
-                    existing.setThoiGian(tour.getThoiGian());
-                    // TODO: update thêm fields khác nếu cần
-                    return tourRepository.save(existing);
-                })
-                .orElse(null);
-    }
-
-    // ✅ Xoá tour
-    public boolean deleteTour(Integer id) {
-        if (tourRepository.existsById(id)) {
-            tourRepository.deleteById(id);
-            return true;
-        }
-        return false;
-    }
 }

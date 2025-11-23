@@ -6,15 +6,19 @@ import java.util.Set;
 
 @Entity
 @Table(name = "ThanhPho")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString(exclude = {"quocGia", "tours"})
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class ThanhPho {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MaThanhPho")
+    @EqualsAndHashCode.Include
     private Integer maThanhPho;
 
     @Column(name = "TenThanhPho", nullable = false, length = 100)
@@ -26,12 +30,11 @@ public class ThanhPho {
     @Column(name = "DuongDanAnh", nullable = false, length = 200)
     private String duongDanAnh;
 
-    // 🔹 Quan hệ N-1: Mỗi thành phố thuộc về một quốc gia
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MaQuocGia") // Khóa ngoại
+    @JoinColumn(name = "MaQuocGia")
     private QuocGia quocGia;
 
-    // 🔹 Quan hệ N-N với Tour (đã có)
     @ManyToMany(mappedBy = "thanhPhos")
     private Set<Tour> tours;
+
 }

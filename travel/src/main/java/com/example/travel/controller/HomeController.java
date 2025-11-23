@@ -1,6 +1,5 @@
 package com.example.travel.controller;
 
-import com.example.travel.mapper.TourMapper;
 import com.example.travel.service.TourService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,7 +17,6 @@ import java.util.stream.Collectors;
 public class HomeController {
 
     private final TourService tourService;
-    private final TourMapper tourMapper;
 
     @GetMapping("/")
     public String home(Model model) {
@@ -28,39 +26,6 @@ public class HomeController {
     @GetMapping("/tour")
     public String tour() {
         return "pages/tour";
-    }
-
-    @GetMapping("/tour/{id}")
-    public String getTourDetail(@PathVariable("id") Integer id, Model model) {
-        return tourService.getTourById(id)
-                .map(tourDetailDTO -> {
-                    String moTa = tourDetailDTO.getMoTa();
-                    List<String> moTaList = List.of();
-
-                    if (moTa != null && !moTa.isBlank()) {
-                        // Chuẩn hóa unicode
-                        moTa = Normalizer.normalize(moTa, Normalizer.Form.NFKC);
-
-                        // Chuẩn hóa newline
-                        moTa = moTa.replace("\r\n", "\n").replace("\r", "\n");
-
-                        // Xóa ký tự ẩn
-                        moTa = moTa.replaceAll("[\\u200B\\u200C\\u200D\\uFEFF\\u00AD]", "");
-
-                        // Tách thành list
-                        moTaList = Arrays.stream(moTa.split("\n"))
-                                .map(String::trim)
-                                .filter(s -> !s.isEmpty())
-                                .collect(Collectors.toList());
-                    }
-
-                    model.addAttribute("tour", tourDetailDTO);
-                    model.addAttribute("moTaList", moTaList);
-                    model.addAttribute("moTaHtml", moTa == null ? "" : moTa.replace("\n", "<br/>"));
-
-                    return "pages/tour-detail";
-                })
-                .orElse("error/404"); // nhớ có file 404.html
     }
 
 }

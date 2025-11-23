@@ -21,39 +21,38 @@ public class TourApi {
         this.tourService = tourService;
     }
 
-    // ✅ Lấy Top Rated Tours
-    @GetMapping("/top-rated")
-    public ResponseEntity<List<TourCardDTO>> getTopRatedTours(
-            @RequestParam(defaultValue = "5") int top) {
-
-        List<TourCardDTO> tours = tourService.getTours(
-                null,
-                null,
-                null,
-                null,
-                "rating",
-                0,
-                top
-        );
-
-        return ResponseEntity.ok(tours);
-    }
-
-    // ✅ Danh sách tours (có filter + sort + paging)
-    @GetMapping
-    public List<TourCardDTO> getTours(
+    // ================================
+    // 🔥 API SEARCH (Specification + pagination + sort)
+    // ================================
+    @GetMapping("/search")
+    public ResponseEntity<List<TourCardDTO>> searchTours(
             @RequestParam(required = false) String tenTour,
             @RequestParam(required = false) String loaiTour,
+            @RequestParam(required = false) String thanhPho,
             @RequestParam(required = false) BigDecimal minGia,
             @RequestParam(required = false) BigDecimal maxGia,
             @RequestParam(required = false) String sortBy,
             @RequestParam(defaultValue = "0") int offset,
             @RequestParam(defaultValue = "10") int limit
     ) {
-        return tourService.getTours(tenTour, loaiTour, minGia, maxGia, sortBy, offset, limit);
+        List<TourCardDTO> tours = tourService.searchTours(
+                tenTour, loaiTour, thanhPho, minGia, maxGia, offset, limit
+        );
+        return ResponseEntity.ok(tours);
     }
 
-    // ✅ Lấy chi tiết tour theo ID
+    // ================================
+    // 🔥 TOP-RATED TOUR (giữ nguyên nhưng dùng searchTours)
+    // ================================
+    @GetMapping("/top-rated")
+    public ResponseEntity<List<TourCardDTO>> getTopRatedTours(
+            @RequestParam(defaultValue = "5") int top) {
+        return ResponseEntity.ok(tourService.getTopRatedTours(top));
+    }
+
+    // ================================
+    // Chi tiết tour
+    // ================================
     @GetMapping("/{id}")
     public ResponseEntity<TourDetailDTO> getTourById(@PathVariable Integer id) {
         return tourService.getTourById(id)
@@ -61,23 +60,4 @@ public class TourApi {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // ✅ Tạo tour mới
-    @PostMapping
-    public ResponseEntity<Tour> createTour(@RequestBody Tour tour) {
-        return ResponseEntity.ok(tourService.createTour(tour));
-    }
-
-    // ✅ Cập nhật tour
-    @PutMapping("/{id}")
-    public ResponseEntity<Tour> updateTour(@PathVariable Integer id, @RequestBody Tour tour) {
-        Tour updated = tourService.updateTour(id, tour);
-        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
-    }
-
-    // ✅ Xoá tour
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTour(@PathVariable Integer id) {
-        return tourService.deleteTour(id) ? ResponseEntity.noContent().build()
-                : ResponseEntity.notFound().build();
-    }
 }

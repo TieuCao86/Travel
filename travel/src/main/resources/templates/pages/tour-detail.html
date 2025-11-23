@@ -83,14 +83,13 @@
                 <a th:href="@{/}" class="text-decoration-none">Trang chủ</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="#" class="text-decoration-none">Tours</a>
-            </li>
-            <li class="breadcrumb-item">
-                <a href="#" class="text-decoration-none"
+                <a th:href="@{/tour/filter(
+                        loaiTour=${tour.loaiTour},
+                        tenTour=${tour.loaiTour == 'Nội địa' ? tour.thanhPhos[0].tenThanhPho : tour.thanhPhos[0].tenQuocGia}
+                    )}"
                    th:text="${#lists.isEmpty(tour.thanhPhos) ? 'Tour' :
-        (#lists.first(tour.thanhPhos).quocGia.tenQuocGia == 'Việt Nam' ?
-         'Tour ' + #lists.first(tour.thanhPhos).tenThanhPho :
-         'Tour ' + #lists.first(tour.thanhPhos).quocGia.tenQuocGia)}">
+                       (tour.loaiTour == 'Nội địa' ? 'Tour ' + tour.thanhPhos[0].tenThanhPho : 'Tour ' + tour.thanhPhos[0].tenQuocGia)}"
+                   class="text-decoration-none">
                 </a>
             </li>
             <li class="breadcrumb-item active" aria-current="page" th:text="${tour.tenTour}"></li>
@@ -241,13 +240,13 @@
                             </thead>
                             <tbody>
                             <tr th:each="lich : ${tour.lichKhoiHanhs}">
-                                <td th:text="${lich.ngayKhoiHanh}"></td>
-                                <td th:text="${lich.ngayKetThuc}"></td>
+                                <td th:text="${#temporals.format(lich.ngayKhoiHanh, 'dd/MM')}"></td>
+                                <td th:text="${#temporals.format(lich.ngayKetThuc, 'dd/MM')}"></td>
                                 <td><span class="badge bg-success" th:text="${lich.trangThai}"></span></td>
                                 <td class="price-highlight">
-                                    <span th:each="gia : ${lich.giaList}" th:if="${gia.loaiHanhKhach == 'NguoiLon'}"
-                                          th:text="|${#numbers.formatDecimal(gia.gia, 0, 0, 'COMMA')} ₫|" th:remove="tag">
-                                    </span>
+                                <span th:each="gia : ${lich.giaList}" th:if="${gia.loaiHanhKhach == 'NguoiLon'}"
+                                      th:text="|${#numbers.formatDecimal(gia.gia, 0, 0, 'COMMA')} ₫|">
+                                </span>
                                 </td>
                                 <td><button class="btn btn-outline-primary btn-sm">Chọn</button></td>
                             </tr>

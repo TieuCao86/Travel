@@ -13,10 +13,6 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface LichTrinhChiTietMapper {
 
-    // Gọi hàm mapAnhChiTiet được đánh dấu @Named("mapAnhChiTiet")
-    @Mapping(target = "dsAnhChiTiet", source = "hinhAnhChiTietTours", qualifiedByName = "mapAnhChiTiet")
-    LichTrinhChiTietDTO toDTO(LichTrinhChiTiet entity);
-
     @Named("mapAnhChiTiet")
     default List<AnhChiTietDTO> mapAnhChiTiet(List<HinhAnhChiTietTour> hinhAnhs) {
         if (hinhAnhs == null || hinhAnhs.isEmpty()) return List.of();

@@ -3,7 +3,7 @@ package com.example.travel.projection;
 import java.math.BigDecimal;
 
 public interface TourCardProjection {
-    int getMaTour();
+    Integer getMaTour();
     String getTenTour();
     String getLoaiTour();
     String getMoTa();
@@ -11,7 +11,12 @@ public interface TourCardProjection {
     BigDecimal getGia();
     String getDuongDanAnhDaiDien();
     Double getSoSaoTrungBinh();
-    Integer getSoDanhGia();
-    String getPhuongTien();   // ✅ khớp alias SQL
-    BigDecimal getGiamGia();  // ✅ kiểu dữ liệu đúng với SQL
+    Long getSoDanhGia();
+    String getPhuongTiens();
+    BigDecimal getGiamGia();
+    String getNoiXuatPhat();
+    String getLichKhoiHanhs();
 }
+
+
+

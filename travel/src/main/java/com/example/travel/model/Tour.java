@@ -1,17 +1,17 @@
 package com.example.travel.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Tour {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +32,7 @@ public class Tour {
     private List<DatTour> datTours;
 
     @OneToMany(mappedBy = "tour")
-    private List<DanhGia> danhGiaList;
+    private Set<DanhGia> danhGiaList;
 
     @ManyToMany
     @JoinTable(
@@ -43,7 +43,7 @@ public class Tour {
     private List<PhuongTien> phuongTiens;
 
     @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<HinhAnhTour> hinhAnhTourList;
+    private Set<HinhAnhTour> hinhAnhTourList;
 
     @OneToMany(mappedBy = "tour")
     private List<LichKhoiHanh> lichKhoiHanhs;
@@ -58,9 +58,11 @@ public class Tour {
 
     @ManyToMany
     @JoinTable(
-            name = "ThanhPho_Tour",
+            name = "ThanhPho_Tour",       // tên bảng trung gian đúng trong DB
+            schema = "dbo",               // bắt buộc với SQL Server nếu DB có schema
             joinColumns = @JoinColumn(name = "MaTour"),
             inverseJoinColumns = @JoinColumn(name = "MaThanhPho")
     )
     private Set<ThanhPho> thanhPhos;
+
 }

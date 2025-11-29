@@ -112,27 +112,49 @@ function createTourCard(tour) {
     div.className = "resort-card mx-2 my-3";
 
     const giamGia = tour.giamGia ?? null;
-    const giaGoc = tour.gia;
+    const giaGoc = Number(tour.gia) || 0;
 
     let giaSauGiam = giaGoc;
     let textGiamGia = null;
     let tietKiem = 0;
 
-    // Xử lý giảm giá
-    if (giamGia) {
-        if (typeof giamGia === 'string' && giamGia.includes('%')) {
-            const phanTram = parseFloat(giamGia.replace('%', ''));
-            if (!isNaN(phanTram)) {
-                giaSauGiam = Math.round(giaGoc * (1 - phanTram / 100));
+    if (giamGia !== null && giamGia !== undefined) {
+        // Nếu là số
+        if (typeof giamGia === "number") {
+
+            // Nếu là giảm theo % (0.1 = 10%)
+            if (giamGia > 0 && giamGia < 1) {
+                const phanTram = giamGia * 100;
+                giaSauGiam = Math.round(giaGoc * (1 - giamGia));
                 tietKiem = giaGoc - giaSauGiam;
                 textGiamGia = `${phanTram}%`;
             }
-        } else {
-            const soTien = parseInt(giamGia.replace(/[^\d]/g, ""));
-            if (!isNaN(soTien)) {
-                giaSauGiam = Math.max(giaGoc - soTien, 0);
+
+            // Giảm theo số tiền cụ thể
+            else if (giamGia >= 1) {
+                giaSauGiam = Math.max(giaGoc - giamGia, 0);
                 tietKiem = giaGoc - giaSauGiam;
-                textGiamGia = `${soTien.toLocaleString('vi-VN')}₫`;
+                textGiamGia = `${giamGia.toLocaleString("vi-VN")}₫`;
+            }
+        }
+
+        // Nếu là chuỗi: "10%", "500000"
+        else if (typeof giamGia === "string") {
+
+            if (giamGia.includes("%")) {
+                const phanTram = parseFloat(giamGia.replace("%", ""));
+                if (!isNaN(phanTram)) {
+                    giaSauGiam = Math.round(giaGoc * (1 - phanTram / 100));
+                    tietKiem = giaGoc - giaSauGiam;
+                    textGiamGia = `${phanTram}%`;
+                }
+            } else {
+                const soTien = parseInt(giamGia.replace(/[^\d]/g, ""));
+                if (!isNaN(soTien)) {
+                    giaSauGiam = Math.max(giaGoc - soTien, 0);
+                    tietKiem = soTien;
+                    textGiamGia = `${soTien.toLocaleString("vi-VN")}₫`;
+                }
             }
         }
     }

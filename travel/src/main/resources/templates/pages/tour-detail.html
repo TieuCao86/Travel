@@ -298,31 +298,46 @@
                     <h6 class="mb-0">Đánh giá khách hàng về Tour</h6>
                     <div class="d-flex align-items-center mt-2">
                         <div class="rating-stars me-2">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
+                            <i th:each="i : ${#numbers.sequence(1,5)}"
+                               th:classappend="${i <= tour.soSaoTrungBinh} ? 'fas fa-star text-warning' :
+                                   (${i - 0.5 <= tour.soSaoTrungBinh} ? 'fas fa-star-half-alt text-warning' : 'far fa-star text-warning')">
+                            </i>
                         </div>
-                        <span class="badge bg-success">4.4/5</span>
-                        <span class="badge bg-secondary ms-2">14 đánh giá</span>
+                        <span class="badge bg-success" th:text="${tour.soSaoTrungBinh + '/5'}"></span>
+                        <span class="badge bg-secondary ms-2" th:text="${tour.soDanhGia + ' đánh giá'}"></span>
                     </div>
                 </div>
+
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-3 mb-3" th:each="dg : ${danhGiaList}">
-                            <div class="d-flex align-items-center">
-                                <i class="fas fa-user-circle text-primary me-2"></i>
-                                <div>
-                                    <strong th:text="${dg.ten}">Tên</strong>
-                                    <div class="rating-stars small">
-                                        <i class="fas fa-star"></i><i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i><i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
+                        <!-- Lặp danh sách đánh giá -->
+                        <div class="col-md-12 mb-3" th:each="dg : ${tour.danhGiaList}">
+                            <div class="border rounded p-3">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-user-circle text-primary me-2" style="font-size: 28px;"></i>
+                                    <div>
+                                        <strong th:text="${dg.tenNguoiDung != null ? dg.tenNguoiDung : 'Khách hàng'}"></strong>
+
+                                        <!-- Sao -->
+                                        <div class="rating-stars small mt-1">
+                                            <i th:each="i : ${#numbers.sequence(1,5)}"
+                                               th:classappend="${i <= dg.soSao} ? 'fas fa-star text-warning' : 'far fa-star text-warning'"></i>
+                                        </div>
                                     </div>
+                                </div>
+
+                                <!-- Nội dung bình luận -->
+                                <p class="mb-1" th:text="${dg.binhLuan}"></p>
+
+                                <!-- Ngày đánh giá -->
+                                <div class="text-muted small"
+                                     th:text="${#temporals.format(dg.ngayDanhGia, 'dd/MM/yyyy HH:mm')}">
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="text-center">
+
+                    <div class="text-center mt-3" th:if="${tour.danhGiaList.size() > 3}">
                         <button class="btn btn-outline-primary">Xem thêm</button>
                     </div>
                 </div>

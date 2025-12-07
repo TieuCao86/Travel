@@ -3,6 +3,7 @@ package com.example.travel.api;
 import com.example.travel.dto.TourCardDTO;
 import com.example.travel.dto.TourDetailDTO;
 import com.example.travel.model.Tour;
+import com.example.travel.projection.TourCardProjection;
 import com.example.travel.service.TourService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +22,7 @@ public class TourApi {
         this.tourService = tourService;
     }
 
-    // ================================
-    // 🔥 API SEARCH (Specification + pagination + sort)
-    // ================================
+    //API SEARCH (Specification + pagination + sort)
     @GetMapping("/search")
     public ResponseEntity<List<TourCardDTO>> searchTours(
             @RequestParam(required = false) String tenTour,
@@ -41,23 +40,36 @@ public class TourApi {
         return ResponseEntity.ok(tours);
     }
 
-    // ================================
-    // 🔥 TOP-RATED TOUR (giữ nguyên nhưng dùng searchTours)
-    // ================================
+    // TOP-RATED TOUR (giữ nguyên nhưng dùng searchTours)
     @GetMapping("/top-rated")
     public ResponseEntity<List<TourCardDTO>> getTopRatedTours(
             @RequestParam(defaultValue = "5") int top) {
         return ResponseEntity.ok(tourService.getTopRatedTours(top));
     }
 
-    // ================================
     // Chi tiết tour
-    // ================================
     @GetMapping("/{id}")
     public ResponseEntity<TourDetailDTO> getTourById(@PathVariable Integer id) {
         return tourService.getTourById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/view")
+    public void saveView(
+            @RequestParam Integer maTour,
+            @RequestParam(required = false) Integer maNguoiDung,
+            @RequestParam(required = false) String sessionId
+    ) {
+        tourService.saveRecent(maTour, maNguoiDung, sessionId);
+    }
+
+    @GetMapping("/recent")
+    public List<TourCardDTO> getRecent(
+            @RequestParam(required = false) Integer maNguoiDung,
+            @RequestParam(required = false) String sessionId
+    ) {
+        return tourService.getRecentTours(maNguoiDung, sessionId);
     }
 
 }

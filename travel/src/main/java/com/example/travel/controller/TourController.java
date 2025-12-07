@@ -1,7 +1,10 @@
 package com.example.travel.controller;
 
+import com.example.travel.model.NguoiDung;
 import com.example.travel.service.TourService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +22,32 @@ public class TourController {
     private final TourService tourService;
 
     @GetMapping("/tour/{id}")
-    public String getTourDetail(@PathVariable("id") Integer id, Model model) {
+    public String getTourDetail(
+            @PathVariable("id") Integer id,
+            Model model,
+            HttpServletRequest request,
+            @AuthenticationPrincipal NguoiDung nguoiDung
+    ) {
+        // Không dùng session để nhận diện người dùng
+        Integer maNguoiDung = (nguoiDung != null) ? nguoiDung.getMaNguoiDung() : null;
+
+        // Lấy clientId từ cookie/header nếu FE gửi
+        String clientId = request.getHeader("X-Client-Id");
+        if (clientId == null) {
+            clientId = request.getParameter("clientId"); // fallback
+        }
+
+        System.out.println("maNguoiDung = " + maNguoiDung);
+        System.out.println("clientId = " + clientId);
+
+        // Lưu lịch sử xem
+        tourService.saveRecent(id, maNguoiDung, clientId);
+
+        //LẤY 3 TOUR LIÊN QUAN
+        model.addAttribute("toursLienQuan",
+                tourService.getRelatedTours(id)
+        );
+
         return tourService.getTourById(id)
                 .map(tourDetailDTO -> {
                     String moTa = tourDetailDTO.getMoTa();
@@ -43,4 +71,5 @@ public class TourController {
                 })
                 .orElse("error/404");
     }
+
 }

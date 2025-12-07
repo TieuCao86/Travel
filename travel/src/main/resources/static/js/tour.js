@@ -1,105 +1,95 @@
+const tourState = {};
 let allTours = [];
 let currentPage = 1;
 const toursPerPage = 9;
 
-function loadTours(apiUrl, targetSelector, usePagination = false) {
-    fetch(apiUrl)
-        .then(async response => {
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`API lỗi: ${response.status} - ${errorText}`);
-                }
-                return response.json();
-        })
-        .then(tours => {
-            allTours = tours;
+async function loadTours(apiUrl, targetSelector, usePagination = false) {
+    const container = document.querySelector(targetSelector);
+    if (!container) {
+        console.error("Không tìm thấy container:", targetSelector);
+        return;
+    }
 
-            if (!tours.length) {
-                document.querySelector(targetSelector).innerHTML = "<p class='text-danger'>Không có tour nào.</p>";
-                return;
-            }
+    try {
+        const response = await fetch(apiUrl);
 
-            if (usePagination) {
-                renderToursPage(currentPage, targetSelector);
-                renderPagination(targetSelector);
-            } else {
-                // Home: hiển thị tất cả tour
-                const container = document.querySelector(targetSelector);
-                container.innerHTML = "";
-                tours.forEach(tour => {
-                    const card = createTourCard(tour);
-                    container.appendChild(card);
-                });
-            }
-        })
-        .catch(error => console.error("Lỗi tải tour:", error));
+        if (!response.ok) {
+            const errorText = await response.text();
+            container.innerHTML = `<p class='text-danger'>Lỗi API: ${response.status}</p>`;
+            throw new Error(`API lỗi: ${response.status} - ${errorText}`);
+        }
+
+        const tours = await response.json();
+
+        // Tạo state cho container nếu chưa có
+        tourState[targetSelector] = {
+            all: tours,
+            page: 1
+        };
+
+        if (!tours.length) {
+            container.innerHTML = "<p class='text-danger'>Không có tour nào.</p>";
+            return;
+        }
+
+        if (usePagination) {
+            renderToursPage(targetSelector);
+            renderPagination(targetSelector);
+        } else {
+            // Home, top-rated: hiển thị hết
+            container.innerHTML = "";
+            tours.forEach(t => container.appendChild(createTourCard(t)));
+        }
+
+    } catch (err) {
+        console.error("Lỗi tải tour:", err);
+        container.innerHTML = `<p class='text-danger'>Không thể tải dữ liệu.</p>`;
+    }
 }
 
 /**
  * renderToursPage - hiển thị 1 trang tour (dùng khi phân trang)
  */
-function renderToursPage(page, targetSelector) {
+function renderToursPage(targetSelector) {
+    const state = tourState[targetSelector];
     const container = document.querySelector(targetSelector);
-    container.innerHTML = "";
 
-    const start = (page - 1) * toursPerPage;
+    const start = (state.page - 1) * toursPerPage;
     const end = start + toursPerPage;
-    const pageTours = allTours.slice(start, end);
+    const pageTours = state.all.slice(start, end);
 
-    if (!pageTours.length) {
-        container.innerHTML = "<p class='text-danger'>Không có tour nào.</p>";
-        return;
-    }
-
-    pageTours.forEach(tour => {
-        const card = createTourCard(tour);
-        container.appendChild(card);
-    });
+    container.innerHTML = "";
+    pageTours.forEach(tour => container.appendChild(createTourCard(tour)));
 }
 
 /**
  * renderPagination - tạo nút phân trang (dùng khi phân trang)
  */
 function renderPagination(targetSelector) {
-    const paginationContainer = document.querySelector(".pagination");
-    if (!paginationContainer) return; // tránh lỗi nếu không có thẻ .pagination
-    paginationContainer.innerHTML = "";
+    const pagination = document.querySelector(`${targetSelector}-pagination`);
+    if (!pagination) return;
 
-    const totalPages = Math.ceil(allTours.length / toursPerPage);
+    const state = tourState[targetSelector];
+    const totalPages = Math.ceil(state.all.length / toursPerPage);
 
-    // Previous
-    paginationContainer.innerHTML += `
-        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-            <a class="page-link" href="#" data-page="${currentPage - 1}">&laquo;</a>
-        </li>
-    `;
+    let html = "";
 
-    // Page numbers
     for (let i = 1; i <= totalPages; i++) {
-        paginationContainer.innerHTML += `
-            <li class="page-item ${i === currentPage ? 'active' : ''}">
+        html += `
+            <li class="page-item ${i === state.page ? "active" : ""}">
                 <a class="page-link" href="#" data-page="${i}">${i}</a>
-            </li>
-        `;
+            </li>`;
     }
 
-    // Next
-    paginationContainer.innerHTML += `
-        <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-            <a class="page-link" href="#" data-page="${currentPage + 1}">&raquo;</a>
-        </li>
-    `;
+    pagination.innerHTML = html;
 
-    // Click event
-    paginationContainer.querySelectorAll("a[data-page]").forEach(link => {
-        link.addEventListener("click", function (e) {
+    // gán sự kiện click
+    pagination.querySelectorAll(".page-link").forEach(link => {
+        link.addEventListener("click", e => {
             e.preventDefault();
-            const page = parseInt(this.dataset.page);
-            if (page > 0 && page <= totalPages) {
-                currentPage = page;
-                renderToursPage(currentPage, targetSelector);
-                renderPagination(targetSelector);
-            }
+            state.page = Number(link.dataset.page);
+            renderToursPage(targetSelector);
+            renderPagination(targetSelector);
         });
     });
 }
@@ -166,7 +156,7 @@ function createTourCard(tour) {
 
     // Build HTML đầy đủ
     div.innerHTML = `
-        <a href="/tour/${tour.maTour}" class="card-link">
+        <a href="#" class="card-link" onclick="goToTour(${tour.maTour}); return false;">
             <div class="card-image-container">
                 <img src="${tour.duongDanAnhDaiDien}" alt="Hình ảnh tour ${tour.tenTour}" class="card-image">
 
@@ -223,3 +213,88 @@ function getTransportIcons(phuongTiens) {
         return `<div class="transport-icon-circle"><i class="fa-solid ${iconClass}"></i></div>`;
     }).join('');
 }
+
+function loadRecentTours() {
+    const userId = localStorage.getItem("userId");
+    const maNguoiDungParam = userId ? `maNguoiDung=${userId}&` : "";
+
+    const clientId = getSessionId();
+
+    const apiUrl = `/api/tours/recent?${maNguoiDungParam}sessionId=${clientId}`;
+
+    fetch(apiUrl)
+        .then(res => res.json())
+        .then(tours => {
+            const container = document.getElementById("recent-tour-container");
+            container.innerHTML = "";
+
+            if (!tours.length) {
+                container.innerHTML = `<p class="text-muted">Bạn chưa xem tour nào.</p>`;
+                return;
+            }
+
+            tours.forEach(tour => {
+                container.appendChild(createRecentTourCard(tour));
+            });
+        })
+        .catch(err => console.error("Lỗi load recent tours:", err));
+}
+
+function getSessionId() {
+    let clientId = localStorage.getItem("clientId");
+    if (!clientId) {
+        clientId = self.crypto.randomUUID();
+        localStorage.setItem("clientId", clientId);
+    }
+    return clientId;
+}
+
+function goToTour(maTour) {
+    window.location.href = `/tour/${maTour}?clientId=${getSessionId()}`;
+}
+
+function createRecentTourCard(tour) {
+    const div = document.createElement("div");
+    div.className = "tour-card";
+
+    div.innerHTML = `
+        <div style="position: relative;">
+            <div class="badge-gift"><i class="fa-solid fa-gift"></i></div>
+            <img src="${tour.duongDanAnhDaiDien}" alt="${tour.tenTour}" class="tour-image">
+        </div>
+
+        <div class="tour-content">
+            <button class="close-btn" onclick="event.stopPropagation(); removeRecentTour(${tour.maTour})">
+                ✕
+            </button>
+
+            <div>
+                <h3 class="tour-title">${tour.tenTour}</h3>
+                <div class="tour-rating">
+                    ${tour.soSaoTrungBinh ?? "0.0"} · Tuyệt vời | ${tour.soDanhGia ?? 0} đánh giá
+                </div>
+            </div>
+
+            <div class="tour-price">
+                <span class="price-current">${Number(tour.gia).toLocaleString("vi-VN")} đ</span>
+            </div>
+        </div>
+    `;
+
+    div.addEventListener("click", () => {
+        window.location.href = `/tour/${tour.maTour}`;
+    });
+
+    return div;
+}
+
+function loadRelatedTours(tourId) {
+    const url = `/api/tours/related/${tourId}`;
+    loadTours(url, "#related-tour-container", false);
+}
+
+
+
+
+
+

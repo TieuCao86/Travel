@@ -19,12 +19,15 @@
                     <!-- Input + Filter Buttons cùng 1 hàng -->
                     <div class="d-flex flex-wrap gap-2 mb-3 align-items-center">
                         <div class="flex-grow-1">
-                            <div class="input-group">
-                                <input type="text" class="form-control search-box" placeholder="Bạn đang tìm về?">
-                                <button class="btn btn-warning" type="button">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
+                            <form action="/tour/filter" method="get" class="w-100">
+                                <div class="input-group">
+                                    <input type="text" class="form-control search-box"
+                                           placeholder="Bạn đang tìm về?" name="tenTour">
+                                    <button class="btn btn-warning" type="submit">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </form>
                         </div>
 
                         <!-- Các nút filter chính -->
@@ -72,6 +75,15 @@
             <span class="carousel-control-next-icon"></span>
         </button>
     </div>
+
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title" style="color:#003c71">Tours du lịch bạn đã xem gần đây</h2>
+
+            <!-- Carousel wrapper -->
+            <div id="recent-tour-container"></div>
+        </div>
+    </section>
 
     <!-- Điểm Đến Nổi Bật -->
     <section id="destinations" class="py-5 bg-light">

@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface TourRepository extends JpaRepository<Tour, Integer>, JpaSpecificationExecutor<Tour> {
 
     @Query(value = """
-    SELECT 
+    SELECT
         T.MaTour AS maTour,
         T.TenTour AS tenTour,
         T.LoaiTour AS loaiTour,
@@ -72,11 +72,11 @@ public interface TourRepository extends JpaRepository<Tour, Integer>, JpaSpecifi
     ) V ON V.MaTour = T.MaTour
 
     -- Ảnh đại diện
-    LEFT JOIN HinhAnhTour A 
+    LEFT JOIN HinhAnhTour A
            ON A.MaTour = T.MaTour AND A.LaAnhDaiDien = 1
 
     -- Filter
-    WHERE 
+    WHERE
         (:tenTour IS NULL OR T.TenTour LIKE CONCAT('%', :tenTour, '%'))
         AND (:loaiTour IS NULL OR T.LoaiTour = :loaiTour)
         AND (:thanhPho IS NULL OR EXISTS (
@@ -88,13 +88,13 @@ public interface TourRepository extends JpaRepository<Tour, Integer>, JpaSpecifi
                   AND (P.TenThanhPho LIKE CONCAT('%', :thanhPho, '%')
                        OR Q.TenQuocGia LIKE CONCAT('%', :thanhPho, '%'))
         ))
-        AND (:minGia IS NULL OR 
+        AND (:minGia IS NULL OR
              (SELECT TOP 1 GLKH.Gia
               FROM LichKhoiHanh LK2
               JOIN GiaLichKhoiHanh GLKH ON LK2.MaLichKhoiHanh = GLKH.MaLichKhoiHanh
               WHERE LK2.MaTour = T.MaTour AND GLKH.LoaiHanhKhach = 'NguoiLon'
               ORDER BY LK2.NgayKhoiHanh ASC) >= :minGia)
-        AND (:maxGia IS NULL OR 
+        AND (:maxGia IS NULL OR
              (SELECT TOP 1 GLKH.Gia
               FROM LichKhoiHanh LK2
               JOIN GiaLichKhoiHanh GLKH ON LK2.MaLichKhoiHanh = GLKH.MaLichKhoiHanh
@@ -125,5 +125,124 @@ public interface TourRepository extends JpaRepository<Tour, Integer>, JpaSpecifi
             "WHERE t.maTour = :id")
     Optional<Tour> findFullDetailById(@Param("id") Integer id);
 
+    @Query(
+            value = """
+       SELECT TOP 6
+           t.MaTour AS maTour,
+           t.TenTour AS tenTour,
+           t.LoaiTour AS loaiTour,
+           t.MoTa AS moTa,
+           t.ThoiGian AS thoiGian,
+           a.DuongDan AS duongDanAnhDaiDien,
+           glkh.Gia AS gia,
+           dg.SoSaoTrungBinh AS soSaoTrungBinh,
+           dg.SoDanhGia AS soDanhGia
+       FROM TourXemGanDay tx
+       JOIN Tour t ON tx.MaTour = t.MaTour
+       LEFT JOIN (
+           SELECT MaTour, DuongDan
+           FROM HinhAnhTour
+           WHERE LaAnhDaiDien = 1
+       ) a ON a.MaTour = t.MaTour
+       LEFT JOIN (
+           SELECT MaTour, Gia
+           FROM (
+               SELECT lk.MaTour, glkh.Gia,
+                      ROW_NUMBER() OVER (PARTITION BY lk.MaTour ORDER BY lk.NgayKhoiHanh ASC) AS rn
+               FROM LichKhoiHanh lk
+               JOIN GiaLichKhoiHanh glkh ON lk.MaLichKhoiHanh = glkh.MaLichKhoiHanh
+               WHERE glkh.LoaiHanhKhach = 'NguoiLon'
+           ) t
+           WHERE rn = 1
+       ) glkh ON glkh.MaTour = t.MaTour
+       LEFT JOIN (
+           SELECT MaTour, AVG(CAST(SoSao AS FLOAT)) AS SoSaoTrungBinh, COUNT(*) AS SoDanhGia
+           FROM DanhGia
+           GROUP BY MaTour
+       ) dg ON dg.MaTour = t.MaTour
+       WHERE
+            (:maNguoiDung IS NOT NULL AND tx.MaNguoiDung = :maNguoiDung)
+         OR (:maNguoiDung IS NULL AND tx.SessionId = :sessionId)
+       ORDER BY tx.ThoiGianXem DESC
+     """,
+            nativeQuery = true
+    )
+    List<TourCardProjection> findRecentTours(
+            @Param("maNguoiDung") Integer maNguoiDung,
+            @Param("sessionId") String sessionId
+    );
+
+    @Query(
+            value = """
+        SELECT TOP 3
+            t.MaTour AS maTour,
+            t.TenTour AS tenTour,
+            t.LoaiTour AS loaiTour,
+            t.MoTa AS moTa,
+            t.ThoiGian AS thoiGian,
+            a.DuongDan AS duongDanAnhDaiDien,
+            glkh.Gia AS gia,
+            ISNULL(dg.SoSaoTrungBinh, 0) AS soSaoTrungBinh,
+            ISNULL(dg.SoDanhGia, 0) AS soDanhGia
+        FROM Tour t
+
+        -- Join để lấy Thành phố và Quốc gia của tour
+        JOIN ThanhPho_Tour ttp ON t.MaTour = ttp.MaTour
+        JOIN ThanhPho tp ON ttp.MaThanhPho = tp.MaThanhPho
+        JOIN QuocGia qg ON tp.MaQuocGia = qg.MaQuocGia
+
+        -- Ảnh đại diện
+        LEFT JOIN (
+            SELECT MaTour, DuongDan
+            FROM HinhAnhTour
+            WHERE LaAnhDaiDien = 1
+        ) a ON a.MaTour = t.MaTour
+
+        -- Giá rẻ nhất
+        LEFT JOIN (
+            SELECT MaTour, Gia
+            FROM (
+                SELECT lk.MaTour, glkh.Gia,
+                       ROW_NUMBER() OVER (PARTITION BY lk.MaTour ORDER BY lk.NgayKhoiHanh ASC) AS rn
+                FROM LichKhoiHanh lk
+                JOIN GiaLichKhoiHanh glkh ON lk.MaLichKhoiHanh = glkh.MaLichKhoiHanh
+                WHERE glkh.LoaiHanhKhach = 'NguoiLon'
+            ) g
+            WHERE rn = 1
+        ) glkh ON glkh.MaTour = t.MaTour
+
+        -- Rating
+        LEFT JOIN (
+            SELECT MaTour,
+                   AVG(CAST(SoSao AS FLOAT)) AS SoSaoTrungBinh,
+                   COUNT(*) AS SoDanhGia
+            FROM DanhGia
+            GROUP BY MaTour
+        ) dg ON dg.MaTour = t.MaTour
+
+        WHERE t.MaTour <> :maTour
+
+          AND (
+                -- Nếu nội địa → so sánh thành phố
+                (:loaiTour = 'Nội địa' AND tp.TenThanhPho = :tenThanhPho)
+
+                OR
+
+                -- Nếu nước ngoài → so sánh quốc gia
+                (:loaiTour <> 'Nội địa' AND qg.TenQuocGia = :tenQuocGia)
+          )
+
+        ORDER BY
+            SoSaoTrungBinh DESC,
+            SoDanhGia DESC
+        """,
+            nativeQuery = true
+    )
+    List<TourCardProjection> findRelatedTours(
+            @Param("maTour") Integer maTour,
+            @Param("loaiTour") String loaiTour,
+            @Param("tenThanhPho") String tenThanhPho,
+            @Param("tenQuocGia") String tenQuocGia
+    );
 
 }

@@ -1,4 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
+console.log("FE COOKIE:", document.cookie);
+console.log("FE SESSION:", getSessionId());
+
+    loadRecentTours();
     loadTours("/api/tours/top-rated", "#top-tour-container", false);
 
     const filterButtons = document.querySelectorAll(".filter-btn");

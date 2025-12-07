@@ -17,7 +17,7 @@ public class TourCardDTO {
     private String noiXuatPhat;
     private BigDecimal giamGia;
     private Double soSaoTrungBinh;
-    private Integer soDanhGia;
+    private Long soDanhGia;
     private String duongDanAnhDaiDien;
     private List<String> phuongTiens;
     private List<String> lichKhoiHanhs;

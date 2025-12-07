@@ -1,410 +1,328 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<html lang="vi"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tour Trung Quốc 5N4Đ: HCM - Thượng Hải - Hàng Châu - Tô Châu</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        /* Tour Detail Styles */
-        body {
-            background: #F2F7FA;
-        }
-        .tour-badge {
-            background: #ff4757;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            z-index: 10;
-        }
-        .tour-section {
-            margin-bottom: 20px;
-            background-color: #fff;
-            border-radius: 0.5rem; /* tương ứng rounded */
-            padding: 1rem;        /* py-4 px-4 */
-            box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
-        }
-        .tour-images { position: relative; }
-        .main-image {
-            width: 100%; height: 300px;
-            object-fit: cover; border-radius: 8px;
-        }
-        .thumbnail-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 5px; margin-top: 10px;
-        }
-        .thumbnail {
-            width: 100%; height: 60px;
-            object-fit: cover; border-radius: 4px;
-            cursor: pointer; opacity: 0.8;
-            transition: all 0.3s;
-        }
-        .thumbnail:hover { opacity: 1; transform: scale(1.05); }
 
-        .price-section {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .price-tag {
-            background: linear-gradient(45deg, #ff6b35, #f7931e);
-            color: white; border-radius: 20px;
-            padding: 8px 16px; font-weight: bold;
-        }
-        .rating { color: #ffc107; }
-        .section-title {
-            margin-bottom: 1rem;
-        }
-        .booking-summary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 10px;
-            padding: 20px;
-        }
-    </style>
+    <th:block layout:fragment="styles">
+        <link rel="stylesheet" th:href="@{/css/tour-detail.css}">
+    </th:block>
 </head>
+
 <body>
-<!-- Navigation Header -->
-
-<!-- Breadcrumb -->
-<div class="container mt-3">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a th:href="@{/}" class="text-decoration-none">Trang chủ</a>
-            </li>
-            <li class="breadcrumb-item">
-                <a th:href="@{/tour/filter(
+<div layout:fragment="content">
+    <div class="container mt-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a th:href="@{/}" class="text-decoration-none">Trang chủ</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a th:href="@{/tour/filter(
                         loaiTour=${tour.loaiTour},
-                        tenTour=${tour.loaiTour == 'Nội địa' ? tour.thanhPhos[0].tenThanhPho : tour.thanhPhos[0].tenQuocGia}
+                        tenTour=${!#lists.isEmpty(tour.thanhPhos) ?
+                                    (tour.loaiTour == 'Nội địa'
+                                        ? tour.thanhPhos.get(0).tenThanhPho
+                                        : tour.thanhPhos.get(0).tenQuocGia)
+                                    : 'Khác'}
                     )}"
-                   th:text="${#lists.isEmpty(tour.thanhPhos) ? 'Tour' :
-                       (tour.loaiTour == 'Nội địa' ? 'Tour ' + tour.thanhPhos[0].tenThanhPho : 'Tour ' + tour.thanhPhos[0].tenQuocGia)}"
-                   class="text-decoration-none">
-                </a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page" th:text="${tour.tenTour}"></li>
-        </ol>
-    </nav>
-</div>
-
-<div class="container py-4">
-    <!-- Tour Title -->
-    <div class="d-flex align-items-center mb-3">
-        <h1 th:text="${tour.tenTour}"></h1>
-        <div class="rating ms-3">
-            <i th:each="i : ${#numbers.sequence(1,5)}"
-               th:classappend="${i <= tour.soSaoTrungBinh} ? 'fas fa-star text-warning' : (${i - 0.5 <= tour.soSaoTrungBinh} ? 'fas fa-star-half-alt text-warning' : 'far fa-star text-warning')">
-            </i> <span class="text-muted ms-2"> (<span th:text="${tour.soSaoTrungBinh}">0</span>/5 - <span th:text="${tour.soDanhGia}">0</span> đánh giá) </span> </div>
+                       th:text="${#lists.isEmpty(tour.thanhPhos)
+                         ? 'Tour'
+                         : (tour.loaiTour == 'Nội địa'
+                             ? 'Tour ' + tour.thanhPhos.get(0).tenThanhPho
+                             : 'Tour ' + tour.thanhPhos.get(0).tenQuocGia)}"
+                                   class="text-decoration-none">
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page" th:text="${tour.tenTour}"></li>
+            </ol>
+        </nav>
     </div>
 
-    <div class="row mb-5">
-        <!-- Left Column -->
-        <div class="col-lg-8">
-            <!-- Tour Images -->
-            <div class="tour-images">
-                <div class="tour-badge">Giảm <span th:text="${tour.giamGia}"></span></div>
-                <img src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800&h=400&fit=crop"
-                     alt="Shanghai skyline" class="main-image">
-                <div class="thumbnail-grid">
-                    <img src="..." alt="Thumbnail 1" class="thumbnail">
-                    <img src="..." alt="Thumbnail 2" class="thumbnail">
-                    <img src="..." alt="Thumbnail 3" class="thumbnail">
-                    <img src="..." alt="Thumbnail 4" class="thumbnail">
-                    <img src="..." alt="Thumbnail 5" class="thumbnail">
-                    <img src="..." alt="Thumbnail 6" class="thumbnail">
-                </div>
-            </div>
+    <div class="container py-4">
+        <!-- Tour Title -->
+        <div class="d-flex align-items-center mb-3">
+            <h1 th:text="${tour.tenTour}"></h1>
+            <div class="rating ms-3">
+                <i th:each="i : ${#numbers.sequence(1,5)}"
+                   th:classappend="${i <= tour.soSaoTrungBinh} ? 'fas fa-star text-warning' : (${i - 0.5 <= tour.soSaoTrungBinh} ? 'fas fa-star-half-alt text-warning' : 'far fa-star text-warning')">
+                </i> <span class="text-muted ms-2"> (<span th:text="${tour.soSaoTrungBinh}">0</span>/5 - <span th:text="${tour.soDanhGia}">0</span> đánh giá) </span> </div>
+        </div>
 
-            <!-- Tour Package Info -->
-            <div class="tour-section">
-                <div class="row g-3">
-                    <div class="col-sm-6">
-                        <i class="fas fa-map-marker-alt text-danger me-1"></i>
-                        Khởi hành từ: <b th:text="${tour.noiXuatPhat}">Hồ Chí Minh</b>
+        <div class="row mb-5">
+            <!-- Left Column -->
+            <div class="col-lg-8">
+                <!-- Tour Images -->
+                <div class="tour-images">
+                    <div class="tour-badge">Giảm <span th:text="${tour.giamGia}"></span></div>
+                    <img src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800&h=400&fit=crop"
+                         alt="Shanghai skyline" class="main-image">
+                    <div class="thumbnail-grid">
+                        <img src="..." alt="Thumbnail 1" class="thumbnail">
+                        <img src="..." alt="Thumbnail 2" class="thumbnail">
+                        <img src="..." alt="Thumbnail 3" class="thumbnail">
+                        <img src="..." alt="Thumbnail 4" class="thumbnail">
+                        <img src="..." alt="Thumbnail 5" class="thumbnail">
+                        <img src="..." alt="Thumbnail 6" class="thumbnail">
                     </div>
-                    <div class="col-sm-2">
-                        <i class="fa fa-plane" title="Máy bay"></i>
-                        <i class="fa fa-bus" title="Ô tô"></i>
-                    </div>
-                    <div class="col-sm-4 text-end">
-                        Mã Tour: <b th:text="${tour.maTour}">TO2206</b>
-                    </div>
-                    <div class="col-12"><hr></div>
-                    <div class="col-12">
-                        <h3 class="section-title">Tour Trọn Gói bao gồm</h3>
-                        <div class="row g-3">
-                            <div class="col-md-4"><i class="fas fa-plane text-primary me-1"></i> Vé máy bay</div>
-                            <div class="col-md-4"><i class="fas fa-passport text-success me-1"></i> Visa</div>
-                            <div class="col-md-4"><i class="fas fa-hotel text-warning me-1"></i> Khách sạn 3-4*</div>
-                            <div class="col-md-4"><i class="fas fa-user-tie text-info me-1"></i> Hướng dẫn viên</div>
-                            <div class="col-md-4"><i class="fas fa-shield-alt text-danger me-1"></i> Bảo hiểm du lịch</div>
+                </div>
+
+                <!-- Tour Package Info -->
+                <div class="tour-section">
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <i class="fas fa-map-marker-alt text-danger me-1"></i>
+                            Khởi hành từ: <b th:text="${tour.noiXuatPhat}">Hồ Chí Minh</b>
+                        </div>
+                        <div class="col-sm-2">
+                            <i class="fa fa-plane" title="Máy bay"></i>
+                            <i class="fa fa-bus" title="Ô tô"></i>
+                        </div>
+                        <div class="col-sm-4 text-end">
+                            Mã Tour: <b th:text="${tour.maTour}">TO2206</b>
+                        </div>
+                        <div class="col-12"><hr></div>
+                        <div class="col-12">
+                            <h3 class="section-title">Tour Trọn Gói bao gồm</h3>
+                            <div class="row g-3">
+                                <div class="col-md-4"><i class="fas fa-plane text-primary me-1"></i> Vé máy bay</div>
+                                <div class="col-md-4"><i class="fas fa-passport text-success me-1"></i> Visa</div>
+                                <div class="col-md-4"><i class="fas fa-hotel text-warning me-1"></i> Khách sạn 3-4*</div>
+                                <div class="col-md-4"><i class="fas fa-user-tie text-info me-1"></i> Hướng dẫn viên</div>
+                                <div class="col-md-4"><i class="fas fa-shield-alt text-danger me-1"></i> Bảo hiểm du lịch</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Tour Experience -->
-            <div class="tour-section">
-                <h3 class="section-title">Trải nghiệm thú vị</h3>
-                <ul th:if="${moTaList}">
-                    <li th:each="item : ${moTaList}">
-                        <i class="fas fa-check-circle text-success me-2"></i>
-                        <span th:text="${item}"></span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Tour Schedule -->
-            <div class="accordion tour-section" id="tourSchedule">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h3 class="section-title mb-0">Chương trình tour</h3>
-                    <span id="xemTatCa" class="text-primary" style="cursor: pointer;">Xem tất cả</span>
+                <!-- Tour Experience -->
+                <div class="tour-section">
+                    <h3 class="section-title">Trải nghiệm thú vị</h3>
+                    <ul th:if="${moTaList}">
+                        <li th:each="item : ${moTaList}">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            <span th:text="${item}"></span>
+                        </li>
+                    </ul>
                 </div>
 
-                <div class="d-flex flex-column gap-4">
-                    <!-- Lặp từng ngày trong lịch trình -->
-                    <div class="accordion-item" th:each="ngay, iter : ${tour.lichTrinhNgayList}">
-                        <h2 class="accordion-header" th:attr="id='heading' + ${iter.index}">
-                            <button class="accordion-button collapsed"
-                                    type="button"
-                                    data-bs-toggle="collapse"
-                                    th:attr="data-bs-target='#day' + ${iter.index}"
-                                    aria-expanded="false"
-                                    th:attrappend="aria-controls='day' + ${iter.index}">
-                                <div class="d-flex align-items-center w-100">
-                                    <img th:src="${ngay.anhNoiBat != null ? ngay.anhNoiBat : '/images/no-image.jpg'}"
-                                         th:alt="${ngay.anhNoiBat != null ? 'Ảnh ngày ' + ngay.ngayThu : 'Chưa có ảnh'}"
-                                         class="me-3 rounded" width="80" height="60" style="object-fit: cover;">
-                                    <div class="d-flex flex-column">
-                                        <strong th:text="'Ngày ' + ${ngay.ngayThu}"></strong>
-                                        <span th:text="${ngay.tieuDe}" class="text-muted small"></span>
+                <!-- Tour Schedule -->
+                <div class="accordion tour-section" id="tourSchedule">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h3 class="section-title mb-0">Chương trình tour</h3>
+                        <span id="xemTatCa" class="text-primary" style="cursor: pointer;">Xem tất cả</span>
+                    </div>
+
+                    <div class="d-flex flex-column gap-4">
+                        <!-- Lặp từng ngày trong lịch trình -->
+                        <div class="accordion-item" th:each="ngay, iter : ${tour.lichTrinhNgayList}">
+                            <h2 class="accordion-header" th:attr="id='heading' + ${iter.index}">
+                                <button class="accordion-button collapsed"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        th:attr="data-bs-target='#day' + ${iter.index}"
+                                        aria-expanded="false"
+                                        th:attrappend="aria-controls='day' + ${iter.index}">
+                                    <div class="d-flex align-items-center w-100">
+                                        <img th:src="${ngay.anhNoiBat != null ? ngay.anhNoiBat : '/images/no-image.jpg'}"
+                                             th:alt="${ngay.anhNoiBat != null ? 'Ảnh ngày ' + ngay.ngayThu : 'Chưa có ảnh'}"
+                                             class="me-3 rounded" width="80" height="60" style="object-fit: cover;">
+                                        <div class="d-flex flex-column">
+                                            <strong th:text="'Ngày ' + ${ngay.ngayThu}"></strong>
+                                            <span th:text="${ngay.tieuDe}" class="text-muted small"></span>
+                                        </div>
                                     </div>
-                                </div>
-                            </button>
-                        </h2>
+                                </button>
+                            </h2>
 
-                        <div class="accordion-collapse collapse"
-                             th:attr="id='day' + ${iter.index}"
-                             th:attrappend="aria-labelledby='heading' + ${iter.index}"
-                             data-bs-parent="#tourSchedule">
-                            <div class="accordion-body">
-                                <!-- Mô tả tổng quan -->
-                                <p th:text="${ngay.moTaTongQuan}"></p>
+                            <div class="accordion-collapse collapse"
+                                 th:attr="id='day' + ${iter.index}"
+                                 th:attrappend="aria-labelledby='heading' + ${iter.index}"
+                                 data-bs-parent="#tourSchedule">
+                                <div class="accordion-body">
+                                    <!-- Mô tả tổng quan -->
+                                    <p th:text="${ngay.moTaTongQuan}"></p>
 
-                                <!-- Hoạt động -->
-                                <ul>
-                                    <li th:each="hd : ${ngay.hoatDongList}" th:text="${hd}"></li>
-                                </ul>
+                                    <!-- Hoạt động -->
+                                    <ul>
+                                        <li th:each="hd : ${ngay.hoatDongList}" th:text="${hd}"></li>
+                                    </ul>
 
-                                <!-- Ảnh chi tiết -->
-                                <div class="day-images mt-3 d-flex flex-wrap">
-                                    <img th:each="anh : ${ngay.dsAnhChiTiet}"
-                                         th:src="@{${anh.duongDan}}"
-                                         th:alt="${anh.moTa != null ? anh.moTa : 'Không có mô tả'}"
-                                         class="img-thumbnail me-2 mb-2"
-                                         width="120" height="90"
-                                         style="object-fit: cover;">
+                                    <!-- Ảnh chi tiết -->
+                                    <div class="day-images mt-3 d-flex flex-wrap">
+                                        <img th:each="anh : ${ngay.dsAnhChiTiet}"
+                                             th:src="@{${anh.duongDan}}"
+                                             th:alt="${anh.moTa != null ? anh.moTa : 'Không có mô tả'}"
+                                             class="img-thumbnail me-2 mb-2"
+                                             width="120" height="90"
+                                             style="object-fit: cover;">
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Schedule Table -->
-            <div class="card schedule-table tour-section">
-                <div class="card-header">
-                    <h3 class="section-title">Lịch Trình và Giá Tour</h3>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead class="table-light">
-                            <tr>
-                                <th>Ngày khởi hành</th>
-                                <th>Ngày kết thúc</th>
-                                <th>Loại hình</th>
-                                <th>Giá tour</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="lich : ${tour.lichKhoiHanhs}">
-                                <td th:text="${#temporals.format(lich.ngayKhoiHanh, 'dd/MM')}"></td>
-                                <td th:text="${#temporals.format(lich.ngayKetThuc, 'dd/MM')}"></td>
-                                <td><span class="badge bg-success" th:text="${lich.trangThai}"></span></td>
-                                <td class="price-highlight">
+                <!-- Schedule Table -->
+                <div class="card schedule-table tour-section">
+                    <div class="card-header">
+                        <h3 class="section-title">Lịch Trình và Giá Tour</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                <tr>
+                                    <th>Ngày khởi hành</th>
+                                    <th>Ngày kết thúc</th>
+                                    <th>Loại hình</th>
+                                    <th>Giá tour</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="lich : ${tour.lichKhoiHanhs}">
+                                    <td th:text="${#temporals.format(lich.ngayKhoiHanh, 'dd/MM')}"></td>
+                                    <td th:text="${#temporals.format(lich.ngayKetThuc, 'dd/MM')}"></td>
+                                    <td><span class="badge bg-success" th:text="${lich.trangThai}"></span></td>
+                                    <td class="price-highlight">
                                 <span th:each="gia : ${lich.giaList}" th:if="${gia.loaiHanhKhach == 'NguoiLon'}"
                                       th:text="|${#numbers.formatDecimal(gia.gia, 0, 0, 'COMMA')} ₫|">
                                 </span>
-                                </td>
-                                <td><button class="btn btn-outline-primary btn-sm">Chọn</button></td>
-                            </tr>
-                            </tbody>
-                        </table>
+                                    </td>
+                                    <td><button class="btn btn-outline-primary btn-sm">Chọn</button></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Tabs Section -->
-            <div class="card tour-section">
-                <div class="card-header">
-                    <ul class="nav nav-tabs card-header-tabs" id="tourTabs">
-                        <li class="nav-item"><a class="nav-link active" href="#overview" data-bs-toggle="tab">Giới thiệu chung</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#itinerary" data-bs-toggle="tab">Chương trình tour</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#policy" data-bs-toggle="tab">Phụ thu</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#terms" data-bs-toggle="tab">Thông tin khác</a></li>
-                    </ul>
-                </div>
-                <div class="card-body">
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="overview">
-                            <div class="info-section">
-                                <h6><i class="fas fa-map-marker-alt text-primary me-2"></i>Vận Chuyển:</h6>
-                                <p>Xe máy lạnh chạy quốc lộ...</p>
-                                <h6><i class="fas fa-bed text-primary me-2"></i>Khách sạn:</h6>
-                                <p>Xe đưa đón từ sân bay...</p>
-                                <h6><i class="fas fa-utensils text-primary me-2"></i>Ẩm thực:</h6>
-                                <p>Phí sân bay 2 nước...</p>
-                                <h6><i class="fas fa-ticket-alt text-primary me-2"></i>Bao gồm:</h6>
-                                <ul>
-                                    <li>Khách sạn 3 - 4 sao</li>
-                                    <li>Bảo hiểm du lịch</li>
-                                    <li>Hướng dẫn viên</li>
-                                    <li>Quà tặng kỷ niệm</li>
-                                </ul>
+                <!-- Tabs Section -->
+                <div class="card tour-section">
+                    <div class="card-header">
+                        <ul class="nav nav-tabs card-header-tabs" id="tourTabs">
+                            <li class="nav-item"><a class="nav-link active" href="#overview" data-bs-toggle="tab">Giới thiệu chung</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#itinerary" data-bs-toggle="tab">Chương trình tour</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#policy" data-bs-toggle="tab">Phụ thu</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#terms" data-bs-toggle="tab">Thông tin khác</a></li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="overview">
+                                <div class="info-section">
+                                    <h6><i class="fas fa-map-marker-alt text-primary me-2"></i>Vận Chuyển:</h6>
+                                    <p>Xe máy lạnh chạy quốc lộ...</p>
+                                    <h6><i class="fas fa-bed text-primary me-2"></i>Khách sạn:</h6>
+                                    <p>Xe đưa đón từ sân bay...</p>
+                                    <h6><i class="fas fa-utensils text-primary me-2"></i>Ẩm thực:</h6>
+                                    <p>Phí sân bay 2 nước...</p>
+                                    <h6><i class="fas fa-ticket-alt text-primary me-2"></i>Bao gồm:</h6>
+                                    <ul>
+                                        <li>Khách sạn 3 - 4 sao</li>
+                                        <li>Bảo hiểm du lịch</li>
+                                        <li>Hướng dẫn viên</li>
+                                        <li>Quà tặng kỷ niệm</li>
+                                    </ul>
+                                </div>
                             </div>
+                            <div class="tab-pane fade" id="itinerary"><p>Chi tiết chương trình...</p></div>
+                            <div class="tab-pane fade" id="policy"><p>Thông tin phụ thu...</p></div>
+                            <div class="tab-pane fade" id="terms"><p>Điều khoản bổ sung...</p></div>
                         </div>
-                        <div class="tab-pane fade" id="itinerary"><p>Chi tiết chương trình...</p></div>
-                        <div class="tab-pane fade" id="policy"><p>Thông tin phụ thu...</p></div>
-                        <div class="tab-pane fade" id="terms"><p>Điều khoản bổ sung...</p></div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Reviews -->
-            <div class="card tour-section">
-                <div class="card-header">
-                    <h6 class="mb-0">Đánh giá khách hàng về Tour</h6>
-                    <div class="d-flex align-items-center mt-2">
-                        <div class="rating-stars me-2">
-                            <i th:each="i : ${#numbers.sequence(1,5)}"
-                               th:classappend="${i <= tour.soSaoTrungBinh} ? 'fas fa-star text-warning' :
+                <!-- Reviews -->
+                <div class="card tour-section">
+                    <div class="card-header">
+                        <h6 class="mb-0">Đánh giá khách hàng về Tour</h6>
+                        <div class="d-flex align-items-center mt-2">
+                            <div class="rating-stars me-2">
+                                <i th:each="i : ${#numbers.sequence(1,5)}"
+                                   th:classappend="${i <= tour.soSaoTrungBinh} ? 'fas fa-star text-warning' :
                                    (${i - 0.5 <= tour.soSaoTrungBinh} ? 'fas fa-star-half-alt text-warning' : 'far fa-star text-warning')">
-                            </i>
+                                </i>
+                            </div>
+                            <span class="badge bg-success" th:text="${tour.soSaoTrungBinh + '/5'}"></span>
+                            <span class="badge bg-secondary ms-2" th:text="${tour.soDanhGia + ' đánh giá'}"></span>
                         </div>
-                        <span class="badge bg-success" th:text="${tour.soSaoTrungBinh + '/5'}"></span>
-                        <span class="badge bg-secondary ms-2" th:text="${tour.soDanhGia + ' đánh giá'}"></span>
                     </div>
-                </div>
 
-                <div class="card-body">
-                    <div class="row">
-                        <!-- Lặp danh sách đánh giá -->
-                        <div class="col-md-12 mb-3" th:each="dg : ${tour.danhGiaList}">
-                            <div class="border rounded p-3">
-                                <div class="d-flex align-items-center mb-2">
-                                    <i class="fas fa-user-circle text-primary me-2" style="font-size: 28px;"></i>
-                                    <div>
-                                        <strong th:text="${dg.tenNguoiDung != null ? dg.tenNguoiDung : 'Khách hàng'}"></strong>
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- Lặp danh sách đánh giá -->
+                            <div class="col-md-12 mb-3" th:each="dg : ${tour.danhGiaList}">
+                                <div class="border rounded p-3">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-user-circle text-primary me-2" style="font-size: 28px;"></i>
+                                        <div>
+                                            <strong th:text="${dg.tenNguoiDung != null ? dg.tenNguoiDung : 'Khách hàng'}"></strong>
 
-                                        <!-- Sao -->
-                                        <div class="rating-stars small mt-1">
-                                            <i th:each="i : ${#numbers.sequence(1,5)}"
-                                               th:classappend="${i <= dg.soSao} ? 'fas fa-star text-warning' : 'far fa-star text-warning'"></i>
+                                            <!-- Sao -->
+                                            <div class="rating-stars small mt-1">
+                                                <i th:each="i : ${#numbers.sequence(1,5)}"
+                                                   th:classappend="${i <= dg.soSao} ? 'fas fa-star text-warning' : 'far fa-star text-warning'"></i>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <!-- Nội dung bình luận -->
-                                <p class="mb-1" th:text="${dg.binhLuan}"></p>
+                                    <!-- Nội dung bình luận -->
+                                    <p class="mb-1" th:text="${dg.binhLuan}"></p>
 
-                                <!-- Ngày đánh giá -->
-                                <div class="text-muted small"
-                                     th:text="${#temporals.format(dg.ngayDanhGia, 'dd/MM/yyyy HH:mm')}">
+                                    <!-- Ngày đánh giá -->
+                                    <div class="text-muted small"
+                                         th:text="${#temporals.format(dg.ngayDanhGia, 'dd/MM/yyyy HH:mm')}">
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="text-center mt-3" th:if="${tour.danhGiaList.size() > 3}">
-                        <button class="btn btn-outline-primary">Xem thêm</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Right Column -->
-        <div class="col-lg-4">
-            <div class="price-section sticky-top" style="top: 20px;">
-                <h3 class="section-title">Đặt tour</h3>
-                <div class="info-item"><span>Thời gian</span><span>5 ngày 4 đêm</span></div>
-                <div class="mb-3">
-                    <label class="form-label">Người lớn</label>
-                    <input type="number" class="form-control" value="2" min="1">
-                    <small>Giá: 13.990.000 ₫/người</small>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Trẻ em</label>
-                    <input type="number" class="form-control" value="1" min="0">
-                    <small>Giá: 10.000.000 ₫/người</small>
-                </div>
-                <hr>
-                <div class="d-flex justify-content-between mb-3">
-                    <span>Tổng giá</span>
-                    <span class="price-highlight">37.980.000 ₫</span>
-                </div>
-                <button class="btn-book">ĐẶT NGAY</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Related Tours -->
-    <div class="card tour-section">
-        <div class="card-header">
-            <h6 class="mb-0">Tours du lịch Malaysia liên quan</h6>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-4 mb-4" th:each="tourLienQuan : ${tourLienQuanList}">
-                    <div class="card tour-card h-100">
-                        <div class="position-relative">
-                            <img th:src="${tourLienQuan.anh}" class="card-img-top" alt="">
-                            <div class="position-absolute top-0 start-0 m-2">
-                                <span class="badge bg-danger" th:text="${tourLienQuan.khuyenMai}"></span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <h6 class="card-title" th:text="${tourLienQuan.ten}"></h6>
-                            <p class="text-muted small" th:text="${tourLienQuan.moTa}"></p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="rating-stars small">
-                                    <i class="fas fa-star"></i><i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i><i class="fas fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                </div>
-                                <small class="text-muted" th:text="${tourLienQuan.thoiGian}"></small>
-                            </div>
-                            <div class="mt-3">
-                                <span class="price-tag" th:text="${tourLienQuan.gia}"></span>
-                            </div>
+                        <div class="text-center mt-3" th:if="${tour.danhGiaList.size() > 3}">
+                            <button class="btn btn-outline-primary">Xem thêm</button>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Right Column -->
+            <div class="col-lg-4">
+                <div class="price-section sticky-top" style="top: 20px;">
+                    <h3 class="section-title">Đặt tour</h3>
+                    <div class="info-item"><span>Thời gian</span><span>5 ngày 4 đêm</span></div>
+                    <div class="mb-3">
+                        <label class="form-label">Người lớn</label>
+                        <input type="number" class="form-control" value="2" min="1">
+                        <small>Giá: 13.990.000 ₫/người</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Trẻ em</label>
+                        <input type="number" class="form-control" value="1" min="0">
+                        <small>Giá: 10.000.000 ₫/người</small>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Tổng giá</span>
+                        <span class="price-highlight">37.980.000 ₫</span>
+                    </div>
+                    <button class="btn-book">ĐẶT NGAY</button>
+                </div>
+            </div>
         </div>
+
+        <!-- Related Tours -->
+        <div id="related-tour-container" class="row mt-4"></div>
+
     </div>
 </div>
+
+<!-- Breadcrumb -->
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -421,6 +339,9 @@
             expanded = !expanded;
             toggleBtn.textContent = expanded ? "Rút gọn" : "Xem tất cả";
         });
+
+        const tourId = [[${tour.maTour}]];
+        loadRelatedTours(tourId);
     });
 </script>
 </body>

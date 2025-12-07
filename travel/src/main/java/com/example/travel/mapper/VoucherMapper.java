@@ -14,7 +14,7 @@ public interface VoucherMapper {
 
     @Named("mapGiamGia")
     default Double mapGiamGia(Set<Voucher> vouchers) {
-        if (vouchers == null || vouchers.isEmpty()) return null;
+        if (vouchers == null || vouchers.isEmpty()) return 0.0; // luôn trả về số
 
         LocalDate now = LocalDate.now();
 
@@ -26,6 +26,7 @@ public interface VoucherMapper {
                 .filter(Objects::nonNull)
                 .mapToDouble(BigDecimal::doubleValue)
                 .max()
-                .orElse(0);
+                .orElse(0.0); // luôn là Double, không phải null
     }
+
 }

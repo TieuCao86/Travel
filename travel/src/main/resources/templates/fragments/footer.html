@@ -1,4 +1,149 @@
-<footer class="text-center mt-5" th:fragment="footer">
-    <hr>
-    <p>&copy; 2025 VietTravel. All rights reserved.</p>
+<footer class="text-center mt-5" th:fragment="footer" xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <!-- Awards Section -->
+    <div class="award-section py-4 bg-white border-bottom">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <img src="https://via.placeholder.com/80x80/FFD700/000000?text=Award" alt="Award 1" class="mb-2" style="max-width: 80px;">
+                    <p class="small text-muted mb-0">Đại lý Du lịch Trực tuyến<br>Hàng đầu Việt Nam</p>
+                </div>
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <img src="https://via.placeholder.com/80x80/C0C0C0/000000?text=Award" alt="Award 2" class="mb-2" style="max-width: 80px;">
+                    <p class="small text-muted mb-0">Best Companies to<br>Work for in Asia</p>
+                </div>
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <img src="https://via.placeholder.com/80x80/CD7F32/000000?text=Award" alt="Award 3" class="mb-2" style="max-width: 80px;">
+                    <p class="small text-muted mb-0">APEA Inspirational<br>Brand Award</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Footer Section -->
+    <div class="footer-section bg-light py-5">
+        <div class="container">
+            <div class="row text-start">
+                <!-- Column 1 -->
+                <div class="col-md-3 col-6 mb-4">
+                    <h6 class="fw-bold mb-3">Về VietTravel.com</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Chúng tôi</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-muted">VietTravel Blog</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Quy chế hoạt động</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 2 -->
+                <div class="col-md-3 col-6 mb-4">
+                    <h6 class="fw-bold mb-3">Thông Tin Cần Biết</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Điều kiện & Điều khoản</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Chính sách giá tốt</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Câu hỏi thường gặp</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3 -->
+                <div class="col-md-3 col-6 mb-4">
+                    <h6 class="fw-bold mb-3">Đối Tác & Liên kết</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Vietnam Airlines</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-muted">VNExpress</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 4 -->
+                <div class="col-md-3 col-6 mb-4">
+                    <h6 class="fw-bold mb-3">Thành viên của</h6>
+                    <img src="https://via.placeholder.com/150x60/003c71/ffffff?text=TMG+Logo" alt="TMG" class="mb-3" style="max-width: 150px;">
+                    <div>
+                        <img src="https://via.placeholder.com/70x70/ff0000/ffffff?text=Cert1" alt="Certification" class="me-2" style="max-width: 70px;">
+                        <img src="https://via.placeholder.com/70x70/0000ff/ffffff?text=Cert2" alt="Certification" style="max-width: 70px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="contact-section bg-white py-4 border-bottom">
+        <div class="container">
+            <div class="row align-items-center text-start">
+                <div class="col-md-4 mb-3">
+                    <p class="fw-bold mb-2">Bạn cần trợ giúp? Hãy gọi ngay</p>
+                    <a href="tel:19002045" class="text-decoration-none fs-4 fw-bold text-warning">
+                        <i class="fas fa-phone"></i> 1900 2045
+                    </a>
+                    <span class="text-muted ms-3">7h30 → 21h</span>
+                </div>
+                <div class="col-md-4 mb-3 text-center">
+                    <button class="btn btn-primary rounded-pill">
+                        <i class="fab fa-viber"></i> VietTravel Viber
+                    </button>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <p class="fw-bold mb-2">Quét mã QRcode để tải ứng dụng VietTravel</p>
+                    <div class="d-flex align-items-center">
+                        <img src="https://via.placeholder.com/80x80/000000/ffffff?text=QR" alt="QR Code" class="me-3" style="max-width: 80px;">
+                        <div>
+                            <a href="#"><img th:src="@{/images/appstore.png}" alt="App Store" class="d-block mb-2" style="max-width: 130px;"></a>
+                            <a href="#"><img th:src="@{/images/google-play.png}" alt="Google Play" class="d-block" style="max-width: 130px;"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Office Info -->
+    <div class="office-info bg-white py-4 text-start">
+        <div class="container">
+            <p class="small text-muted mb-2"><strong>ĐKKD:</strong> 0312788481, ngày cấp: 21/05/2014, sở KHĐT Thành Phố Hồ Chí Minh</p>
+            <p class="small text-muted mb-2"><i class="fas fa-map-marker-alt"></i> <strong>HCM:</strong> Tầng 2, Tòa nhà Anh Đăng, 215 Nam Kỳ Khởi Nghĩa, Phường Xuân Hòa, TP. Hồ Chí Minh <a href="#" class="text-decoration-none">(Xem bản đồ)</a></p>
+            <p class="small text-muted mb-2"><i class="fas fa-map-marker-alt"></i> <strong>HN:</strong> Tầng 3, Khách sạn Flower Garden Hà Nội, Số 46 Nguyễn Trường Tộ, P. Ba Đình, Tp. Hà Nội <a href="#" class="text-decoration-none">(Xem bản đồ)</a></p>
+            <p class="small text-muted mb-3"><i class="fas fa-map-marker-alt"></i> <strong>Cần Thơ:</strong> Tầng 7 - Tòa nhà STS - 11B Đại Lộ Hòa Bình, Phường Ninh Kiều, TP. Cần Thơ <a href="#" class="text-decoration-none">(Xem bản đồ)</a></p>
+
+            <div class="social-section">
+                <p class="fw-bold mb-2">Like để cập nhật cẩm nang du lịch</p>
+                <a href="#" class="btn btn-info btn-sm rounded-circle me-2"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="btn btn-info btn-sm rounded-circle me-2"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="btn btn-info btn-sm rounded-circle me-2"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="btn btn-info btn-sm rounded-circle me-2"><i class="fab fa-tiktok"></i></a>
+                <a href="#" class="btn btn-info btn-sm rounded-circle me-2"><i class="fab fa-twitter"></i></a>
+                <span class="ms-2 small text-muted"><i class="fas fa-envelope"></i> tour@viettravel.com</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Copyright -->
+    <hr class="my-0">
+    <div class="py-3 bg-light">
+        <p class="mb-0">&copy; 2025 VietTravel. All rights reserved.</p>
+    </div>
+
 </footer>
+
+<style>
+    footer .award-section img {
+        transition: transform 0.3s;
+    }
+
+    footer .award-section img:hover {
+        transform: scale(1.1);
+    }
+
+    footer a:hover {
+        color: #003c71 !important;
+    }
+
+    footer .btn-info {
+        background-color: #00bcd4;
+        border-color: #00bcd4;
+    }
+
+    footer .btn-info:hover {
+        background-color: #0097a7;
+        border-color: #0097a7;
+    }
+</style>

@@ -6,6 +6,7 @@
 <head th:replace="fragments/header :: header">
     <!-- Cho phép các trang con chèn thêm CSS -->
     <div layout:fragment="styles"></div>
+    <title></title>
 </head>
 
 <body>
@@ -22,7 +23,6 @@
 <!-- Footer -->
 <div th:replace="fragments/footer :: footer"></div>
 
-<!-- ✅ Bootstrap Bundle (có Popper, bắt buộc để accordion hoạt động) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- JS của bạn -->

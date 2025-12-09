@@ -21,13 +21,7 @@ public interface TourRepository extends JpaRepository<Tour, Integer>, JpaSpecifi
         T.MoTa AS moTa,
         T.ThoiGian AS thoiGian,
 
-        -- Giá người lớn của lịch gần nhất
-        (SELECT TOP 1 GLKH.Gia
-         FROM LichKhoiHanh LK2
-         JOIN GiaLichKhoiHanh GLKH ON LK2.MaLichKhoiHanh = GLKH.MaLichKhoiHanh
-         WHERE LK2.MaTour = T.MaTour AND GLKH.LoaiHanhKhach = 'NguoiLon'
-         ORDER BY LK2.NgayKhoiHanh ASC
-        ) AS gia,
+        GiaNL.Gia AS gia,
 
         DG.SoSaoTrungBinh AS soSaoTrungBinh,
         DG.SoDanhGia AS soDanhGia,
@@ -35,73 +29,85 @@ public interface TourRepository extends JpaRepository<Tour, Integer>, JpaSpecifi
         PT.PhuongTien AS phuongTiens,
         V.GiamGia AS giamGia,
 
-        -- Tất cả ngày khởi hành
-        (SELECT STRING_AGG(CONVERT(varchar, LK.NgayKhoiHanh, 23), ',')
-         FROM LichKhoiHanh LK
-         WHERE LK.MaTour = T.MaTour
+        (
+            SELECT STRING_AGG(CONVERT(varchar, LK.NgayKhoiHanh, 23), ',')
+            FROM LichKhoiHanh LK
+            WHERE LK.MaTour = T.MaTour
         ) AS lichKhoiHanhs
 
     FROM Tour T
 
-    -- Rating
+    OUTER APPLY (
+        SELECT TOP 1 GLKH.Gia
+        FROM LichKhoiHanh LK2
+        JOIN GiaLichKhoiHanh GLKH
+            ON LK2.MaLichKhoiHanh = GLKH.MaLichKhoiHanh
+        WHERE LK2.MaTour = T.MaTour
+          AND GLKH.LoaiHanhKhach = 'NguoiLon'
+        ORDER BY LK2.NgayKhoiHanh ASC
+    ) GiaNL
+
     LEFT JOIN (
-        SELECT MaTour,
-               AVG(CAST(SoSao AS FLOAT)) AS SoSaoTrungBinh,
-               COUNT(*) AS SoDanhGia
+        SELECT
+            MaTour,
+            AVG(CAST(SoSao AS FLOAT)) AS SoSaoTrungBinh,
+            COUNT(*) AS SoDanhGia
         FROM DanhGia
         GROUP BY MaTour
     ) DG ON DG.MaTour = T.MaTour
 
-    -- Phương tiện
     LEFT JOIN (
-        SELECT TP.MaTour,
-               STRING_AGG(PT.TenPhuongTien, ', ') AS PhuongTien
+        SELECT
+            TP.MaTour,
+            STRING_AGG(PT.TenPhuongTien, ', ') AS PhuongTien
         FROM TourPhuongTien TP
-        JOIN PhuongTien PT ON TP.MaPhuongTien = PT.MaPhuongTien
+        JOIN PhuongTien PT
+            ON TP.MaPhuongTien = PT.MaPhuongTien
         GROUP BY TP.MaTour
     ) PT ON PT.MaTour = T.MaTour
 
-    -- Voucher
     LEFT JOIN (
-        SELECT TV.MaTour,
-               MAX(V.GiaTri) AS GiamGia
+        SELECT
+            TV.MaTour,
+            MAX(V.GiaTri) AS GiamGia
         FROM TourVoucher TV
-        JOIN Voucher V ON TV.MaVoucher = V.MaVoucher
+        JOIN Voucher V
+            ON TV.MaVoucher = V.MaVoucher
         WHERE V.NgayHetHan >= GETDATE()
         GROUP BY TV.MaTour
     ) V ON V.MaTour = T.MaTour
 
-    -- Ảnh đại diện
     LEFT JOIN HinhAnhTour A
-           ON A.MaTour = T.MaTour AND A.LaAnhDaiDien = 1
+        ON A.MaTour = T.MaTour
+       AND A.LaAnhDaiDien = 1
 
-    -- Filter
     WHERE
         (:tenTour IS NULL OR T.TenTour LIKE CONCAT('%', :tenTour, '%'))
         AND (:loaiTour IS NULL OR T.LoaiTour = :loaiTour)
-        AND (:thanhPho IS NULL OR EXISTS (
+        AND (
+            :thanhPho IS NULL OR EXISTS (
                 SELECT 1
                 FROM ThanhPho_Tour TP
-                JOIN ThanhPho P ON TP.MaThanhPho = P.MaThanhPho
-                JOIN QuocGia Q ON P.MaQuocGia = Q.MaQuocGia
+                JOIN ThanhPho P
+                    ON TP.MaThanhPho = P.MaThanhPho
+                JOIN QuocGia Q
+                    ON P.MaQuocGia = Q.MaQuocGia
                 WHERE TP.MaTour = T.MaTour
-                  AND (P.TenThanhPho LIKE CONCAT('%', :thanhPho, '%')
-                       OR Q.TenQuocGia LIKE CONCAT('%', :thanhPho, '%'))
-        ))
-        AND (:minGia IS NULL OR
-             (SELECT TOP 1 GLKH.Gia
-              FROM LichKhoiHanh LK2
-              JOIN GiaLichKhoiHanh GLKH ON LK2.MaLichKhoiHanh = GLKH.MaLichKhoiHanh
-              WHERE LK2.MaTour = T.MaTour AND GLKH.LoaiHanhKhach = 'NguoiLon'
-              ORDER BY LK2.NgayKhoiHanh ASC) >= :minGia)
-        AND (:maxGia IS NULL OR
-             (SELECT TOP 1 GLKH.Gia
-              FROM LichKhoiHanh LK2
-              JOIN GiaLichKhoiHanh GLKH ON LK2.MaLichKhoiHanh = GLKH.MaLichKhoiHanh
-              WHERE LK2.MaTour = T.MaTour AND GLKH.LoaiHanhKhach = 'NguoiLon'
-              ORDER BY LK2.NgayKhoiHanh ASC) <= :maxGia)
+                  AND (
+                      P.TenThanhPho LIKE CONCAT('%', :thanhPho, '%')
+                      OR Q.TenQuocGia LIKE CONCAT('%', :thanhPho, '%')
+                  )
+            )
+        )
+        AND (:minGia IS NULL OR GiaNL.Gia >= :minGia)
+        AND (:maxGia IS NULL OR GiaNL.Gia <= :maxGia)
 
-    ORDER BY DG.SoSaoTrungBinh DESC
+    ORDER BY
+        CASE WHEN :sort = 'rating' THEN DG.SoSaoTrungBinh END DESC,
+        CASE WHEN :sort = 'price'  THEN GiaNL.Gia END ASC,
+        CASE WHEN :sort = 'sale'   THEN V.GiamGia END DESC,
+        CASE WHEN :sort = 'new'    THEN T.MaTour END DESC
+
     OFFSET :offset ROWS
     FETCH NEXT :limit ROWS ONLY
 """, nativeQuery = true)
@@ -111,6 +117,7 @@ public interface TourRepository extends JpaRepository<Tour, Integer>, JpaSpecifi
             @Param("thanhPho") String thanhPho,
             @Param("minGia") BigDecimal minGia,
             @Param("maxGia") BigDecimal maxGia,
+            @Param("sort") String sort,
             @Param("offset") int offset,
             @Param("limit") int limit
     );

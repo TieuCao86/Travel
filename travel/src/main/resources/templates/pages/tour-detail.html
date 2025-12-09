@@ -10,7 +10,9 @@
 
     <th:block layout:fragment="styles">
         <link rel="stylesheet" th:href="@{/css/tour-detail.css}">
+        <link rel="stylesheet" th:href="@{/css/home.css}">
     </th:block>
+    <title></title>
 </head>
 
 <body>
@@ -47,6 +49,7 @@
         <!-- Tour Title -->
         <div class="d-flex align-items-center mb-3">
             <h1 th:text="${tour.tenTour}"></h1>
+            <input type="hidden" id="tour-id" th:value="${tour.maTour}">
             <div class="rating ms-3">
                 <i th:each="i : ${#numbers.sequence(1,5)}"
                    th:classappend="${i <= tour.soSaoTrungBinh} ? 'fas fa-star text-warning' : (${i - 0.5 <= tour.soSaoTrungBinh} ? 'fas fa-star-half-alt text-warning' : 'far fa-star text-warning')">
@@ -130,7 +133,7 @@
                                     <div class="d-flex align-items-center w-100">
                                         <img th:src="${ngay.anhNoiBat != null ? ngay.anhNoiBat : '/images/no-image.jpg'}"
                                              th:alt="${ngay.anhNoiBat != null ? 'Ảnh ngày ' + ngay.ngayThu : 'Chưa có ảnh'}"
-                                             class="me-3 rounded" width="80" height="60" style="object-fit: cover;">
+                                             class="me-3 rounded" width="80" height="60" style="object-fit: cover;" alt="">
                                         <div class="d-flex flex-column">
                                             <strong th:text="'Ngày ' + ${ngay.ngayThu}"></strong>
                                             <span th:text="${ngay.tieuDe}" class="text-muted small"></span>
@@ -159,7 +162,7 @@
                                              th:alt="${anh.moTa != null ? anh.moTa : 'Không có mô tả'}"
                                              class="img-thumbnail me-2 mb-2"
                                              width="120" height="90"
-                                             style="object-fit: cover;">
+                                             style="object-fit: cover;" alt="" src="">
                                     </div>
                                 </div>
                             </div>
@@ -297,12 +300,16 @@
                     <div class="info-item"><span>Thời gian</span><span>5 ngày 4 đêm</span></div>
                     <div class="mb-3">
                         <label class="form-label">Người lớn</label>
-                        <input type="number" class="form-control" value="2" min="1">
+                        <label>
+                            <input type="number" class="form-control" value="2" min="1">
+                        </label>
                         <small>Giá: 13.990.000 ₫/người</small>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Trẻ em</label>
-                        <input type="number" class="form-control" value="1" min="0">
+                        <label>
+                            <input type="number" class="form-control" value="1" min="0">
+                        </label>
                         <small>Giá: 10.000.000 ₫/người</small>
                     </div>
                     <hr>
@@ -321,28 +328,12 @@
     </div>
 </div>
 
-<!-- Breadcrumb -->
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const toggleBtn = document.getElementById("xemTatCa"); // ✅ sửa lại id cho đúng
-        const allCollapses = document.querySelectorAll("#tourSchedule .accordion-collapse");
-        let expanded = false;
-
-        toggleBtn.addEventListener("click", function() {
-            allCollapses.forEach(collapse => {
-                const bsCollapse = new bootstrap.Collapse(collapse, { toggle: false });
-                expanded ? bsCollapse.hide() : bsCollapse.show();
-            });
-
-            expanded = !expanded;
-            toggleBtn.textContent = expanded ? "Rút gọn" : "Xem tất cả";
-        });
-
-        const tourId = [[${tour.maTour}]];
-        loadRelatedTours(tourId);
-    });
-</script>
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/home.js}"></script>
+    <script th:src="@{/js/tour.api.js}"></script>
+    <script th:src="@{/js/tour.card.js}"></script>
+    <script th:src="@{/js/tour.recent.js}"></script>
+    <script th:src="@{/js/tour-detail.js}"></script>
+</th:block>
 </body>
 </html>

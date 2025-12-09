@@ -11,6 +11,7 @@
     <th:block layout:fragment="styles">
         <link rel="stylesheet" th:href="@{/css/tour-filter.css}">
     </th:block>
+    <title></title>
 </head>
 
 
@@ -27,21 +28,27 @@
                         <label class="form-label">
                             <i class="fas fa-map-marker-alt"></i> Địa điểm
                         </label>
-                        <input type="text" class="form-control" th:value="${tenTour}" readonly>
+                        <label>
+                            <input type="text" class="form-control" th:value="${tenTour}" readonly>
+                        </label>
                     </div>
 
                     <div class="col-md-3">
                         <label class="form-label">
                             <i class="far fa-calendar"></i> Ngày khởi hành
                         </label>
-                        <input type="text" class="form-control" placeholder="Linh hoạt">
+                        <label>
+                            <input type="text" class="form-control" placeholder="Linh hoạt">
+                        </label>
                     </div>
 
                     <div class="col-md-3">
                         <label class="form-label">
                             <i class="fas fa-plane"></i> Khởi hành từ
                         </label>
-                        <input type="text" class="form-control" placeholder="Tất cả">
+                        <label>
+                            <input type="text" class="form-control" placeholder="Tất cả">
+                        </label>
                     </div>
 
                     <div class="col-md-3">
@@ -99,7 +106,7 @@
                         <div class="row g-0">
                             <div class="col-md-4">
                                 <div class="tour-image">
-                                    <img th:src="${tour.duongDanAnhDaiDien}" alt="img">
+                                    <img th:src="${tour.duongDanAnhDaiDien}" alt="img" src="">
                                     <button class="favorite-btn"><i class="far fa-heart"></i></button>
 
                                     <span class="badge-standard">

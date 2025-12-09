@@ -1,19 +1,19 @@
-<footer class="text-center mt-5" th:fragment="footer" xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<footer class="text-center mt-5" th:fragment="footer" xmlns:th="http://www.w3.org/1999/xhtml">
 
     <!-- Awards Section -->
     <div class="award-section py-4 bg-white border-bottom">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-4 col-sm-6 mb-3">
-                    <img src="https://via.placeholder.com/80x80/FFD700/000000?text=Award" alt="Award 1" class="mb-2" style="max-width: 80px;">
+                    <img src=""  th:src="@{/images/dailydulich.png}" alt="Award 1" class="mb-2" style="max-width: 80px;">
                     <p class="small text-muted mb-0">Đại lý Du lịch Trực tuyến<br>Hàng đầu Việt Nam</p>
                 </div>
                 <div class="col-md-4 col-sm-6 mb-3">
-                    <img src="https://via.placeholder.com/80x80/C0C0C0/000000?text=Award" alt="Award 2" class="mb-2" style="max-width: 80px;">
+                    <img src=""  th:src="@{/images/workforinasia.png}" alt="Award 2" class="mb-2" style="max-width: 80px;">
                     <p class="small text-muted mb-0">Best Companies to<br>Work for in Asia</p>
                 </div>
                 <div class="col-md-4 col-sm-6 mb-3">
-                    <img src="https://via.placeholder.com/80x80/CD7F32/000000?text=Award" alt="Award 3" class="mb-2" style="max-width: 80px;">
+                    <img src=""  th:src="@{/images/apea.png}" alt="Award 3" class="mb-2" style="max-width: 80px;">
                     <p class="small text-muted mb-0">APEA Inspirational<br>Brand Award</p>
                 </div>
             </div>
@@ -56,7 +56,7 @@
                 <!-- Column 4 -->
                 <div class="col-md-3 col-6 mb-4">
                     <h6 class="fw-bold mb-3">Thành viên của</h6>
-                    <img src="https://via.placeholder.com/150x60/003c71/ffffff?text=TMG+Logo" alt="TMG" class="mb-3" style="max-width: 150px;">
+                    <img src=""  th:src="@{/images/pmg.png}" alt="TMG" class="mb-3" style="max-width: 150px;">
                     <div>
                         <img src="https://via.placeholder.com/70x70/ff0000/ffffff?text=Cert1" alt="Certification" class="me-2" style="max-width: 70px;">
                         <img src="https://via.placeholder.com/70x70/0000ff/ffffff?text=Cert2" alt="Certification" style="max-width: 70px;">
@@ -85,10 +85,10 @@
                 <div class="col-md-4 mb-3">
                     <p class="fw-bold mb-2">Quét mã QRcode để tải ứng dụng VietTravel</p>
                     <div class="d-flex align-items-center">
-                        <img src="https://via.placeholder.com/80x80/000000/ffffff?text=QR" alt="QR Code" class="me-3" style="max-width: 80px;">
+                        <img src=""  th:src="@{/images/QRcode.png}" alt="QR Code" class="me-3" style="max-width: 80px;">
                         <div>
-                            <a href="#"><img th:src="@{/images/appstore.png}" alt="App Store" class="d-block mb-2" style="max-width: 130px;"></a>
-                            <a href="#"><img th:src="@{/images/google-play.png}" alt="Google Play" class="d-block" style="max-width: 130px;"></a>
+                            <a href="#"><img src=""  th:src="@{/images/appstore.png}" alt="App Store" class="d-block mb-2" style="max-width: 130px;"></a>
+                            <a href="#"><img src=""  th:src="@{/images/google-play.png}" alt="Google Play" class="d-block" style="max-width: 130px;"></a>
                         </div>
                     </div>
                 </div>
@@ -125,11 +125,11 @@
 </footer>
 
 <style>
-    footer .award-section img {
+    footer .award-section img src=""  {
         transition: transform 0.3s;
     }
 
-    footer .award-section img:hover {
+    footer .award-section img src="" :hover {
         transform: scale(1.1);
     }
 

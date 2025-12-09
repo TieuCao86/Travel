@@ -4,6 +4,7 @@ console.log("FE SESSION:", getSessionId());
 
     loadRecentTours();
     loadTours("/api/tours/top-rated", "#top-tour-container", false);
+    loadTours("/api/tours/international", "#tour-foreign", false);
 
     const filterButtons = document.querySelectorAll(".filter-btn");
     const searchBox = document.querySelector(".search-box");

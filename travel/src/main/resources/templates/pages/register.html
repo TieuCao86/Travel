@@ -139,21 +139,33 @@
 
     <form th:action="@{/register}" th:object="${user}" method="post">
 
-        <input type="text" class="form-control" th:field="*{hoTen}" placeholder="Nhập họ tên">
+        <label>
+            <input type="text" class="form-control" th:field="*{hoTen}" placeholder="Nhập họ tên">
+        </label>
 
-        <input type="email" class="form-control" th:field="*{email}" placeholder="Nhập email">
+        <label>
+            <input type="email" class="form-control" th:field="*{email}" placeholder="Nhập email">
+        </label>
 
-        <input type="tel" class="form-control" th:field="*{soDienThoai}" placeholder="Nhập số điện thoại">
+        <label>
+            <input type="tel" class="form-control" th:field="*{soDienThoai}" placeholder="Nhập số điện thoại">
+        </label>
 
-        <input type="password" class="form-control" th:field="*{matKhau}" placeholder="Mật khẩu">
+        <label>
+            <input type="password" class="form-control" th:field="*{matKhau}" placeholder="Mật khẩu">
+        </label>
 
-        <input type="date" class="form-control" th:field="*{ngaySinh}">
+        <label>
+            <input type="date" class="form-control" th:field="*{ngaySinh}">
+        </label>
 
-        <select class="form-select" th:field="*{gioiTinh}">
-            <option value="Nam">Nam</option>
-            <option value="Nữ">Nữ</option>
-            <option value="Khác">Khác</option>
-        </select>
+        <label>
+            <select class="form-select" th:field="*{gioiTinh}">
+                <option value="Nam">Nam</option>
+                <option value="Nữ">Nữ</option>
+                <option value="Khác">Khác</option>
+            </select>
+        </label>
 
         <div th:if="${error}" class="text-danger">
             <span th:text="${error}"></span>

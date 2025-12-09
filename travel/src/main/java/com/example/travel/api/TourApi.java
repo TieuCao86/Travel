@@ -35,16 +35,15 @@ public class TourApi {
             @RequestParam(defaultValue = "10") int limit
     ) {
         List<TourCardDTO> tours = tourService.searchTours(
-                tenTour, loaiTour, thanhPho, minGia, maxGia, offset, limit
+                tenTour, loaiTour, thanhPho, minGia, maxGia, sortBy, offset, limit
         );
         return ResponseEntity.ok(tours);
     }
 
     // TOP-RATED TOUR (giữ nguyên nhưng dùng searchTours)
     @GetMapping("/top-rated")
-    public ResponseEntity<List<TourCardDTO>> getTopRatedTours(
-            @RequestParam(defaultValue = "5") int top) {
-        return ResponseEntity.ok(tourService.getTopRatedTours(top));
+    public ResponseEntity<List<TourCardDTO>> getTopRatedTours() {
+        return ResponseEntity.ok(tourService.getHotTours());
     }
 
     // Chi tiết tour
@@ -70,6 +69,16 @@ public class TourApi {
             @RequestParam(required = false) String sessionId
     ) {
         return tourService.getRecentTours(maNguoiDung, sessionId);
+    }
+
+    @GetMapping("/related/{tourId}")
+    public List<TourCardDTO> getRelatedTours(@PathVariable Integer tourId) {
+        return tourService.getRelatedTours(tourId);
+    }
+
+    @GetMapping("/international")
+    public List<TourCardDTO> getInternational() {
+        return tourService.getInternationalTours();
     }
 
 }

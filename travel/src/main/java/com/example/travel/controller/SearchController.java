@@ -34,6 +34,7 @@ public class SearchController {
                 thanhPho,
                 minGia,
                 maxGia,
+                null,
                 0,
                 20
         );

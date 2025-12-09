@@ -43,11 +43,6 @@ public class TourController {
         // Lưu lịch sử xem
         tourService.saveRecent(id, maNguoiDung, clientId);
 
-        //LẤY 3 TOUR LIÊN QUAN
-        model.addAttribute("toursLienQuan",
-                tourService.getRelatedTours(id)
-        );
-
         return tourService.getTourById(id)
                 .map(tourDetailDTO -> {
                     String moTa = tourDetailDTO.getMoTa();

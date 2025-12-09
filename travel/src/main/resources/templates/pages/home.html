@@ -4,9 +4,13 @@
       layout:decorate="~{layout/layout}">
 
 <head>
-    <div layout:fragment="styles">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <th:block layout:fragment="styles">
         <link rel="stylesheet" th:href="@{/css/home.css}">
-    </div>
+    </th:block>
+    <title></title>
 </head>
 
 <body>
@@ -21,8 +25,10 @@
                         <div class="flex-grow-1">
                             <form action="/tour/filter" method="get" class="w-100">
                                 <div class="input-group">
-                                    <input type="text" class="form-control search-box"
-                                           placeholder="Bạn đang tìm về?" name="tenTour">
+                                    <label>
+                                        <input type="text" class="form-control search-box"
+                                               placeholder="Bạn đang tìm về?" name="tenTour">
+                                    </label>
                                     <button class="btn btn-warning" type="submit">
                                         <i class="fas fa-search"></i>
                                     </button>
@@ -76,89 +82,36 @@
         </button>
     </div>
 
-    <section class="py-5 bg-light">
+    <section class="py-5 fullwidth-section section-recent">
         <div class="container">
-            <h2 class="section-title" style="color:#003c71">Tours du lịch bạn đã xem gần đây</h2>
-
-            <!-- Carousel wrapper -->
-            <div id="recent-tour-container"></div>
+            <h2 class="section-title">Tours du lịch bạn đã xem gần đây</h2>
+            <div id="recent-tour-container" class="tour-grid"></div>
         </div>
     </section>
 
     <!-- Điểm Đến Nổi Bật -->
-    <section id="destinations" class="py-5 bg-light">
+    <section id="destinations" class="py-5 fullwidth-section section-destination">
         <div class="container">
-            <h2 class="text-center mb-4">Điểm Đến Nổi Bật</h2>
-
-            <!-- Carousel wrapper -->
-            <div class="position-relative">
-                <!-- Scrollable container -->
-                <div id="top-tour-container" class="scroll-drag-container">
-                    <!-- JS sẽ load tour vào đây -->
-                </div>
-
-            </div>
+            <h2 class="section-title">Điểm Đến Nổi Bật</h2>
+            <div id="top-tour-container" class="tour-grid"></div>
         </div>
     </section>
 
-    <!-- Tại sao chọn chúng tôi -->
-    <section class="py-5">
+    <section id="foreign" class="py-5 fullwidth-section section-foreign">
         <div class="container">
-            <h2 class="text-center mb-4">Tại Sao Chọn Chúng Tôi?</h2>
-            <div class="row text-center">
-                <div class="col-md-3">
-                    <div class="p-3">
-                        <div class="fs-1 mb-2">🎯</div>
-                        <h5>Tour Chất Lượng</h5>
-                        <p>10+ năm kinh nghiệm thiết kế tour chuyên nghiệp.</p>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="p-3">
-                        <div class="fs-1 mb-2">💰</div>
-                        <h5>Giá Cả Hợp Lý</h5>
-                        <p>Ưu đãi tốt, minh bạch chi phí, không phát sinh.</p>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="p-3">
-                        <div class="fs-1 mb-2">🏆</div>
-                        <h5>Dịch Vụ 5 Sao</h5>
-                        <p>Hướng dẫn viên tận tâm, thân thiện và chuyên nghiệp.</p>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="p-3">
-                        <div class="fs-1 mb-2">🛡️</div>
-                        <h5>An Toàn Tuyệt Đối</h5>
-                        <p>Bảo hiểm toàn diện cho mọi hành trình.</p>
-                    </div>
-                </div>
-            </div>
+            <h2 class="section-title">Tour Du Lịch Nước Ngoài Cao Cấp</h2>
+            <div id="tour-foreign" class="tour-grid"></div>
         </div>
     </section>
 
-    <!-- Newsletter -->
-    <section class="bg-primary text-white py-5">
-        <div class="container text-center">
-            <h2>Đăng Ký Nhận Tin</h2>
-            <p>Nhận thông tin ưu đãi và tour mới nhất</p>
-            <form class="row justify-content-center">
-                <div class="col-md-6 col-sm-8">
-                    <input type="email" class="form-control form-control-lg mb-3" placeholder="Nhập email của bạn..." required>
-                </div>
-                <div class="col-auto">
-                    <button type="submit" class="btn btn-warning btn-lg">Đăng Ký</button>
-                </div>
-            </form>
-        </div>
-    </section>
 
 </div>
 
 <th:block layout:fragment="scripts">
     <script th:src="@{/js/home.js}"></script>
-    <script th:src="@{/js/tour.js}"></script>
+    <script th:src="@{/js/tour.api.js}"></script>
+    <script th:src="@{/js/tour.card.js}"></script>
+    <script th:src="@{/js/tour.recent.js}"></script>
 </th:block>
 </body>
 </html>

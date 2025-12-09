@@ -28,132 +28,161 @@ public class TourService {
 
     private final TourRepository tourRepository;
     private final TourMapper tourMapper;
-    private  final NguoiDungRepository nguoiDungRepository;
+    private final NguoiDungRepository nguoiDungRepository;
     private final TourXemGanDayRepository tourXemGanDayRepository;
 
-    public List<TourCardDTO> getTopRatedTours(int top) {
-        List<TourCardProjection> projections = tourRepository.getFullTourCards(
-                null,
-                null,
-                null,
-                null,
-                null,
-                0,
-                5
-        );
+    // ==========================
+    //  SECTION COMMON LOADER
+    // ==========================
+    private List<TourCardDTO> loadSectionTours(
+            String loaiTour,
+            String thanhPho,
+            BigDecimal minGia,
+            BigDecimal maxGia,
+            int limit
+    ) {
+        List<TourCardProjection> projections =
+                tourRepository.getFullTourCards(
+                        null,           // tên tour
+                        loaiTour,       // lọc theo loại
+                        thanhPho,       // lọc theo thành phố
+                        minGia,
+                        maxGia,
+                        "rating",
+                        0,              // offset tại trang Home luôn là 0
+                        limit
+                );
+
         return tourMapper.toCardDTOList(projections);
     }
 
+    // ==========================
+    // SECTION REAL IMPLEMENT
+    // ==========================
+
+    // Section 1: Tour hot (5 SAO, GIÁ CAO → query tự ORDER đúng)
+    public List<TourCardDTO> getHotTours() {
+        return loadSectionTours(null, null, null, null, 6);
+    }
+
+    // Section 2: Tour miền Bắc
+    public List<TourCardDTO> getNorthernTours() {
+        return loadSectionTours(null, "Hà Nội", null, null, 6);
+    }
+
+    // Section 3: Tour nước ngoài
+    public List<TourCardDTO> getInternationalTours() {
+        return loadSectionTours("Quốc Tế", null, null, null, 6);
+    }
+
+    // Section 4: Tour giá rẻ
+    public List<TourCardDTO> getCheapTours() {
+        return loadSectionTours(null, null, null, new BigDecimal("3000000"), 6);
+    }
+
+    // ==========================
+    // SEARCH TRANG /search
+    // ==========================
     public List<TourCardDTO> searchTours(
             String tenTour,
             String loaiTour,
             String thanhPho,
             BigDecimal minGia,
             BigDecimal maxGia,
+            String sort,
             int offset,
             int limit
     ) {
-        List<TourCardProjection> projections = tourRepository.getFullTourCards(
-                tenTour,
-                loaiTour,
-                thanhPho,
-                minGia,
-                maxGia,
-                offset,
-                limit
+        return tourMapper.toCardDTOList(
+                tourRepository.getFullTourCards(
+                        tenTour,
+                        loaiTour,
+                        thanhPho,
+                        minGia,
+                        maxGia,
+                        sort,
+                        offset,
+                        limit
+                )
         );
-
-        return tourMapper.toCardDTOList(projections);
     }
 
+    // ==========================
+    // GET BY ID
+    // ==========================
     public Optional<TourDetailDTO> getTourById(Integer id) {
         return tourRepository.findFullDetailById(id)
-                .map(tourMapper::toDetailDTO) // map sang DTO trước
+                .map(tourMapper::toDetailDTO)
                 .map(dto -> {
-                    // Lọc duplicate theo ngày khởi hành
-                    List<LichKhoiHanhDTO> distinctLich = dto.getLichKhoiHanhs().stream()
+                    var distinct = dto.getLichKhoiHanhs().stream()
                             .collect(Collectors.toMap(
                                     LichKhoiHanhDTO::getNgayKhoiHanh,
-                                    lich -> lich,
-                                    (existing, replacement) -> existing // nếu trùng giữ bản đầu
+                                    x -> x,
+                                    (a, b) -> a
                             ))
-                            .values()
-                            .stream()
-                            .toList();
-                    dto.setLichKhoiHanhs(distinctLich);
+                            .values().stream().toList();
+
+                    dto.setLichKhoiHanhs(distinct);
                     return dto;
                 });
     }
 
+    // ==========================
+    // RECENT TOURS
+    // ==========================
     public List<TourCardDTO> getRecentTours(Integer maNguoiDung, String sessionId) {
-
-        List<TourCardProjection> projections =
-                tourRepository.findRecentTours(maNguoiDung, sessionId);
-
-        return tourMapper.toCardDTOList(projections);
+        return tourMapper.toCardDTOList(
+                tourRepository.findRecentTours(maNguoiDung, sessionId)
+        );
     }
 
+    // ==========================
+    // SAVE RECENT VIEW
+    // ==========================
     public void saveRecent(Integer tourId, Integer maNguoiDung, String sessionId) {
+        if (maNguoiDung == null && (sessionId == null || sessionId.isBlank())) return;
 
-        if (maNguoiDung == null && (sessionId == null || sessionId.isBlank())) {
-            return;
-        }
+        var existing = tourXemGanDayRepository.findExisting(tourId, maNguoiDung, sessionId);
 
-        Optional<TourXemGanDay> existing =
-                tourXemGanDayRepository.findExisting(tourId, maNguoiDung, sessionId);
-
-        TourXemGanDay xem;
-
-        if (existing.isPresent()) {
-            xem = existing.get();
-            xem.setThoiGianXem(LocalDateTime.now());
-        } else {
-            xem = new TourXemGanDay();
-            xem.setTour(tourRepository.getReferenceById(tourId));
-            xem.setThoiGianXem(LocalDateTime.now());
-
+        TourXemGanDay xem = existing.orElseGet(() -> {
+            TourXemGanDay x = new TourXemGanDay();
+            x.setTour(tourRepository.getReferenceById(tourId));
             if (maNguoiDung != null) {
-                xem.setNguoiDung(nguoiDungRepository.getReferenceById(maNguoiDung));
+                x.setNguoiDung(nguoiDungRepository.getReferenceById(maNguoiDung));
             } else {
-                xem.setSessionId(sessionId);
+                x.setSessionId(sessionId);
             }
-        }
+            return x;
+        });
 
+        xem.setThoiGianXem(LocalDateTime.now());
         tourXemGanDayRepository.save(xem);
     }
 
+    // ==========================
+    // RELATED TOUR
+    // ==========================
     public List<TourCardDTO> getRelatedTours(Integer tourId) {
         Tour tour = tourRepository.findById(tourId).orElse(null);
         if (tour == null) return List.of();
 
-        // Lấy loaiTour và thành phố/quốc gia
         String loaiTour = tour.getLoaiTour();
-        String tenThanhPho = null;
-        String tenQuocGia = null;
-
-        if (!tour.getThanhPhos().isEmpty()) {
-            ThanhPho tp = tour.getThanhPhos().iterator().next(); // vì là Set
-            tenThanhPho = tp.getTenThanhPho();
-            tenQuocGia = tp.getQuocGia().getTenQuocGia();
-        }
+        String thanhPho = tour.getThanhPhos().isEmpty()
+                ? null
+                : tour.getThanhPhos().iterator().next().getTenThanhPho();
 
         List<TourCardProjection> result =
-                tourRepository.findRelatedTours(tourId, loaiTour, tenThanhPho, tenQuocGia);
+                tourRepository.findRelatedTours(
+                        tourId,
+                        loaiTour,
+                        thanhPho,
+                        tour.getThanhPhos().stream()
+                                .findFirst()
+                                .map(tp -> tp.getQuocGia().getTenQuocGia())
+                                .orElse(null)
+                );
 
-        return result.stream().map(r ->
-                TourCardDTO.builder()
-                        .maTour(r.getMaTour())
-                        .tenTour(r.getTenTour())
-                        .loaiTour(r.getLoaiTour())
-                        .moTa(r.getMoTa())
-                        .thoiGian(r.getThoiGian())
-                        .duongDanAnhDaiDien(r.getDuongDanAnhDaiDien())
-                        .soSaoTrungBinh(r.getSoSaoTrungBinh())
-                        .soDanhGia(r.getSoDanhGia())
-                        .gia(r.getGia())
-                        .build()
-        ).toList();
+        return tourMapper.toCardDTOList(result);
     }
-
-
 }
+

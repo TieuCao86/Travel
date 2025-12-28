@@ -21,12 +21,19 @@ document.addEventListener("DOMContentLoaded", function() {
     const input = document.getElementById("tour-id");
     if (input) {
         const tourId = input.value;
+        saveRecentTour(tourId);
         loadRelatedTours(tourId);
     }
 });
 
-
 function loadRelatedTours(tourId) {
     const url = `/api/tours/related/${tourId}`;
     loadTours(url, "#related-tour-container", false);
+}
+
+function saveRecentTour(tourId) {
+    fetch(`/api/tours/recent/${tourId}`, {
+        method: "POST",
+        credentials: "include" // QUAN TRỌNG: để gửi JSESSIONID
+    }).catch(err => console.error(err));
 }

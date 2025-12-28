@@ -1,22 +1,15 @@
-function getSessionId() {
-    let clientId = localStorage.getItem("clientId");
-    if (!clientId) {
-        clientId = self.crypto.randomUUID();
-        localStorage.setItem("clientId", clientId);
-    }
-    return clientId;
-}
-
 function loadRecentTours() {
-    const userId = localStorage.getItem("userId") ?? "";
-    const clientId = getSessionId();
-
-    const apiUrl = `/api/tours/recent?maNguoiDung=${userId}&sessionId=${clientId}`;
-
-    fetch(apiUrl)
-        .then(res => res.json())
+    fetch("/api/tours/recent", {
+        credentials: "include"
+    })
+        .then(res => {
+            if (!res.ok) throw new Error("HTTP " + res.status);
+            return res.json();
+        })
         .then(tours => {
             const container = document.getElementById("recent-tour-container");
+            if (!container) return;
+
             container.innerHTML = "";
 
             if (!tours.length) {
@@ -24,9 +17,11 @@ function loadRecentTours() {
                 return;
             }
 
-            tours.forEach(t => container.appendChild(createRecentTourCard(t)));
+            tours.forEach(t =>
+                container.appendChild(createRecentTourCard(t))
+            );
         })
-        .catch(err => console.error(err));
+        .catch(err => console.error("Recent tours error:", err));
 }
 
 function createRecentTourCard(tour) {
@@ -57,5 +52,6 @@ function createRecentTourCard(tour) {
 }
 
 function goToTour(maTour) {
-    window.location.href = `/tour/${maTour}?clientId=${getSessionId()}`;
+    window.location.href = `/tour/${maTour}`;
 }
+

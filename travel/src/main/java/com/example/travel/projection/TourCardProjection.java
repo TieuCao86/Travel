@@ -8,15 +8,20 @@ public interface TourCardProjection {
     String getLoaiTour();
     String getMoTa();
     String getThoiGian();
+
     BigDecimal getGia();
+    BigDecimal getGiamGia();
+
     String getDuongDanAnhDaiDien();
+
     Double getSoSaoTrungBinh();
     Long getSoDanhGia();
+
     String getPhuongTiens();
-    BigDecimal getGiamGia();
     String getNoiXuatPhat();
     String getLichKhoiHanhs();
 }
+
 
 
 

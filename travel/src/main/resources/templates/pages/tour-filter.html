@@ -29,7 +29,10 @@
                             <i class="fas fa-map-marker-alt"></i> Địa điểm
                         </label>
                         <label>
-                            <input type="text" class="form-control" th:value="${tenTour}" readonly>
+                            <input type="text"
+                                   class="form-control"
+                                   name="tenTour"
+                                   th:value="${tenTour}">
                         </label>
                     </div>
 
@@ -52,9 +55,12 @@
                     </div>
 
                     <div class="col-md-3">
-                        <button class="btn search-btn w-100">
-                            <i class="fas fa-search"></i> Tìm kiếm
-                        </button>
+                        <form action="/tour/filter" method="get">
+                            <input type="text" name="tenTour" th:value="${tenTour}">
+                            <button type="submit" class="btn search-btn w-100">
+                                <i class="fas fa-search"></i> Tìm kiếm
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

@@ -7,21 +7,26 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Data
-@Builder
 public class TourCardDTO {
-    private int maTour;
+
+    private Integer maTour;
     private String tenTour;
     private String loaiTour;
     private String moTa;
     private String thoiGian;
-    private String noiXuatPhat;
+
+    private BigDecimal gia;
     private BigDecimal giamGia;
+
     private Double soSaoTrungBinh;
     private Long soDanhGia;
+
     private String duongDanAnhDaiDien;
+
     private List<String> phuongTiens;
     private List<String> lichKhoiHanhs;
-    private BigDecimal gia;
 
+    private String noiXuatPhat;
 }
+
 

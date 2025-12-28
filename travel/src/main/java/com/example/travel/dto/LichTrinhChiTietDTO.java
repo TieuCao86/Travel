@@ -8,18 +8,19 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class LichTrinhChiTietDTO {
+
     private Integer maChiTiet;
+    private Integer maNgay;
     private Integer thuTu;
     private String loaiNoiDung;
     private String noiDung;
-    private String tenThanhPho;
-
-    // Thêm dòng này:
-    private List<AnhChiTietDTO> dsAnhChiTiet;
+    private Integer maThanhPho;
 }
+
+
+
 
 

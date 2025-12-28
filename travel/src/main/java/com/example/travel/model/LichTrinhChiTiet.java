@@ -41,7 +41,5 @@ public class LichTrinhChiTiet {
     @JoinColumn(name = "MaThanhPho")
     private ThanhPho thanhPho;
 
-    @OneToMany(mappedBy = "lichTrinhChiTiet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<HinhAnhChiTietTour> hinhAnhChiTietTours;
 
 }

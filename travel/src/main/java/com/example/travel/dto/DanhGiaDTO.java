@@ -1,13 +1,19 @@
 package com.example.travel.dto;
 
-import lombok.Data;
+import lombok.*;
+
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class DanhGiaDTO {
-    private Integer maDanhGia;
-    private String tenNguoiDung;
-    private int soSao;
+
+    private String hoTen;
+    private Integer soSao;
     private String binhLuan;
     private LocalDateTime ngayDanhGia;
 }
+
+

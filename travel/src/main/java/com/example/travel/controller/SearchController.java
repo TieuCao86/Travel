@@ -23,7 +23,6 @@ public class SearchController {
     public String filterTours(
             @RequestParam(value = "tenTour", required = false) String tenTour,
             @RequestParam(value = "loaiTour", required = false) String loaiTour,
-            @RequestParam(value = "thanhPho", required = false) String thanhPho,
             @RequestParam(value = "minGia", required = false) BigDecimal minGia,
             @RequestParam(value = "maxGia", required = false) BigDecimal maxGia,
             Model model) {
@@ -31,25 +30,23 @@ public class SearchController {
         List<TourCardDTO> tours = tourService.searchTours(
                 tenTour,
                 loaiTour,
-                thanhPho,
                 minGia,
                 maxGia,
-                null,
-                0,
-                20
+                null,   // sort
+                0,      // offset
+                20      // limit
         );
 
         model.addAttribute("tours", tours);
         model.addAttribute("tenTour", tenTour);
         model.addAttribute("loaiTour", loaiTour);
-        model.addAttribute("thanhPho", thanhPho);
         model.addAttribute("minGia", minGia);
         model.addAttribute("maxGia", maxGia);
 
         return "pages/tour-filter";
     }
-
 }
+
 
 
 

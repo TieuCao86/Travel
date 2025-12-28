@@ -9,18 +9,16 @@ import java.util.Optional;
 
 public interface TourXemGanDayRepository extends JpaRepository<TourXemGanDay, Integer> {
 
-    @Query("""
-        SELECT tx FROM TourXemGanDay tx
-        WHERE tx.tour.maTour = :maTour
-          AND (
-                (:maNguoiDung IS NOT NULL AND tx.nguoiDung.maNguoiDung = :maNguoiDung)
-             OR (:maNguoiDung IS NULL AND tx.sessionId = :sessionId)
-          )
-    """)
-    Optional<TourXemGanDay> findExisting(
-            @Param("maTour") Integer maTour,
-            @Param("maNguoiDung") Integer maNguoiDung,
-            @Param("sessionId") String sessionId
+    Optional<TourXemGanDay>
+    findByTour_MaTourAndNguoiDung_MaNguoiDung(
+            Integer maTour,
+            Integer maNguoiDung
+    );
+
+    Optional<TourXemGanDay>
+    findByTour_MaTourAndClientId(
+            Integer maTour,
+            String clientId
     );
 }
 

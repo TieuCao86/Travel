@@ -1,45 +1,89 @@
 package com.example.travel.mapper;
 
 import com.example.travel.dto.*;
-import com.example.travel.model.*;
+import com.example.travel.model.DanhGia;
 import com.example.travel.projection.TourCardProjection;
+import com.example.travel.projection.TourDetailProjection;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
-@Mapper(
-        componentModel = "spring",
-        uses = {
-                PhuongTienMapper.class,
-                LichKhoiHanhMapper.class,
-                DanhGiaMapper.class,
-                LichTrinhChiTietMapper.class,
-                HinhAnhTourMapper.class,
-                ThanhPhoMapper.class,
-                VoucherMapper.class,
-                TourHelperMapper.class
-        }
-)
+@Mapper(componentModel = "spring")
 public interface TourMapper {
 
-    @Mapping(target = "hinhAnhs", source = "hinhAnhTourList", qualifiedByName = "mapHinhAnhs")
-    @Mapping(target = "duongDanAnhDaiDien", source = "hinhAnhTourList", qualifiedByName = "mapAnhDaiDien")
-    @Mapping(target = "phuongTiens", source = "phuongTiens", qualifiedByName = "mapPhuongTiens")
-    @Mapping(target = "lichKhoiHanhs", source = "lichKhoiHanhs") // map List<LichKhoiHanh> -> List<LichKhoiHanhDTO>
-    @Mapping(target = "danhGiaList", source = "danhGiaList")
-    @Mapping(target = "noiXuatPhat", source = ".", qualifiedByName = "mapNoiXuatPhat")
-    @Mapping(target = "soSaoTrungBinh", source = "danhGiaList", qualifiedByName = "tinhSoSaoTrungBinh")
-    @Mapping(target = "soDanhGia", expression = "java(tour.getDanhGiaList() != null ? tour.getDanhGiaList().size() : 0)")
-    @Mapping(target = "giamGia", source = "vouchers", qualifiedByName = "mapGiamGia")
-    @Mapping(target = "thanhPhos", source = "thanhPhos", qualifiedByName = "mapThanhPhos")
-    TourDetailDTO toDetailDTO(Tour tour);
+    /* ================= HOME ================= */
 
-    @Mapping(target = "lichKhoiHanhs", source = "lichKhoiHanhs", qualifiedByName = "mapLichCard")
-    @Mapping(target = "phuongTiens", source = "phuongTiens", qualifiedByName = "splitStringToList")
-    TourCardDTO toCardDTO(TourCardProjection projection);
+    @Mapping(target = "phuongTiens", source = "phuongTiens", qualifiedByName = "split")
+    @Mapping(target = "lichKhoiHanhs", source = "lichKhoiHanhs", qualifiedByName = "split")
+    @Mapping(target = "noiXuatPhat", source = "noiXuatPhat")
+    TourCardDTO toCardDTO(TourCardProjection p);
 
     List<TourCardDTO> toCardDTOList(List<TourCardProjection> projections);
+
+    /* ================= DETAIL ================= */
+
+    @Mapping(target = "phuongTiens", source = "phuongTiens", qualifiedByName = "split")
+    @Mapping(target = "hinhAnhs", source = "hinhAnhs", qualifiedByName = "split")
+    @Mapping(target = "thanhPhos", source = "thanhPhos", qualifiedByName = "mapThanhPhoFromString")
+    @Mapping(target = "lichKhoiHanhs", source = "lichKhoiHanhs", qualifiedByName = "mapLichKhoiHanhDetail")
+    @Mapping(target = "lichTrinhNgayList", source = "lichTrinhNgays", qualifiedByName = "mapLichTrinhNgay")
+    TourDetailDTO toDetailDTO(TourDetailProjection p);
+
+    DanhGiaDTO toDanhGiaDTO(DanhGia danhGia);
+
+    /* ================= HELPER ================= */
+
+    @Named("split")
+    default List<String> split(String value) {
+        return value == null || value.isBlank()
+                ? List.of()
+                : Arrays.stream(value.split("\\s*,\\s*")).toList();
+    }
+
+    @Named("mapThanhPhoFromString")
+    default List<ThanhPhoDTO> mapThanhPhoFromString(String value) {
+        if (value == null || value.isBlank()) return List.of();
+
+        return Arrays.stream(value.split("\\s*,\\s*"))
+                .map(name -> {
+                    ThanhPhoDTO dto = new ThanhPhoDTO();
+                    dto.setTenThanhPho(name);
+                    return dto;
+                })
+                .toList();
+    }
+
+    @Named("mapLichKhoiHanhDetail")
+    default List<LichKhoiHanhDTO> mapLichKhoiHanhDetail(String value) {
+        if (value == null || value.isBlank()) return List.of();
+
+        return Arrays.stream(value.split("\\s*,\\s*"))
+                .map(date -> {
+                    LichKhoiHanhDTO dto = new LichKhoiHanhDTO();
+                    dto.setNgayKhoiHanh(LocalDate.parse(date));
+                    return dto;
+                })
+                .toList();
+    }
+
+    @Named("mapLichTrinhNgay")
+    default List<LichTrinhNgayDTO> mapLichTrinhNgay(String value) {
+        if (value == null || value.isBlank()) return List.of();
+
+        return Arrays.stream(value.split(";;"))
+                .map(row -> {
+                    String[] parts = row.split("\\|");
+                    LichTrinhNgayDTO dto = new LichTrinhNgayDTO();
+                    dto.setNgayThu(Integer.parseInt(parts[0]));
+                    dto.setTieuDe(parts[1]);
+                    dto.setBuaAn(parts[2]);
+                    dto.setMoTaTongQuan(parts[3]);
+                    return dto;
+                })
+                .toList();
+    }
 }
-
-

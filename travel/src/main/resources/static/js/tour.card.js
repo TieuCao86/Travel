@@ -1,6 +1,9 @@
 function createTourCard(tour) {
+    const col = document.createElement("div");
+    col.className = "col";
+
     const div = document.createElement("div");
-    div.className = "resort-card mx-2 my-3";
+    div.className = "resort-card h-100";
 
     const giamGia = tour.giamGia ?? null;
     const giaGoc = Number(tour.gia) || 0;
@@ -92,7 +95,8 @@ function createTourCard(tour) {
         </a>
     `;
 
-    return div;
+     col.appendChild(div);
+     return col;
 }
 
 /**

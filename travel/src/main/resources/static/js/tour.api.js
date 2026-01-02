@@ -6,8 +6,18 @@ async function loadTours(apiUrl, targetSelector, usePagination = false) {
     if (!container) return;
 
     try {
-        const res = await fetch(apiUrl);
-        if (!res.ok) throw new Error("API lỗi");
+        const res = await fetch(apiUrl, {
+            credentials: 'include'
+        });
+
+        if (!res.ok) {
+            throw new Error(`API lỗi ${res.status}`);
+        }
+
+        const contentType = res.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+            throw new Error("Response không phải JSON");
+        }
 
         const tours = await res.json();
 
@@ -30,7 +40,7 @@ async function loadTours(apiUrl, targetSelector, usePagination = false) {
         }
     } catch (err) {
         container.innerHTML = "<p class='text-danger'>Không thể tải dữ liệu.</p>";
-        console.error(err);
+        console.error("loadTours error:", err);
     }
 }
 

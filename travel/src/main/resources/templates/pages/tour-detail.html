@@ -136,7 +136,7 @@
                                     <div class="d-flex align-items-center w-100">
                                         <img th:src="${ngay.anhNoiBat != null ? ngay.anhNoiBat : '/images/no-image.jpg'}"
                                              th:alt="${ngay.anhNoiBat != null ? 'Ảnh ngày ' + ngay.ngayThu : 'Chưa có ảnh'}"
-                                             class="me-3 rounded" width="80" height="60" style="object-fit: cover;" alt="">
+                                             class="me-3 rounded" width="80" height="60" style="object-fit: cover;" alt="" src="">
                                         <div class="d-flex flex-column">
                                             <strong th:text="'Ngày ' + ${ngay.ngayThu}"></strong>
                                             <span th:text="${ngay.tieuDe}" class="text-muted small"></span>
@@ -167,7 +167,7 @@
                                              th:src="${ct.noiDung}"
                                              class="img-thumbnail me-2 mb-2"
                                              width="120" height="90"
-                                             style="object-fit: cover;">
+                                             style="object-fit: cover;" alt="" src="">
                                     </div>
                                 </div>
                             </div>
@@ -198,7 +198,7 @@
                                     <td th:text="${#temporals.format(lich.ngayKetThuc, 'dd/MM')}"></td>
                                     <td><span class="badge bg-success" th:text="${lich.trangThai}"></span></td>
                                     <td class="price-highlight">
-                                <span th:each="gia : ${lich.giaList}" th:if="${gia.loaiHanhKhach == 'NguoiLon'}"
+                                <span th:each="gia : ${lich.giaList}" th:if="${gia.loaiKhach == 'NguoiLon'}"
                                       th:text="|${#numbers.formatDecimal(gia.gia, 0, 0, 'COMMA')} ₫|">
                                 </span>
                                     </td>
@@ -300,35 +300,64 @@
 
             <!-- Right Column -->
             <div class="col-lg-4">
-                <div class="price-section sticky-top" style="top: 20px;">
-                    <h3 class="section-title">Đặt tour</h3>
-                    <div class="info-item"><span>Thời gian</span><span>5 ngày 4 đêm</span></div>
-                    <div class="mb-3">
-                        <label class="form-label">Người lớn</label>
-                        <label>
-                            <input type="number" class="form-control" value="2" min="1">
-                        </label>
-                        <small>Giá: 13.990.000 ₫/người</small>
+                <div class="booking-card">
+                    <div class="booking-header">
+                        <span class="price-label">Giá từ</span>
+                        <div class="price-value"
+                             th:text="|${#numbers.formatDecimal(tour.giaTu, 0, 0, 'COMMA')} ₫|">
+                        </div>
+                        <span class="price-note">/ khách</span>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Trẻ em</label>
-                        <label>
-                            <input type="number" class="form-control" value="1" min="0">
-                        </label>
-                        <small>Giá: 10.000.000 ₫/người</small>
+
+                    <div class="booking-info">
+                        <div class="info-row">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Khởi hành:</span>
+                            <strong th:if="${!#lists.isEmpty(tour.lichKhoiHanhs)}"
+                                    th:text="${#temporals.format(tour.lichKhoiHanhs[0].ngayKhoiHanh, 'dd/MM/yyyy')}">
+                            </strong>
+                        </div>
+
+                        <div class="info-row">
+                            <i class="fas fa-clock"></i>
+                            <span>Thời gian:</span>
+                            <strong th:text="${tour.thoiGian}"></strong>
+                        </div>
+
+                        <div class="info-row">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Xuất phát:</span>
+                            <strong th:text="${!#lists.isEmpty(tour.thanhPhos)
+                            ? tour.thanhPhos.get(0).tenThanhPho
+                            : 'Chưa xác định'}">
+                            </strong>
+                        </div>
                     </div>
-                    <hr>
-                    <div class="d-flex justify-content-between mb-3">
-                        <span>Tổng giá</span>
-                        <span class="price-highlight">37.980.000 ₫</span>
-                    </div>
-                    <button class="btn-book">ĐẶT NGAY</button>
+
+                    <a th:href="@{/booking/{id}(id=${tour.maTour})}"
+                       class="btn-book-now">
+                        <i class="fas fa-bolt"></i> Đặt ngay
+                    </a>
+
+                    <p class="booking-note">
+                        <i class="fas fa-check-circle"></i>
+                        Xác nhận nhanh – Không mất phí
+                    </p>
                 </div>
             </div>
         </div>
 
         <!-- Related Tours -->
-        <div id="related-tour-container" class="row mt-4"></div>
+        <section id="related-tours"
+                 class="py-5 fullwidth-section section-foreign">
+            <div class="container">
+                <h2 class="section-title">Các tour liên quan</h2>
+
+                <div id="related-tour-container"
+                     class="tour-grid">
+                </div>
+            </div>
+        </section>
 
     </div>
 </div>

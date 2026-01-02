@@ -2,6 +2,8 @@ package com.example.travel.mapper;
 
 import com.example.travel.dto.*;
 import com.example.travel.model.DanhGia;
+import com.example.travel.model.GiaLichKhoiHanh;
+import com.example.travel.model.LichKhoiHanh;
 import com.example.travel.projection.TourCardProjection;
 import com.example.travel.projection.TourDetailProjection;
 import org.mapstruct.Mapper;
@@ -12,7 +14,10 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(
+        componentModel = "spring",
+        uses = { LichKhoiHanhMapper.class }
+)
 public interface TourMapper {
 
     /* ================= HOME ================= */
@@ -29,11 +34,8 @@ public interface TourMapper {
     @Mapping(target = "phuongTiens", source = "phuongTiens", qualifiedByName = "split")
     @Mapping(target = "hinhAnhs", source = "hinhAnhs", qualifiedByName = "split")
     @Mapping(target = "thanhPhos", source = "thanhPhos", qualifiedByName = "mapThanhPhoFromString")
-    @Mapping(target = "lichKhoiHanhs", source = "lichKhoiHanhs", qualifiedByName = "mapLichKhoiHanhDetail")
     @Mapping(target = "lichTrinhNgayList", source = "lichTrinhNgays", qualifiedByName = "mapLichTrinhNgay")
     TourDetailDTO toDetailDTO(TourDetailProjection p);
-
-    DanhGiaDTO toDanhGiaDTO(DanhGia danhGia);
 
     /* ================= HELPER ================= */
 
@@ -52,19 +54,6 @@ public interface TourMapper {
                 .map(name -> {
                     ThanhPhoDTO dto = new ThanhPhoDTO();
                     dto.setTenThanhPho(name);
-                    return dto;
-                })
-                .toList();
-    }
-
-    @Named("mapLichKhoiHanhDetail")
-    default List<LichKhoiHanhDTO> mapLichKhoiHanhDetail(String value) {
-        if (value == null || value.isBlank()) return List.of();
-
-        return Arrays.stream(value.split("\\s*,\\s*"))
-                .map(date -> {
-                    LichKhoiHanhDTO dto = new LichKhoiHanhDTO();
-                    dto.setNgayKhoiHanh(LocalDate.parse(date));
                     return dto;
                 })
                 .toList();

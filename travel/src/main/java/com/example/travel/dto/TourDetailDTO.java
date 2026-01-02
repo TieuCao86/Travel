@@ -17,11 +17,14 @@ public class TourDetailDTO {
     private String quocGia;
     private String duongDanAnhDaiDien;
 
+    /* ===== GIÁ ===== */
+    private BigDecimal giaTu;
     private BigDecimal giamGia;
+
     private Double soSaoTrungBinh;
     private Integer soDanhGia;
 
-    /* ===== list từ STRING_AGG ===== */
+    /* ===== LIST ===== */
     private List<String> hinhAnhs;
     private List<String> phuongTiens;
     private List<LichKhoiHanhDTO> lichKhoiHanhs;
@@ -29,4 +32,5 @@ public class TourDetailDTO {
     private List<LichTrinhNgayDTO> lichTrinhNgayList;
     private List<DanhGiaDTO> danhGiaList;
 }
+
 

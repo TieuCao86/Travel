@@ -4,9 +4,11 @@ import com.example.travel.dto.LichTrinhChiTietDTO;
 import com.example.travel.dto.TourCardDTO;
 import com.example.travel.dto.TourDetailDTO;
 import com.example.travel.mapper.DanhGiaMapper;
+import com.example.travel.mapper.LichKhoiHanhMapper;
 import com.example.travel.mapper.TourMapper;
 import com.example.travel.projection.TourCardProjection;
 import com.example.travel.repository.DanhGiaRepository;
+import com.example.travel.repository.LichKhoiHanhRepository;
 import com.example.travel.repository.LichTrinhChiTietRepository;
 import com.example.travel.repository.TourRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,9 +27,12 @@ public class TourService {
 
     private final TourRepository tourRepository;
     private final DanhGiaRepository danhGiaRepository;
+    private final LichTrinhChiTietRepository lichTrinhChiTietRepository;
+    private final LichKhoiHanhRepository lichKhoiHanhRepository;
+
     private final TourMapper tourMapper;
     private final DanhGiaMapper danhGiaMapper;
-    private final LichTrinhChiTietRepository lichTrinhChiTietRepository;
+    private final LichKhoiHanhMapper lichKhoiHanhMapper;
 
     /* =====================================================
      * HOME PAGE – 1 QUERY
@@ -109,7 +114,7 @@ public class TourService {
 
         opt.ifPresent(dto -> {
 
-            // Đánh giá – OK
+            /* ================= ĐÁNH GIÁ ================= */
             dto.setDanhGiaList(
                     danhGiaMapper.toDTOList(
                             danhGiaRepository.findDanhGiaByTour(
@@ -119,6 +124,7 @@ public class TourService {
                     )
             );
 
+            /* ================= LỊCH TRÌNH ================= */
             List<LichTrinhChiTietDTO> hoatDongList =
                     lichTrinhChiTietRepository.findByTour(maTour);
 
@@ -133,9 +139,42 @@ public class TourService {
                             map.getOrDefault(ngay.getMaNgay(), List.of())
                     )
             );
+
+            /* ================= LỊCH KHỞI HÀNH + GIÁ (THIẾU) ================= */
+            dto.setLichKhoiHanhs(
+                    lichKhoiHanhMapper.toDTOList(
+                            lichKhoiHanhRepository.findByTour(maTour)
+                    )
+            );
         });
 
         return opt;
     }
+
+    public List<TourCardDTO> getRelatedTours(Integer tourId) {
+
+        TourDetailDTO tour = getTourDetail(tourId).orElse(null);
+        if (tour == null || tour.getLoaiTour() == null) {
+            return List.of();
+        }
+
+        String loaiTour = tour.getLoaiTour().split(",")[0].trim();
+
+        return tourMapper.toCardDTOList(
+                tourRepository.getHomeTours(
+                                null,
+                                loaiTour,
+                                null,
+                                null,
+                                "rating",
+                                0,
+                                4 // lấy dư 1 để loại chính nó
+                        ).stream()
+                        .filter(p -> !p.getMaTour().equals(tourId))
+                        .limit(3)
+                        .toList()
+        );
+    }
+
 
 }

@@ -1,52 +1,34 @@
 package com.example.travel.security;
 
 import com.example.travel.model.NguoiDung;
-import lombok.Getter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import com.example.travel.service.NguoiDungService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.*;
+import org.springframework.stereotype.Service;
 
-import java.util.Collection;
+@Service
+@RequiredArgsConstructor
+public class CustomUserDetailsService implements UserDetailsService {
 
-@Getter
-public class CustomUserDetails implements UserDetails {
-
-    private final NguoiDung nguoiDung;
-    private final Collection<? extends GrantedAuthority> authorities;
-
-    public CustomUserDetails(NguoiDung nguoiDung, Collection<? extends GrantedAuthority> authorities) {
-        this.nguoiDung = nguoiDung;
-        this.authorities = authorities;
-    }
+    private final NguoiDungService nguoiDungService;
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
-    }
+    public UserDetails loadUserByUsername(String email)
+            throws UsernameNotFoundException {
 
-    @Override
-    public String getPassword() {
-        return nguoiDung.getMatKhau();
-    }
+        NguoiDung user = nguoiDungService.findByEmail(email)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("Email không tồn tại"));
 
-    @Override
-    public String getUsername() {
-        return nguoiDung.getEmail(); // login vẫn dùng email
-    }
+        if (user.getMatKhau() == null) {
+            throw new UsernameNotFoundException(
+                    "Tài khoản không hỗ trợ đăng nhập local");
+        }
 
-    @Override
-    public boolean isAccountNonExpired() { return true; }
-
-    @Override
-    public boolean isAccountNonLocked() { return true; }
-
-    @Override
-    public boolean isCredentialsNonExpired() { return true; }
-
-    @Override
-    public boolean isEnabled() { return true; }
-
-    // Hàm tiện ích để hiển thị họ tên
-    public String getHoTen() {
-        return nguoiDung.getHoTen();
+        // Trả về CustomUserDetails thay vì User mặc định
+        return new CustomUserDetails(
+                user,
+                nguoiDungService.getAuthorities(user.getMaNguoiDung())
+        );
     }
 }

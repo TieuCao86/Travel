@@ -1,6 +1,8 @@
 <nav th:fragment="navbar" class="navbar navbar-expand-lg fixed-top navbar-transparent shadow-sm p-3"
-     xmlns:th="http://www.w3.org/1999/xhtml">
-    <div class="container-fluid">
+     xmlns:th="http://www.thymeleaf.org"
+     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<div class="container-fluid">
         <a class="navbar-brand fw-bold text-primary" th:href="@{/}">TrungTravel</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
             <span class="navbar-toggler-icon"></span>
@@ -88,12 +90,10 @@
                 </li>
             </ul>
 
-            <!-- Góc phải: ngôn ngữ + đăng nhập -->
             <div class="d-flex align-items-center gap-3">
                 <!-- Ngôn ngữ -->
                 <div class="dropdown">
-                    <a class="dropdown-toggle text-black text-decoration-none d-flex align-items-center gap-1"
-                       href="#" data-bs-toggle="dropdown">
+                    <a class="dropdown-toggle text-black text-decoration-none d-flex align-items-center gap-1" href="#" data-bs-toggle="dropdown">
                         <i class="fas fa-globe"></i> <span>Ngôn ngữ</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
@@ -102,8 +102,19 @@
                     </ul>
                 </div>
 
-                <!-- Nút đăng nhập -->
-                <a class="btn btn-warning fw-bold" th:href="@{/login}">Đăng nhập</a>
+                <!-- Chưa đăng nhập -->
+                <a class="btn btn-warning fw-bold" href="/login" sec:authorize="isAnonymous()">Đăng nhập</a>
+
+                <!-- Đã đăng nhập -->
+                <div class="dropdown" sec:authorize="isAuthenticated()">
+                    <a class="btn btn-success fw-bold dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                        <span sec:authentication="name">Người dùng</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="/profile">Hồ sơ</a></li>
+                        <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
+                    </ul>
+                </div>
             </div>
 
         </div>

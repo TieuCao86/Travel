@@ -1,5 +1,6 @@
 package com.example.travel.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,7 +22,8 @@ public class LichKhoiHanh {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MaTour", nullable = false)
-    private Tour tour; // Quan hệ N-1 với Tour
+    @JsonIgnore
+    private Tour tour;
 
     @Column(name = "NgayKhoiHanh", nullable = false)
     private LocalDate ngayKhoiHanh;
@@ -40,8 +42,10 @@ public class LichKhoiHanh {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MaThanhPhoKhoiHanh")
+    @JsonIgnore
     private ThanhPho thanhPhoKhoiHanh;
 
     @OneToMany(mappedBy = "lichKhoiHanh", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<GiaLichKhoiHanh> giaLichKhoiHanhs;
 }

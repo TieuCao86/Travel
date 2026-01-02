@@ -125,9 +125,14 @@ public class TourApi {
             response.addCookie(cookie);
         }
 
-        Integer userId = (Integer) session.getAttribute("USER_ID");
+        Long userId = (Long) session.getAttribute("USER_ID");
         tourXemGanDayService.save(userId, clientId, tourId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/related/{tourId}")
+    public List<TourCardDTO> getRelatedTours(@PathVariable Integer tourId) {
+        return tourService.getRelatedTours(tourId);
     }
 
 }

@@ -1,10 +1,20 @@
 package com.example.travel.api;
 
+import com.example.travel.dto.LoginRequest;
+import com.example.travel.dto.RegisterRequest;
 import com.example.travel.model.NguoiDung;
+import com.example.travel.model.TaiKhoanLienKet;
+import com.example.travel.service.JwtService;
 import com.example.travel.service.NguoiDungService;
+import com.example.travel.service.NguoiDungVaiTroService;
+import com.example.travel.service.TaiKhoanLienKetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -13,39 +23,72 @@ import org.springframework.web.bind.annotation.*;
 public class AuthApi {
 
     private final NguoiDungService nguoiDungService;
+    private final TaiKhoanLienKetService taiKhoanLienKetService;
+    private final NguoiDungVaiTroService nguoiDungVaiTroService;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    // ============================
-    // 🔥 API REGISTER
-    // ============================
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody NguoiDung user) {
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
 
-        if (nguoiDungService.existsByEmail(user.getEmail())) {
-            return ResponseEntity.badRequest().body("Email đã tồn tại!");
+        if (nguoiDungService.existsByEmail(request.getEmail())) {
+            return ResponseEntity.badRequest().body("Email đã tồn tại");
         }
 
-        user.setVaiTro("USER");
-        nguoiDungService.save(user);
+        NguoiDung user = new NguoiDung();
+        user.setHoTen(request.getHoTen());
+        user.setEmail(request.getEmail());
+        user.setDienThoai(request.getDienThoai());
+        user.setMatKhau(passwordEncoder.encode(request.getMatKhau()));
+        user.setTrangThai("Hoạt động");
 
-        return ResponseEntity.ok("Đăng ký thành công!");
+        user = nguoiDungService.save(user);
+
+        // ROLE_USER
+        nguoiDungVaiTroService.addRoleUser(user.getMaNguoiDung());
+
+        // LOCAL link
+        TaiKhoanLienKet link = new TaiKhoanLienKet();
+        link.setNguoiDung(user);
+        link.setNhaCungCap("LOCAL");
+        link.setProviderUserId(user.getEmail());
+        link.setEmail(user.getEmail());
+        link.setTenHienThi(user.getHoTen());
+
+        taiKhoanLienKetService.save(link);
+
+        return ResponseEntity.ok("Đăng ký thành công");
     }
 
-    // ============================
-    // 🔥 API LOGIN
-    // ============================
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody NguoiDung request) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
-        var user = nguoiDungService.findByEmailOrSoDienThoai(
-                request.getEmail(),
-                request.getSoDienThoai()
-        );
+        var userOpt = nguoiDungService.findByEmail(request.getEmail());
 
-        if (user == null || !user.getMatKhau().equals(request.getMatKhau())) {
-            return ResponseEntity.badRequest().body("Sai tài khoản hoặc mật khẩu!");
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("Sai email hoặc mật khẩu");
         }
 
-        return ResponseEntity.ok("Đăng nhập thành công!");
+        NguoiDung user = userOpt.get();
+
+        if (user.getMatKhau() == null ||
+                !passwordEncoder.matches(request.getMatKhau(), user.getMatKhau())) {
+            return ResponseEntity.badRequest().body("Sai email hoặc mật khẩu");
+        }
+
+        // Tạo JWT
+        String token = jwtService.generateToken(new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getMatKhau(),
+                List.of() // roles có thể thêm sau
+        ));
+
+        // Trả về token
+        return ResponseEntity.ok(Map.of(
+                "message", "Đăng nhập thành công",
+                "token", token
+        ));
     }
+
 
 }

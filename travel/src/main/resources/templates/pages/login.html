@@ -29,20 +29,9 @@
         padding: 30px;
         text-align: center;
     }
-    .logo-section img {
-        max-width: 250px;
-        height: auto;
-    }
-    .form-section {
-        padding: 40px;
-    }
-    .form-title {
-        color: #0066b2;
-        font-weight: 700;
-        font-size: 28px;
-        margin-bottom: 30px;
-        text-align: center;
-    }
+    .logo-section img { max-width: 250px; height: auto; }
+    .form-section { padding: 40px; }
+    .form-title { color: #0066b2; font-weight: 700; font-size: 28px; margin-bottom: 30px; text-align: center; }
     .form-label { color: #333; font-weight: 600; margin-bottom: 8px; }
     .form-control {
         border: none;
@@ -82,11 +71,7 @@
         transform: translateY(-2px);
         box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
     }
-    .divider {
-        text-align: center;
-        margin: 25px 0;
-        position: relative;
-    }
+    .divider { text-align: center; margin: 25px 0; position: relative; }
     .divider::before {
         content: '';
         position: absolute;
@@ -96,13 +81,7 @@
         height: 1px;
         background: #ddd;
     }
-    .divider span {
-        background: white;
-        padding: 0 15px;
-        position: relative;
-        color: #666;
-        font-size: 14px;
-    }
+    .divider span { background: white; padding: 0 15px; position: relative; color: #666; font-size: 14px; }
     .btn-social {
         width: 100%;
         padding: 12px;
@@ -133,26 +112,20 @@
 
     <form th:action="@{/login}" method="post">
       <div class="mb-3">
-        <label class="form-label">Số điện thoại hoặc email <span class="required">*</span></label>
-        <label>
-          <input type="text" class="form-control" name="username" placeholder="Số điện thoại hoặc email" required>
-        </label>
+        <label class="form-label" for="username">Số điện thoại hoặc email <span class="required">*</span></label>
+        <input type="text" class="form-control" id="username" name="username" placeholder="Số điện thoại hoặc email" required>
       </div>
 
       <div class="mb-3">
-        <label class="form-label">Mật khẩu <span class="required">*</span></label>
+        <label class="form-label" for="password">Mật khẩu <span class="required">*</span></label>
         <div class="password-input-wrapper">
-          <label>
-            <input type="password" class="form-control" name="password" placeholder="Nhập mật khẩu" required>
-          </label>
-          <button type="button" class="password-toggle" onclick="togglePassword()">
-            <i class="far fa-eye" id="toggleIcon"></i>
-          </button>
+          <input type="password" class="form-control" id="password" name="password" placeholder="Nhập mật khẩu" required>
+          <button type="button" class="password-toggle" onclick="togglePassword()"><i class="far fa-eye" id="toggleIcon"></i></button>
         </div>
       </div>
 
       <div class="register-link">
-        Chưa là thành viên? <a th:href="@{/register}">Đăng ký ngay</a>
+        Chưa là thành viên? <a href="/register">Đăng ký ngay</a>
       </div>
 
       <button type="submit" class="btn btn-login">ĐĂNG NHẬP</button>
@@ -173,10 +146,9 @@
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
   function togglePassword() {
-      const passwordInput = document.querySelector('input[name="password"]');
+      const passwordInput = document.getElementById('password');
       const toggleIcon = document.getElementById('toggleIcon');
       if (passwordInput.type === 'password') {
           passwordInput.type = 'text';

@@ -12,7 +12,7 @@ public interface TourXemGanDayRepository extends JpaRepository<TourXemGanDay, In
     Optional<TourXemGanDay>
     findByTour_MaTourAndNguoiDung_MaNguoiDung(
             Integer maTour,
-            Integer maNguoiDung
+            Long maNguoiDung
     );
 
     Optional<TourXemGanDay>

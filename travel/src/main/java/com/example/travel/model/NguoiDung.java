@@ -1,61 +1,43 @@
 package com.example.travel.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@Table(name = "NguoiDung")
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class NguoiDung {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer maNguoiDung;
+    @Column(name = "MaNguoiDung")
+    private Long maNguoiDung;
 
+    @Column(name = "HoTen", nullable = false)
     private String hoTen;
 
-    @Column(unique = true)
+    @Column(name = "Email", unique = true)
     private String email;
 
-    private String soDienThoai;
-    private String matKhau;
-    private LocalDate ngaySinh;
-    private String gioiTinh;
-    private String vaiTro;
+    @Column(name = "MatKhau")
+    private String matKhau; // LOCAL login
 
-    // OAuth2 / social login
-    private String provider;      // local / google / facebook
-    private String providerId;    // id từ OAuth2 provider
-    private String avatar;        // link avatar
+    @Column(name = "DienThoai")
+    private String dienThoai;
 
-    // Trạng thái và quản lý
-    private String trangThai = "ACTIVE"; // ACTIVE / INACTIVE / LOCKED
-    private LocalDateTime ngayTao = LocalDateTime.now();
-    private LocalDateTime ngayCapNhat = LocalDateTime.now();
+    @Column(name = "TrangThai")
+    private String trangThai;
 
-    // Các quan hệ
-    @OneToMany(mappedBy = "nguoiDung")
-    private List<SoThichNguoiDung> soThich;
+    @Column(name = "NgayTao")
+    private LocalDateTime ngayTao;
 
     @OneToMany(mappedBy = "nguoiDung")
-    private List<LichSuTimKiem> lichSuTimKiem;
+    private List<TaiKhoanLienKet> taiKhoanLienKets;
 
     @OneToMany(mappedBy = "nguoiDung")
-    private List<DatTour> datTours;
-
-    @OneToMany(mappedBy = "nguoiDung")
-    private List<Voucher> vouchers;
-
-    @OneToMany(mappedBy = "nguoiDung")
-    private List<DanhGia> danhGiaList;
-
-    @OneToMany(mappedBy = "nguoiDung")
-    private List<GoiYAI> goiYList;
+    private List<NguoiDungVaiTro> vaiTros;
 }
+

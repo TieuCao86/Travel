@@ -15,7 +15,7 @@ public class TourXemGanDayService {
     private final TourRepository tourRepository;
     private final NguoiDungRepository nguoiDungRepository;
 
-    public void save(Integer maNguoiDung, String clientId, Integer maTour) {
+    public void save(Long maNguoiDung, String clientId, Integer maTour) {
 
         TourXemGanDay tx;
 

@@ -5,12 +5,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface NguoiDungRepository extends JpaRepository<NguoiDung, Integer> {
+public interface NguoiDungRepository extends JpaRepository<NguoiDung, Long> {
 
-    boolean existsByEmail(String email);
+    Optional<NguoiDung> findByDienThoai(String dienThoai);
 
     Optional<NguoiDung> findByEmail(String email);
 
-    NguoiDung findBySoDienThoai(String phone);
+    boolean existsByEmail(String email);
 }
+
 

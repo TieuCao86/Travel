@@ -56,7 +56,9 @@
 
                     <div class="col-md-3">
                         <form action="/tour/filter" method="get">
-                            <input type="text" name="tenTour" th:value="${tenTour}">
+                            <label>
+                                <input type="text" name="tenTour" th:value="${tenTour}">
+                            </label>
                             <button type="submit" class="btn search-btn w-100">
                                 <i class="fas fa-search"></i> Tìm kiếm
                             </button>
